@@ -1,1 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Assigment template</title>
+  <script src="https://kit.fontawesome.com/5e0a1eec4b.js" crossorigin="anonymous"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://theactualzenaldv2.github.io/Game-Development-2023/assignments/templates/barebones.css">
 
+</head>
+<body> <br> 
+
+    <div class="container">
+        <h1 class="section-titleGold">Game Dev 2023 template</h1>
+        <h2 class="section-title" style="text-align: center; text-decoration: underline; cursor: pointer;" onclick="{window.location = 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/index.html'}">Back</h2>
+        </div> <br>
+  <div class="container">
+
+    <h1 class="section-title"> Images: </h1>
+    <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Fries</th>
+            <th scope="col">Burgers</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><img src="https://www.recipetineats.com/wp-content/uploads/2022/09/Crispy-Fries_8.jpg?w=500&h=500&crop=1" width="300">
+            </td> 
+            <td>  
+              <img src="https://www.allrecipes.com/thmb/5JVfA7MxfTUPfRerQMdF-nGKsLY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/25473-the-perfect-basic-burger-DDMFS-4x3-56eaba3833fd4a26a82755bcd0be0c54.jpg" alt="Example Image" class="img-fluid rounded" width="300">
+          </td>
+                 </tr>
+        
+        </tbody>
+      </table>
+</div> <br>
+      
+ 
+<div class="container">
+  <h2 class="section-title" style="text-align: center;"> Iframes To Import Maps&Videos</h2>
+  <ul class="nav nav-tabs" id="myTab2" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active section-title" id="tab7-tab" data-bs-toggle="tab" data-bs-target="#tab7" type="button" role="tab" aria-controls="tab7" aria-selected="true">YouTube</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link section-title" id="tab8-tab" data-bs-toggle="tab" data-bs-target="#tab8" type="button" role="tab" aria-controls="tab8" aria-selected="false">Google Maps</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link section-title" id="tab9-tab" data-bs-toggle="tab" data-bs-target="#tab9" type="button" role="tab" aria-controls="tab9" aria-selected="false">YouTube</button>
+    </li>
+  </ul>
+
+  <div class="tab-content mt-3" id="myTabContent2">
+    <div class="tab-pane fade show active" id="tab7" role="tabpanel" aria-labelledby="tab7-tab">
+      <div class="section-title">Youtube Iframe Example:  </div>
+      <iframe width="420" height="315" src="https://www.youtube.com/embed/tgbNymZ7vqY" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" allow="accelerometer; autoplay; encrypted-media; picture-in-picture;" allowfullscreen ></iframe>
+    </div>
+    <div class="tab-pane fade" id="tab8" role="tabpanel" aria-labelledby="tab8-tab">
+      <div class="section-title">Google Maps Import: (Dont ask where i got the API key from)</div>
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.291105862345!2d-73.9854286845933!3d40.7488179793286!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259b4f5d8b3c7%3A0x3e9b9e7f9d4b1d5a!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1638381916846!5m2!1sen!2sus" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+
+    </div>
+    <div class="tab-pane fade" id="tab9" role="tabpanel" aria-labelledby="tab9-tab">
+      <div class="section-title">Youtube Iframe Example:  </div>
+      <iframe width="420" height="315" src="https://www.youtube.com/embed/6WlI24rv__g?si=2P65sDLHO5rZs8sB" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" allow="accelerometer; autoplay; encrypted-media; picture-in-picture;" allowfullscreen ></iframe>
+    </div>
+  </div>
+</div>
+<br>
+
+
+<div class="container"> 
+  <h1 class="section-title"> Maps Import Code: (Using Prism.js)</h1>
+
+<pre><code class="language-javascript ">
+  &lt;iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.291105862345!2d-73.9854286845933!3d40.7488179793286!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259b4f5d8b3c7%3A0x3e9b9e7f9d4b1d5a!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1638381916846!5m2!1sen!2sus" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"&gt;&lt;/iframe>
+
+    </code></pre>
+</div> <br>
+
+
+<div class="section container">
+  <h2 class="section-title">Buttons</h2>
+  <div class="section-content">
+      <button onclick="changeText('Input/Output: Changing Screen Elements')" class="btn btn-primary">Input/Output </button>
+      <button onclick="changeText('Variables: Things that change, example: <br> let x = 10; <br> x = 15')" class="btn btn-primary">Variables </button>
+      <button onclick="changeText('Loops: Do something more times')" class="btn btn-primary">Loops </button>
+      <button onclick="changeText('If Statements: Decision statements, example: <br> if(isCool){<br> /give player 100 points <br> myFunction01()<br>}')" class="btn btn-primary">If Statements</button> <br> <br> 
+      <button onclick="changeText('Functions:  Block of game dev code')" class="btn btn-primary">Functions </button> 
+      <button onclick="changeText('Events: KInda useless')" class="btn btn-primary">Events </button>
+      <button onclick="changeText('Arrays: A pain in the ass to learn')" class="btn btn-primary">Arrays </button>
+      <button onclick="changeText('Objects: Useful for game dev, example: <br> let playerProperties = {<br> health: 100; <br> color: white; <br> speed: 10; <br> x: 10; <br> y: 10; <br> }')" class="btn btn-primary">Objects </button>
+      <button onclick="changeText('Classes: Good for visual effects thats about it lol')" class="btn btn-primary">Classes </button>
+
+
+   </div>
+   <div id="textElement"></div>
+
+</div>
+
+    
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+</body>
+
+<script>
+  const textElement = document.getElementById('textElement')
+  function changeText(text){
+    textElement.innerHTML = text;
+  }
+
+     
+
+</script>
+</html>
