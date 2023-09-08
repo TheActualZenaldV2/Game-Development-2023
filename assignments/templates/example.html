@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Assigment template</title>
+  <script src="https://kit.fontawesome.com/5e0a1eec4b.js" crossorigin="anonymous"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://theactualzenaldv2.github.io/Game-Development-2023/assignments/templates/barebones.css">
+
+</head>
+<body> <br> 
+
+    <div class="container">
+        <h1 class="section-titleGold">Game Dev 2023 template</h1>
+        <h2 class="section-title" style="text-align: center; text-decoration: underline; cursor: pointer;" onclick="{window.location = ''}">Back</h2>
+        </div> <br>
+    <div class="section container">
+        <h2 class="section-title">Buttons</h2>
+        <div class="section-content">
+          <button class="btn btn-primary" onclick="buttonExample()"><span id="buttonExampleText">Click me</span></button>
+        </div>
+      </div>
+  <div class="container my-5">
+    <div class="section">
+      <h2 class="section-title">IFrames</h2>
+      <div class="section-content">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.291105862345!2d-73.9854286845933!3d40.7488179793286!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259b4f5d8b3c7%3A0x3e9b9e7f9d4b1d5a!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1638381916846!5m2!1sen!2sus" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+      </div>
+    </div>
+  </div>
+
+
+  
+  <div class="section container">
+    <h2 class="section-title">CSS</h2>
+    <div class="section-content">
+      <p>This is an example of a paragraph with some custom CSS styles applied:</p>
+      <p style="font-size: 18px;">This text is gray and has a font size of 18px.</p>
+    </div>
+  </div>
+
+  <div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="section-title">Column 1</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, velit vel bibendum bibendum, nisi elit consequat velit, vel lacinia sapien velit vel sapien.</p>
+    </div>
+    <div class="col-md-6">
+      <h1 class="section-title">Column 2</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, velit vel bibendum bibendum, nisi elit consequat velit, vel lacinia sapien velit vel sapien.</p>
+    </div>
+  </div>
+</div> <br>
+<form class="container">
+    <h1 class="section-title">Form</h1>
+    <div class="mb-3">
+      <label for="username" class="form-label">Username</label>
+      <input type="text" class="form-control" id="username">
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" class="form-control" id="password">
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+  </form> <br> 
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="container">
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active section-title" id="tab1-tab" data-bs-toggle="tab" data-bs-target="#tab1" type="button" role="tab" aria-controls="tab1" aria-selected="true">Example</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link section-title" id="tab2-tab" data-bs-toggle="tab" data-bs-target="#tab2" type="button" role="tab" aria-controls="tab2" aria-selected="false">HTML</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link section-title" id="tab3-tab" data-bs-toggle="tab" data-bs-target="#tab3" type="button" role="tab" aria-controls="tab3" aria-selected="false">CSS</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link section-title" id="tab4-tab" data-bs-toggle="tab" data-bs-target="#tab4" type="button" role="tab" aria-controls="tab4" aria-selected="false">JS</button>
+        </li>
+      </ul>
+
+
+      
+      <div class="tab-content mt-3" id="myTabContent">
+        <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
+          <div class="section-title"> Live Update Clock </div>
+
+          <button class="btn btn-primary" onclick="toggleClock()" id="clockButton">Start Clock</button> <br>
+         <br>  <p id="time" class="section-content"></p>
+        </div>
+
+        <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
+          <div class="section-title"> HTML </div>
+  
+          <div class="d-flex justify-content-end">
+            <span id="copyText01" class="badge bg-success fade hide" style="margin-right: 20px; font-size: 25px;">Copied</span>
+   
+            <i class="fa-solid fa-copy" id="copyButton" onclick="copyCode(codeBlock01, 'copyText01')" style="cursor: pointer; font-size: 30px; color: var(--purple-900);"></i>
+             <br>
+          </div>
+         
+  
+          
+          <pre><code id="codeBlock01" class="language-html">
+            &lt;div class="section-title"&gt; Live Update Clock &lt;/div&gt;
+      
+            &lt;button class="btn btn-primary" onclick="toggleClock()" id="clockButton"&gt;Start Clock&lt;/button&gt; &lt;br&gt;
+            &lt;br&gt; &lt;p id="time" class="section-content"&gt;&lt;/p&gt;
+          </code></pre>
+          <br>
+
+
+        </div>
+
+        <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab3-tab">
+         
+          <div class="section-title"> CSS </div>
+          <div class="d-flex justify-content-end"><span id="copyText03" class="badge bg-success fade hide" style="margin-right: 20px; font-size: 25px;">Copied</span>
+   
+            <i class="fa-solid fa-copy" id="copyButton" onclick="copyCode(codeBlock03, 'copyText03')" style="cursor: pointer; font-size: 30px; color: var(--purple-900);"></i> 
+          </div>
+          <pre><code id="codeBlock03" class="language-css">
+        :root {
+          --purple-100: #f3e8fd;
+          --purple-200: #d6b8fa;
+          --purple-300: #b88af7;
+          --purple-400: #9b5cf4;
+          --purple-500: #6f42c1;
+          --purple-600: #5e32b3;
+          --purple-700: #4b2790;
+          --purple-800: #381c6d;
+          --purple-900: #25114a;
+          --purple-a700: #AA00FF;
+          --gold: #ffd700;
+          --gray: #f8f9fa;
+          --black: #212529;
+        }
+        body {
+            background-color: var(--purple-100);
+        }
+        .btn-primary {
+            background-color: var(--purple-500);
+            border-color: var(--purple-500);
+        }
+        .btn-primary:hover {
+            background-color: var(--purple-600);
+            border-color: var(--purple-600);
+        }
+          </code></pre> <br>
+          
+        </div>
+
+        <div class="tab-pane fade" id="tab4" role="tabpanel" aria-labelledby="tab4-tab">
+         
+          <div class="section-title"> JS </div>
+          <div class="d-flex justify-content-end"><span id="copyText02" class="badge bg-success fade hide" style="margin-right: 20px; font-size: 25px;">Copied</span>
+   
+            <i class="fa-solid fa-copy" id="copyButton" onclick="copyCode(codeBlock02, 'copyText02')" style="cursor: pointer; font-size: 30px; color: var(--purple-900);"></i> 
+          </div>
+  
+          <pre><code id="codeBlock02" class="language-javascript">
+        let clockStarted = false; //boolean flag to check if clock is running
+        let clockInterval;
+        
+        function toggleClock() {
+          if (clockStarted) {
+            // Stop the clock
+            clearInterval(clockInterval);
+            clockStarted = false;
+            document.getElementById('clockButton').innerHTML = 'Start Clock'; //update HTML
+          } else {
+            // Start the clock
+            getTime();
+            document.getElementById('clockButton').innerHTML = 'Stop Clock';
+            clockInterval = setInterval(() => {
+              getTime(); //clock function
+            }, 1000);
+            clockStarted = true;
+          }
+        }
+        
+        function getTime() {
+          document.getElementById('time').innerHTML = new Date().toLocaleTimeString(); //get time and update HTML
+        }
+        //new Date() gets the current date in a long number format
+        //toLocaleTimeString() converts the long number format to a readable time format
+          </code></pre>
+          
+        </div>
+
+      </div>
+      </div> <br>
+
+  
+          
+
+    <div class="container">
+      <ul class="nav nav-tabs" id="myTab2" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active section-title" id="tab7-tab" data-bs-toggle="tab" data-bs-target="#tab7" type="button" role="tab" aria-controls="tab7" aria-selected="true">Tab 7</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link section-title" id="tab8-tab" data-bs-toggle="tab" data-bs-target="#tab8" type="button" role="tab" aria-controls="tab8" aria-selected="false">Tab 8</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link section-title" id="tab9-tab" data-bs-toggle="tab" data-bs-target="#tab9" type="button" role="tab" aria-controls="tab9" aria-selected="false">Tab 9</button>
+        </li>
+      </ul>
+
+      <div class="tab-content mt-3" id="myTabContent2">
+        <div class="tab-pane fade show active" id="tab7" role="tabpanel" aria-labelledby="tab7-tab">
+          <div class="section-title">Tab 7 Content</div>
+          <p class="section-content">This is the content for Tab 7.</p>
+        </div>
+        <div class="tab-pane fade" id="tab8" role="tabpanel" aria-labelledby="tab8-tab">
+          <div class="section-title">Tab 8 Content</div>
+          <p class="section-content">This is the content for Tab 8.</p>
+        </div>
+        <div class="tab-pane fade" id="tab9" role="tabpanel" aria-labelledby="tab9-tab">
+          <div class="section-title">Tab 9 Content</div>
+          <p class="section-content">This is the content for Tab 9.</p>
+        </div>
+      </div>
+    </div>
+    <br>
+
+    <div class="container">
+      <ul class="nav nav-tabs" id="myTab3" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active section-title" id="tab10-tab" data-bs-toggle="tab" data-bs-target="#tab10" type="button" role="tab" aria-controls="tab10" aria-selected="true">Tab 10</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link section-title" id="tab11-tab" data-bs-toggle="tab" data-bs-target="#tab11" type="button" role="tab" aria-controls="tab11" aria-selected="false">Tab 11</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link section-title" id="tab12-tab" data-bs-toggle="tab" data-bs-target="#tab12" type="button" role="tab" aria-controls="tab12" aria-selected="false">Tab 12</button>
+        </li>
+      </ul>
+
+      <div class="tab-content mt-3" id="myTabContent3">
+        <div class="tab-pane fade show active" id="tab10" role="tabpanel" aria-labelledby="tab10-tab">
+          <div class="section-title">Tab 10 Content</div>
+          <p class="section-content">This is the content for Tab 10.</p>
+        </div>
+        <div class="tab-pane fade" id="tab11" role="tabpanel" aria-labelledby="tab11-tab">
+          <div class="section-title">Tab 11 Content</div>
+          <p class="section-content">This is the content for Tab 11.</p>
+        </div>
+        <div class="tab-pane fade" id="tab12" role="tabpanel" aria-labelledby="tab12-tab">
+          <div class="section-title">Tab 12 Content</div>
+          <p class="section-content">This is the content for Tab 12.</p>
+        </div>
+      </div>
+    </div>
+    <br>
+
+    <div class="container">
+      <ul class="nav nav-tabs" id="myTab4" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active section-title" id="tab13-tab" data-bs-toggle="tab" data-bs-target="#tab13" type="button" role="tab" aria-controls="tab13" aria-selected="true">Tab 13</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link section-title" id="tab14-tab" data-bs-toggle="tab" data-bs-target="#tab14" type="button" role="tab" aria-controls="tab14" aria-selected="false">Tab 14</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link section-title" id="tab15-tab" data-bs-toggle="tab" data-bs-target="#tab15" type="button" role="tab" aria-controls="tab15" aria-selected="false">Tab 15</button>
+        </li>
+      </ul>
+
+      <div class="tab-content mt-3" id="myTabContent4">
+        <div class="tab-pane fade show active" id="tab13" role="tabpanel" aria-labelledby="tab13-tab">
+          <div class="section-title">Tab 13 Content</div>
+          <p class="section-content">This is the content for Tab 13.</p>
+        </div>
+        <div class="tab-pane fade" id="tab14" role="tabpanel" aria-labelledby="tab14-tab">
+          <div class="section-title">Tab 14 Content</div>
+          <p class="section-content">This is the content for Tab 14.</p>
+        </div>
+        <div class="tab-pane fade" id="tab15" role="tabpanel" aria-labelledby="tab15-tab">
+          <div class="section-title">Tab 15 Content</div>
+          <p class="section-content">This is the content for Tab 15.</p>
+        </div>
+      </div>
+    </div>
+    <br>
+          
+
+
+
+    <div class="container"> 
+        <h1 class="section-title"> Code Example: (Using Prism.js)</h1>
+    
+    <pre><code class="language-javascript ">
+        function continueWeb() {
+          document.querySelector('.top-section').classList.add('animateOut');
+          setTimeout(() => {
+            document.querySelector('.top-section').style.display = 'none';
+            document.querySelector('.bottom-section').classList.add('animateIn');
+            document.querySelector('.bottom-section').style.display = 'flex';
+          }, 1200);
+        }
+          </code></pre>
+    </div> <br>
+    <div class="container">
+        <h1 class="section-title"> Tables Example</h1>
+        <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td> Boe</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td> Joe</td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td>Larry</td>
+                <td>
+              </tr>
+            </tbody>
+          </table>
+    </div> <br>
+
+    <div id="romanianStealing" class="alert alert-success hide fade" role="alert">
+      <span class="section-title" id="alert-text"></span>
+    </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<script src="https://theactualzenaldv2.github.io/Game-Development-2023/assignments/templates/barebones.js"></script>
+</body>
+
+<script>
+    function buttonExample() {
+      document.getElementById('buttonExampleText').innerHTML = 'You clicked me! At ' + new Date().toLocaleTimeString();
+      setTimeout(() => {
+        document.getElementById('buttonExampleText').innerHTML = 'Click Me';
+
+      }, 5000);
+    }
+    let clockStarted = false;
+      let clockInterval;
+
+      function toggleClock() {
+        if (clockStarted) {
+          // Stop the clock
+          clearInterval(clockInterval);
+          clockStarted = false;
+          document.getElementById('clockButton').innerHTML = 'Start Clock';
+        } else {
+          // Start the clock
+          getTime();
+            document.getElementById('clockButton').innerHTML = 'Stop Clock';
+          clockInterval = setInterval(() => {
+            getTime();
+          }, 1000);
+          clockStarted = true;
+        }
+      }
+function getTime() {
+  document.getElementById('time').innerHTML = new Date().toLocaleTimeString();
+}
+
+     
+
+</script>
+</html>
