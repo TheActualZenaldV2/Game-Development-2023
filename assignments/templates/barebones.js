@@ -1,4 +1,19 @@
-
+function copyCode(element, id) {
+    console.log(id);
+  const codeBlock = element;
+  const range = document.createRange();
+  range.selectNode(codeBlock);
+  window.getSelection().removeAllRanges();
+  window.getSelection().addRange(range);
+  document.execCommand("copy");
+  window.getSelection().removeAllRanges();
+  const copyText = document.getElementById(id);
+  copyText.style.display = "inline-block";
+  copyText.classList.add("show");
+  setTimeout(() => {
+    copyText.classList.remove("show");
+  }, 2000);
+}
   //JS needed for basic webpage to work:
   document.addEventListener('DOMContentLoaded', function() {
       Prism.highlightAll();
