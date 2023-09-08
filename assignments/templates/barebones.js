@@ -1,39 +1,4 @@
 
-    function buttonExample() {
-      document.getElementById('buttonExampleText').innerHTML = 'You clicked me! At ' + new Date().toLocaleTimeString();
-      setTimeout(() => {
-        document.getElementById('buttonExampleText').innerHTML = 'Click Me';
-
-      }, 5000);
-    }
-    let clockStarted = false;
-      let clockInterval;
-
-      function toggleClock() {
-        if (clockStarted) {
-          // Stop the clock
-          clearInterval(clockInterval);
-          clockStarted = false;
-          document.getElementById('clockButton').innerHTML = 'Start Clock';
-        } else {
-          // Start the clock
-          getTime();
-            document.getElementById('clockButton').innerHTML = 'Stop Clock';
-          clockInterval = setInterval(() => {
-            getTime();
-          }, 1000);
-          clockStarted = true;
-        }
-      }
-function getTime() {
-  document.getElementById('time').innerHTML = new Date().toLocaleTimeString();
-}
-
-     
-
-</script>
-
-<script>
   //JS needed for basic webpage to work:
   document.addEventListener('DOMContentLoaded', function() {
       Prism.highlightAll();
