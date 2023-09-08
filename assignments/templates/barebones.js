@@ -1,4 +1,40 @@
-//JS needed for basic webpage to work:
+
+    function buttonExample() {
+      document.getElementById('buttonExampleText').innerHTML = 'You clicked me! At ' + new Date().toLocaleTimeString();
+      setTimeout(() => {
+        document.getElementById('buttonExampleText').innerHTML = 'Click Me';
+
+      }, 5000);
+    }
+    let clockStarted = false;
+      let clockInterval;
+
+      function toggleClock() {
+        if (clockStarted) {
+          // Stop the clock
+          clearInterval(clockInterval);
+          clockStarted = false;
+          document.getElementById('clockButton').innerHTML = 'Start Clock';
+        } else {
+          // Start the clock
+          getTime();
+            document.getElementById('clockButton').innerHTML = 'Stop Clock';
+          clockInterval = setInterval(() => {
+            getTime();
+          }, 1000);
+          clockStarted = true;
+        }
+      }
+function getTime() {
+  document.getElementById('time').innerHTML = new Date().toLocaleTimeString();
+}
+
+     
+
+</script>
+
+<script>
+  //JS needed for basic webpage to work:
   document.addEventListener('DOMContentLoaded', function() {
       Prism.highlightAll();
       console.log("Add 'container' class to HTML to put in the middle of screen");
@@ -315,3 +351,20 @@
       Object.entries(selectedPalette).forEach(([key, value]) => {
         document.documentElement.style.setProperty(key, value);
       });
+
+      function copyCode(element, id) {
+    console.log(id);
+  const codeBlock = element;
+  const range = document.createRange();
+  range.selectNode(codeBlock);
+  window.getSelection().removeAllRanges();
+  window.getSelection().addRange(range);
+  document.execCommand("copy");
+  window.getSelection().removeAllRanges();
+  const copyText = document.getElementById(id);
+  copyText.style.display = "inline-block";
+  copyText.classList.add("show");
+  setTimeout(() => {
+    copyText.classList.remove("show");
+  }, 2000);
+}
