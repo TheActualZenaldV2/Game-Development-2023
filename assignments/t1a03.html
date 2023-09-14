@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Assigment template</title>
+  <script src="https://kit.fontawesome.com/5e0a1eec4b.js" crossorigin="anonymous"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://theactualzenaldv2.github.io/Game-Development-2023/assignments/templates/barebones.css">
+
+</head>
+<body> <br>
+	
+	
+
+
+    <div class="container">
+        <h1 class="section-titleGold">t1a03 forms</h1>
+        <h2 class="section-title" style="text-align: center; text-decoration: underline; cursor: pointer;" onclick="{window.location = 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/index.html'}">Back</h2>
+		<h2 class="section-title" style="text-align: center; text-decoration: underline; cursor: pointer;" onclick="{window.location = 'https://theactualzenaldv2.github.io/gamedev/public2/t1a03-forms.html'}">Old site</h2>
+    
+	</div> <br>
+  
+		<div class="container">
+			<h2 class="section-title"> Upload your own file, click link. its upload for everyone. </h2> <p class="section-content">If its an image, you will see a preview of it. <br> Choose bigger pictures under 20mb to see upload progress.</p>
+			<label for="profile-picture">Uploading Service:</label>
+			<input type="file" id="profile-picture"  required> <br>
+			<div id="progress"> </div>
+			<div> File Link: <span id="fileLink" style="font-weight: bolder;"></span></div>
+			<div style="text-align: center;">
+				<img id="preview-image" src="" alt="Image preview" width="500px" height="500px">
+			</div>
+		</div> <br> 
+
+    <div class="container"> 
+        <h1 class="section-title"> Code Example: (Using Prism.js)</h1>
+    
+    <pre><code class="language-javascript ">
+        //using firebase for backend:
+
+const previewImage = document.getElementById('preview-image');
+const profilePictureInput = document.getElementById('profile-picture');
+previewImage.style.display = 'none';
+const username = "Joe"
+profilePictureInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    const maxSize = 20 * 1024 * 1024; 
+    
+    if (file && file.size <= maxSize) { // Check if file exists and is within the size limit
+        const reader = new FileReader();
+        reader.onload = (readerEvent) => {
+            previewImage.src = readerEvent.target.result;
+        };
+        reader.readAsDataURL(file);
+        previewImage.style.display = 'block';
+		uploadProfilePicture(username, file)
+    } else {
+        alert("File is too large! Please select a file that is 20MB or smaller."); // Updated the alert message for consistency
+        profilePictureInput.value = ''; // Reset the input field to clear the invalid file
+        previewImage.src = '';
+        previewImage.style.display = 'none';
+    }
+});
+          </code></pre>
+    </div> <br>
+<div class="container">
+	<h2 class="section-title">Input examples: </h2>
+<hr>
+	<input type="button" value="button"> <br><br>
+	<input type="text" placeholder="type something here"><br><br>
+	Click me <input type="radio" value="radio button"><br><br>
+	<input type="submit" value="useless"><br><br>
+	<input type="textarea" value="also a textarea"><br><br>
+
+</div>
+
+	<script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-storage.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<script src="https://theactualzenaldv2.github.io/Game-Development-2023/assignments/templates/barebones.js"></script>
+</body>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCqB4uXUadpU3A2_xoqxEbf2E6XotmZVN0",
+  authDomain: "fortnitelovers.firebaseapp.com",
+  databaseURL: "https://fortnitelovers-default-rtdb.firebaseio.com",
+  projectId: "fortnitelovers",
+  storageBucket: "fortnitelovers.appspot.com",
+  messagingSenderId: "775617229851",
+  appId: "1:775617229851:web:f43a82425c9d26db58f4be",
+  measurementId: "G-3K165RJPM4"
+};
+
+   // Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+// Declare database variable
+var database = firebase.database();
+
+const previewImage = document.getElementById('preview-image');
+const profilePictureInput = document.getElementById('profile-picture');
+previewImage.style.display = 'none';
+const username = "Joe"
+profilePictureInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    const maxSize = 100 * 1024 * 1024; 
+    
+    if (file && file.size <= maxSize) { // Check if file exists and is within the size limit
+        const reader = new FileReader();
+        reader.onload = (readerEvent) => {
+            previewImage.src = readerEvent.target.result;
+        };
+        reader.readAsDataURL(file);
+        previewImage.style.display = 'block';
+		uploadProfilePicture(username, file)
+    } else {
+        alert("File is too large! Please select a file that is 20MB or smaller."); // Updated the alert message for consistency
+        profilePictureInput.value = ''; // Reset the input field to clear the invalid file
+        previewImage.src = '';
+        previewImage.style.display = 'none';
+    }
+});
+
+// Send profile picture to Firebase Storage
+function uploadProfilePicture(username, file) {
+    var storageRef = firebase.storage().ref();
+    var metadata = {
+        contentType: file.type
+    };
+    
+    var uploadTask = storageRef.child('profilePictures/' + username).put(file, metadata);
+
+    uploadTask.on('state_changed',
+        function(snapshot) {
+            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+            var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            var progressDone = Math.round(progress);
+            console.log('Upload is ' + progressDone + '% done');
+			document.getElementById('progress').innerHTML = "Upload In Progress: " + progressDone + "%"
+            switch (snapshot.state) {
+                case firebase.storage.TaskState.PAUSED:
+                    console.log('Upload is paused');
+                    break;
+                case firebase.storage.TaskState.RUNNING:
+                    console.log('Upload is running');
+                    break;
+            }
+        },
+        function(error) {
+            // Handle errors
+            switch (error.code) {
+                case 'storage/unauthorized':
+                    console.log('User doesn\'t have permission to access the object');
+                    break;
+                case 'storage/canceled':
+                    console.log('User canceled the upload');
+                    break;
+                case 'storage/unknown':
+                    console.log('Unknown error occurred');
+                    break;
+                default:
+                    console.log('An error occurred:', error);
+            }
+        },
+        function() {
+            // Upload completed successfully, now we can get the download URL
+            uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                console.log('File available at', downloadURL);
+				document.getElementById('fileLink').innerHTML = `<a href="${downloadURL}">File Link</a>`;
+                // Update the user's profile picture URL in the database
+                database.ref('users/' + username).update({
+                    profilePicture: downloadURL
+                });
+            });
+        }
+    );
+}
+
+// Example usage:
+// Assuming you have a 'username' variable and a 'file' variable
+// Make sure to call this function with the appropriate values
+// uploadProfilePicture(username, file);
+
+
+
+</script>
+</html>
