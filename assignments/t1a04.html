@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Customizable Clock</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#options" aria-controls="options" id="optionsButton">
+      <i class="fas fa-cog"></i>
+    </button>
+    <div class="container">
+      
+      <div class="row">
+        <div class="col-md-12">
+        
+          <div class="offcanvas offcanvas-end" tabindex="-1" id="options" aria-labelledby="optionsLabel">
+             <h2 class="section-title" style="text-align: center; text-decoration: underline; cursor: pointer;" onclick="{window.location = 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/index.html'}">Back</h2>
+		<h2 class="section-title" style="text-align: center; text-decoration: underline; cursor: pointer;" onclick="{window.location = 'https://theactualzenaldv2.github.io/gamedev/public2/https://theactualzenaldv2.github.io/gamedev/public2/t1a04-css-jon.html'}">Old site</h2>
+            <div class="offcanvas-header">
+              <h3 class="offcanvas-title" id="optionsLabel">Options</h3>
+              <h5> Press i to toggle menu</h5>
+              <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+              <h2>Background</h2>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="background" id="background1" value="background1" checked>
+                <label class="form-check-label" for="background1">
+                  Background 1
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="background" id="background2" value="background2">
+                <label class="form-check-label" for="background2">
+                  Background 2
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="background" id="background3" value="background3">
+                <label class="form-check-label" for="background3">
+                  Background 3
+                </label>
+              </div> 
+              <br>
+              <h2>Clock Font</h2>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="font" id="font1" value="font1" checked>
+                <label class="form-check-label" for="font1" style="font-family: 'sans-serif';">
+                  Font 1
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="font" id="font2" value="font2">
+                <label class="form-check-label" for="font2" style="font-family: 'ADLaM Display', cursive;">
+                  Font 2
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="font" id="font3" value="font3">
+                <label class="form-check-label" for="font3" style="font-family: 'monospace'">
+                  Font 3
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="font" id="font4" value="font4">
+                <label class="form-check-label" for="font4" style="font-family: 'Pacifico', cursive;">
+                  Font 4
+                </label>
+              </div>
+              <br>
+              <h2>Font Size and Position</h2>
+              <div class="form-group">
+                <label for="font-size">Font Size</label>
+                <input type="range" class="form-range" id="font-size" min="10" max="300" value="20">
+              </div>
+
+              <div class="form-group">
+                <label for="font-position-x">Font Position X</label>
+                <input type="range" class="form-range" id="font-position-x" min="-100" max="100" value="50">
+              </div>
+              <div class="form-group">
+                <label for="font-position-y">Font Position Y</label>
+                <input type="range" class="form-range" id="font-position-y" min="-100" max="100" value="50">
+              </div>
+              <br>
+              <h2>Color</h2>
+
+              <!-- Color options -->
+<div class="form-group">
+  <label for="color">Color</label>
+  <input type="color" class="form-control" id="color" value="#000000">
+</div>
+
+<!-- Text shadow color options -->
+<div class="form-group">
+  <label for="text-shadow-color">Text Shadow Color</label>
+  <input type="color" class="form-control" id="text-shadow-color" value="#ffffff">
+</div> <br>
+
+<!-- Text shadow size options -->
+<div class="form-group">
+  <label for="text-shadow-size">Text Shadow Size</label>
+  <input type="range" class="form-control-range" id="text-shadow-size" min="0" max="50" step="1" value="0">
+</div>
+<br>
+<h2>Animations </h2>
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" name="enableAnimations" id="enableAnimationsCheckbox" value="enableAnimations" checked>
+  <label class="form-check-label" for="enableAnimationsCheckbox">
+    Clock Animation
+  </label>
+</div>
+<!-- Animation Options -->
+<div class="form-check">
+  <input class="form-check-input" type="radio" name="animation" id="animation1" value="animation1" checked>
+  <label class="form-check-label" for="animation1">
+    Vibrate
+  </label>
+</div> 
+<div class="form-check">
+  <input class="form-check-input" type="radio" name="animation" id="animation2" value="animation2">
+  <label class="form-check-label" for="animation2">
+   Flicker
+  </label>
+</div>
+<div class="form-check">
+  <input class="form-check-input" type="radio" name="animation" id="animation3" value="animation3">
+  <label class="form-check-label" for="animation3">
+    Pulse
+  </label>
+</div> 
+<br>
+
+<h2>Custom Background</h2>
+
+
+<!-- Custom background options -->
+<div class="form-group">
+  <label for="custom-background">Custom Background</label>
+  <input type="text" class="form-control" id="custom-background" placeholder="Enter image URL">
+</div> <br>
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" name="toggleOptions" id="toggleOptionsButton" value="toggleOptions" checked>
+  <label class="form-check-label" for="toggleOptionsButton">
+    Show Options Button
+  </label>
+</div>
+<br>
+
+            </div>
+          </div>
+        </div>
+      </div>
+     
+    </div>
+
+    <div class="row my-5">
+        <div class="col-md-12">
+          <div class="card text-center" style="background-color: transparent; border: none">
+            <div class="card-body">
+              <h1 id="clock" class="display-1">12:00:00</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+    <div id="background1" class="background"></div>
+    <div id="background2" class="background"></div>
+    <div id="background3" class="background"></div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/5e0a1eec4b.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script>
+
+const clock = document.getElementById('clock');
+      const fontSizeSlider = document.getElementById('font-size');
+      const fontPositionXSlider = document.getElementById('font-position-x');
+      const fontPositionYSlider = document.getElementById('font-position-y');
+        const font1 = document.getElementById('font1');
+        const font2 = document.getElementById('font2');
+        const font3 = document.getElementById('font3');
+        const font4 = document.getElementById('font4');
+        const color = document.getElementById('color');
+        const textShadowColor = document.getElementById('text-shadow-color');
+        const textShadowSize = document.getElementById('text-shadow-size');
+        const customBackground = document.getElementById('custom-background');
+        const toggleOptionsButton = document.getElementById('toggleOptionsButton');
+        const body = document.body;
+        const animation1 = document.getElementById('animation1');
+        const animation2 = document.getElementById('animation2');
+        const animation3 = document.getElementById('animation3');
+        const enableAnimationsCheckbox = document.getElementById('enableAnimationsCheckbox');
+
+      fontSizeSlider.addEventListener('input', () => {
+        clock.style.fontSize = `${fontSizeSlider.value}px`;
+        localStorage.setItem('fontSize', fontSizeSlider.value);
+      });
+
+      fontPositionXSlider.addEventListener('input', () => {
+        clock.style.left = `${fontPositionXSlider.value}%`;
+        localStorage.setItem('fontPositionX', fontPositionXSlider.value);
+      });
+
+      fontPositionYSlider.addEventListener('input', () => {
+        clock.style.top = `${fontPositionYSlider.value * 40}%`;
+        localStorage.setItem('fontPositionY', fontPositionYSlider.value);
+      });
+
+        font1.addEventListener('change', () => {
+            clock.style.fontFamily = 'sans-serif';
+            localStorage.setItem('fontFamily', 'sans-serif');
+        });
+        font2.addEventListener('change', () => {
+            clock.style.fontFamily = "'ADLaM Display', cursive";
+            localStorage.setItem('fontFamily', "'ADLaM Display', cursive");
+                });
+        font3.addEventListener('change', () => {
+            clock.style.fontFamily = 'monospace';
+            localStorage.setItem('fontFamily', 'monospace');
+        });
+        font4.addEventListener('change', () => {
+            clock.style.fontFamily = "'Pacifico', cursive";
+            localStorage.setItem('fontFamily', "'Pacifico', cursive");
+        });
+        color.addEventListener('change', () => {
+            clock.style.color = color.value;
+            localStorage.setItem('color', color.value);
+        });
+        textShadowColor.addEventListener('change', () => {
+            clock.style.textShadow = `0 0 ${textShadowSize.value}px ${textShadowColor.value}`;
+            localStorage.setItem('textShadowColor', textShadowColor.value);
+        });
+        textShadowSize.addEventListener('input', () => {
+            clock.style.textShadow = `0 0 ${textShadowSize.value}px ${textShadowColor.value}`;
+            localStorage.setItem('textShadowSize', textShadowSize.value);
+        });
+        animation1.addEventListener('change', () => {
+            clock.style.animation = 'vibrate-1 0.3s linear infinite both';
+            localStorage.setItem('animation1', 'vibrate-1 0.3s linear infinite both');
+            //remove other animation from local storage
+            localStorage.removeItem('animation2');
+            localStorage.removeItem('animation3');
+        });
+        animation2.addEventListener('change', () => {
+            clock.style.animation = 'flicker-5 3s linear infinite both';
+            localStorage.setItem('animation2', 'flicker-5 3s linear infinite both');
+            //remove other animation from local storage
+            localStorage.removeItem('animation1');
+            localStorage.removeItem('animation3');
+        });
+        animation3.addEventListener('change', () => {
+            clock.style.animation = 'pulse 3s linear infinite both';
+            localStorage.setItem('animation3', 'pulse 3s linear infinite both');
+            //remove other animation from local storage
+            localStorage.removeItem('animation1');
+            localStorage.removeItem('animation2');
+        });
+        enableAnimationsCheckbox.addEventListener('change', () => {
+  if (enableAnimationsCheckbox.checked) {
+    animation1.disabled = false;
+    animation2.disabled = false;
+    animation3.disabled = false;
+    //uncheck all animations
+    animation1.checked = false;
+    animation2.checked = false;
+    animation3.checked = false;
+    localStorage.setItem('enableAnimationsCheckbox', 'true');
+    //stop animation if it is currently playing
+  } else {
+    animation1.disabled = true;
+    animation2.disabled = true;
+    animation3.disabled = true;
+    localStorage.setItem('enableAnimationsCheckbox', 'false');
+    clock.style.animation = 'none';
+
+  }
+});
+        customBackground.addEventListener('change', () => {
+  body.style.backgroundImage = `url(${customBackground.value})`;
+  localStorage.setItem('customBackground', customBackground.value);
+  if (customBackground.value === '') {
+    body.style.backgroundImage = 'url(https://cdn.pixabay.com/photo/2020/04/10/11/54/nature-5025462_1280.jpg)';
+    localStorage.setItem('customBackground', 'url(https://cdn.pixabay.com/photo/2020/04/10/11/54/nature-5025462_1280.jpg)');
+  }
+});
+        toggleOptionsButton.addEventListener('change', () => {
+  if (toggleOptionsButton.checked) {
+    document.getElementById('optionsButton').style.display = 'block';
+    localStorage.setItem('toggleOptionsButton', 'block');
+  } else {
+    document.getElementById('optionsButton').style.display = 'none';
+    localStorage.setItem('toggleOptionsButton', 'none');
+  }
+});
+const background1 = document.getElementById('background1');
+const background2 = document.getElementById('background2');
+const background3 = document.getElementById('background3');
+
+background1.addEventListener('change', () => {
+  body.style.backgroundImage = 'url(https://cdn.pixabay.com/photo/2020/04/10/11/54/nature-5025462_1280.jpg)';
+  //set background image to take up the whole screen
+  body.style.backgroundSize = 'cover';
+  //prevent background image from repeating
+  body.style.backgroundRepeat = 'no-repeat';
+  //center the background image
+  body.style.backgroundPosition = 'center';
+  localStorage.setItem('backgroundImage', 'url(https://cdn.pixabay.com/photo/2020/04/10/11/54/nature-5025462_1280.jpg)');
+  
+});
+
+background2.addEventListener('change', () => {
+  body.style.backgroundImage = 'url(https://wallpaperaccess.com/full/1098117.jpg)';
+  localStorage.setItem('backgroundImage', 'url(https://wallpaperaccess.com/full/1098117.jpg)');
+});
+
+background3.addEventListener('change', () => {
+  body.style.backgroundImage = 'url(https://images2.alphacoders.com/128/1289176.jpg)';
+  localStorage.setItem('backgroundImage', 'url(https://images2.alphacoders.com/128/1289176.jpg)');
+});
+//clock function
+function clockTime() {
+  //get current time
+  let date = new Date();
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  let seconds = date.getSeconds();
+  //add 0 to minutes and seconds if less than 10
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+  seconds = seconds < 10 ? `0${seconds}` : seconds;
+  //set time
+  clock.textContent = `${hours}:${minutes}:${seconds}`;
+  //call clockTime every second
+  setTimeout(clockTime, 1000);
+}
+//call clockTime
+clockTime();
+//get values from local storage
+const fontSize = localStorage.getItem('fontSize');
+const fontPositionX = localStorage.getItem('fontPositionX');
+const fontPositionY = localStorage.getItem('fontPositionY');
+const fontFamily = localStorage.getItem('fontFamily');
+let  colorValue = localStorage.getItem('color');
+let  textShadowColorValue = localStorage.getItem('textShadowColor');
+const textShadowSizeValue = localStorage.getItem('textShadowSize');
+const backgroundImage = localStorage.getItem('backgroundImage');
+const customBackgroundValue = localStorage.getItem('customBackground');
+const toggleOptionsButtonValue = localStorage.getItem('toggleOptionsButton');
+const animation1Value = localStorage.getItem('animation1');
+const animation2Value = localStorage.getItem('animation2');
+const animation3Value = localStorage.getItem('animation3');
+const enableAnimationsCheckboxValue = localStorage.getItem('enableAnimationsCheckbox');
+
+
+//set values from local storage
+clock.style.fontSize = `${fontSize}px`;
+fontSizeSlider.value = fontSize;
+clock.style.left = `${fontPositionX}%`;
+fontPositionXSlider.value = fontPositionX;
+clock.style.top = `${fontPositionY * 40}%`;
+fontPositionYSlider.value = fontPositionY;
+clock.style.fontFamily = fontFamily;
+if (fontFamily === 'sans-serif') {
+  font1.checked = true;
+} else if (fontFamily === "'ADLaM Display', cursive") {
+  font2.checked = true;
+} else if (fontFamily === 'monospace') {
+  font3.checked = true;
+} else if (fontFamily === "'Pacifico', cursive") {
+  font4.checked = true;
+}
+if(colorValue === null) {
+  colorValue = '#000000';
+}
+if(textShadowColorValue === null) {
+  textShadowColorValue = '#ffffff';
+}
+clock.style.color = colorValue;
+color.value = colorValue;
+clock.style.textShadow = `0 0 ${textShadowSizeValue}px ${textShadowColorValue}`;
+textShadowColor.value = textShadowColorValue;
+textShadowSize.value = textShadowSizeValue;
+body.style.backgroundImage = backgroundImage;
+if (backgroundImage === 'url(https://cdn.pixabay.com/photo/2020/04/10/11/54/nature-5025462_1280.jpg)') {
+  background1.checked = true;
+} else if (backgroundImage === 'url(https://wallpaperaccess.com/full/1098117.jpg)') {
+  background2.checked = true;
+} else if (backgroundImage === 'url(https://images2.alphacoders.com/128/1289176.jpg)') {
+  background3.checked = true;
+}
+if(customBackgroundValue){
+if (customBackgroundValue.trim() !== '') {
+  customBackground.value = customBackgroundValue;
+  //set custom background
+  body.style.backgroundImage = `url(${customBackgroundValue})`;
+}
+}
+
+if (toggleOptionsButtonValue === 'block') {
+  toggleOptionsButton.checked = true;
+  document.getElementById('optionsButton').style.display = 'block';
+} else if (toggleOptionsButtonValue === 'none') {
+  toggleOptionsButton.checked = false;
+  document.getElementById('optionsButton').style.display = 'none';
+}
+if (animation1Value === 'vibrate-1 0.3s linear infinite both') {
+  animation1.checked = true;
+  clock.style.animation = 'vibrate-1 0.3s linear infinite both';
+} else if (animation2Value === 'flicker-5 3s linear infinite both') {
+  animation2.checked = true;
+  clock.style.animation = 'flicker-5 3s linear infinite both';
+} else if (animation3Value === 'pulse 3s linear infinite both') {
+  animation3.checked = true;
+  clock.style.animation = 'pulse 3s linear infinite both';
+}
+if (enableAnimationsCheckboxValue === 'true') {
+  enableAnimationsCheckbox.checked = true;
+  animation1.disabled = false;
+  animation2.disabled = false;
+  animation3.disabled = false;
+} else if (enableAnimationsCheckboxValue === 'false') {
+  enableAnimationsCheckbox.checked = false;
+  animation1.disabled = true;
+  animation2.disabled = true;
+  animation3.disabled = true;
+  clock.style.animation = 'none';
+}
+//reset page position
+window.onload = function () {
+  window.scrollTo(0, 0);
+}
+window.BeforeUnloadEvent = function () {
+  window.scrollTo(0, 0);
+}
+//press i to open options
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'i' || e.key === 'I' || e.key === 'escape' || e.key === 'Escape') {
+    document.getElementById('optionsButton').click();
+    //unfocus button
+    document.getElementById('optionsButton').blur();
+  }
+});
+
+</script> 
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=ADLaM+Display&family=Fjalla+One&family=Pacifico&family=Poppins:ital@1&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=ADLaM+Display&family=Fjalla+One&family=Poppins:ital@1&display=swap');
+    :root {
+      --purple-100: #f3e8fd;
+      --purple-200: #d6b8fa;
+      --purple-300: #b88af7;
+      --purple-300a:rgba(184, 138, 247, 0.395);
+      --purple-400: #9b5cf4;
+      --purple-500: #6f42c1;
+      --purple-600: #5e32b3;
+      --purple-700: #4b2790;
+      --purple-800: #381c6d;
+      --purple-900: #25114a;
+      --gold: #ffd700;
+      --gray: #f8f9fa;
+        --black: #212529;
+    }
+    
+body {
+  background-image: url("https://cdn.pixabay.com/photo/2020/04/10/11/54/nature-5025462_1280.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  transition: all 0.5s ease-in-out;
+  user-select: none;
+}
+
+   
+    #clock {
+        position: absolute;
+        height: 100%;
+        font-weight: bold;
+        text-shadow: 0 0 10px var(--gray);
+    }
+
+    #clock {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3em;
+  font-weight: bold;
+  text-shadow: 0 0 10px var(--gray);
+  -webkit-animation: vibrate-1 0.3s linear infinite both;
+	        animation: vibrate-1 0.3s linear infinite both;
+          transition: opacity 0.5s ease-in-out;
+}
+
+    .offcanvas {
+background-color: var(--purple-300a);
+color: white;
+
+}
+#optionsButton {
+position: relative;
+top: 10;
+right: 10;
+}
+::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--purple-300);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--purple-600);
+    }
+
+    @keyframes vibrate-1 {
+  0% {
+    -webkit-transform: translate(0);
+            transform: translate(0);
+  }
+  20% {
+    -webkit-transform: translate(-2px, 2px);
+            transform: translate(-2px, 2px);
+  }
+  40% {
+    -webkit-transform: translate(-2px, -2px);
+            transform: translate(-2px, -2px);
+  }
+  60% {
+    -webkit-transform: translate(2px, 2px);
+            transform: translate(2px, 2px);
+  }
+  80% {
+    -webkit-transform: translate(2px, -2px);
+            transform: translate(2px, -2px);
+  }
+  100% {
+    -webkit-transform: translate(0);
+            transform: translate(0);
+  }
+}
+
+    
+@keyframes flicker-5 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  0.02% {
+    opacity: 1;
+  }
+  0% {
+    opacity: 1;
+  }
+  1% {
+    opacity: 1;
+  }
+  1.02% {
+    opacity: 1;
+  }
+  8.98% {
+    opacity: 1;
+  }
+  9% {
+    opacity: 0;
+  }
+  9.8% {
+    opacity: 0;
+  }
+  9.82% {
+    opacity: 1;
+  }
+  9.48% {
+    opacity: 1;
+  }
+  9.5% {
+    opacity: 1;
+  }
+  9.6% {
+    opacity: 1;
+  }
+  9.62% {
+    opacity: 1;
+  }
+  14.98% {
+    opacity: 1;
+  }
+  15% {
+    opacity: 0.5;
+  }
+  15.8% {
+    opacity: 0.5;
+  }
+  15.82% {
+    opacity: 1;
+  }
+  15.18% {
+    opacity: 1;
+  }
+  15.2% {
+    opacity: 0.7;
+  }
+  16% {
+    opacity: 0.7;
+  }
+  16.02% {
+    opacity: 1;
+  }
+  15.48% {
+    opacity: 1;
+  }
+  15.5% {
+    opacity: 0.5;
+  }
+  16.2% {
+    opacity: 0.5;
+  }
+  16.22% {
+    opacity: 1;
+  }
+  16.98% {
+    opacity: 1;
+  }
+  17% {
+    opacity: 1;
+  }
+  17.8% {
+    opacity: 1;
+  }
+  17.82% {
+    opacity: 1;
+  }
+  20.48% {
+    opacity: 1;
+  }
+  20.5% {
+    opacity: 0.9;
+  }
+  21.3% {
+    opacity: 0.9;
+  }
+  21.32% {
+    opacity: 1;
+  }
+  20.98% {
+    opacity: 1;
+  }
+  21% {
+    opacity: 1;
+  }
+  22% {
+    opacity: 1;
+  }
+  22.02% {
+    opacity: 1;
+  }
+  39.98% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 1;
+  }
+  41% {
+    opacity: 1;
+  }
+  41.02% {
+    opacity: 1;
+  }
+  40.48% {
+    opacity: 1;
+  }
+  40.5% {
+    opacity: 0.6;
+  }
+  41.4% {
+    opacity: 0.6;
+  }
+  41.42% {
+    opacity: 1;
+  }
+  41.98% {
+    opacity: 1;
+  }
+  42% {
+    opacity: 1;
+  }
+  42.8% {
+    opacity: 1;
+  }
+  42.82% {
+    opacity: 1;
+  }
+  59.98% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 1;
+  }
+  61% {
+    opacity: 1;
+  }
+  61.02% {
+    opacity: 1;
+  }
+  60.18% {
+    opacity: 1;
+  }
+  60.2% {
+    opacity: 0.2;
+  }
+  61% {
+    opacity: 0.2;
+  }
+  61.02% {
+    opacity: 1;
+  }
+  60.78% {
+    opacity: 1;
+  }
+  60.8% {
+    opacity: 0.4;
+  }
+  61.6% {
+    opacity: 0.4;
+  }
+  61.62% {
+    opacity: 1;
+  }
+  61.38% {
+    opacity: 1;
+  }
+  61.4% {
+    opacity: 0;
+  }
+  62.2% {
+    opacity: 0;
+  }
+  62.22% {
+    opacity: 1;
+  }
+  61.78% {
+    opacity: 1;
+  }
+  61.8% {
+    opacity: 1;
+  }
+  62.8% {
+    opacity: 1;
+  }
+  62.82% {
+    opacity: 1;
+  }
+  75.98% {
+    opacity: 1;
+  }
+  76% {
+    opacity: 1;
+  }
+  77% {
+    opacity: 1;
+  }
+  77.02% {
+    opacity: 1;
+  }
+  77.98% {
+    opacity: 1;
+  }
+  78% {
+    opacity: 0.7;
+  }
+  78.8% {
+    opacity: 0.7;
+  }
+  78.82% {
+    opacity: 1;
+  }
+  78.98% {
+    opacity: 1;
+  }
+  79% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  80.02% {
+    opacity: 1;
+  }
+  99.98% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+  101% {
+    opacity: 1;
+  }
+  101.02% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    text-shadow: 0 0 0px;
+  }
+  25% {
+    transform: translate(-50%, -50%) scale(1.05);
+    text-shadow: 0 0 5px;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+    text-shadow: 0 0 10px;
+  }
+  75% {
+    transform: translate(-50%, -50%) scale(1.05);
+    text-shadow: 0 0 5px;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    text-shadow: 0 0 0px;
+  }
+}
+  
+
+  
+
+
+
+</style>
+</body>
+</html>
