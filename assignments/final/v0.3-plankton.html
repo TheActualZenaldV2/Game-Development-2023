@@ -1,0 +1,3019 @@
+
+
+
+
+
+<html>
+    <body onload=""> </body>
+   
+
+<head>
+  <style>
+    canvas {
+  border:1px solid #000;
+  background-color: rgb(135, 135, 135);
+cursor: crosshair;
+  width: 100%;
+height: 100%;
+}
+    body {
+      background-color: black;
+      overflow: hidden;
+      user-select: none;
+      background-image: url('https://i.imgur.com/YtBqakq.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+      transition: 0.3s ease all;
+    }
+  
+    #pingContainer {
+    position: fixed;
+    top: 50px;
+    left: 5px; /* Adjust the right distance from the edge of the viewport */
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+    padding: 10px;
+    max-width: 200px;
+    border-radius: 5px;
+  }
+
+  #ammoContainer {
+    position: fixed;
+    bottom: 5px;
+    left: 5px; /* Adjust the right distance from the edge of the viewport */
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  #pingContainer p {
+    color: white;
+    margin: 0; /* Remove default margin for the <p> element */
+    font-size: 18px; /* Adjust the font size as needed */
+  }
+
+  #pingContainer #pingTime {
+    font-weight: bold;
+  }
+  #statsContainerWrapper {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 999999;
+}
+
+#statsContainer {
+  font-family: 'Your Font', sans-serif; /* Use the desired font family */
+  font-size: 18px; /* Adjust the font size as needed */
+  color: white; /* Set the text color */
+  /* Add other text-related styling here */
+}
+
+.menu {
+	-webkit-box-shadow: 5px 5px 5px 0px #000000, inset 4px 4px 25px 0px #000000, 5px 5px 25px 18px rgba(0,0,0,0.5);
+	box-shadow: 5px 5px 5px 0px #000000, inset 4px 4px 25px 0px #000000, 5px 5px 25px 18px rgba(0,0,0,0.5);
+	position: absolute;
+	border: 2px solid rgb(0, 174, 255);
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%) scale(0.9);
+	background-color: rgba(0, 0, 0, 0.7);
+	padding: 20px;
+	border-radius: 10px;
+	text-align: center;
+	animation: fade-in 0.75s forwards;
+	max-height: 600px;
+	overflow: auto;
+}
+
+#startMenu {
+    width: 700px;
+}
+
+.menu button {
+    background-color: #1e90ff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 21px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.menu button:hover {
+    background-color: #007bff;
+}
+
+.menu button#login {
+    background-color: #1e26ff;
+}
+
+.menu button#login:hover {
+    background-color: #0021a5;
+}
+
+.menu button#register {
+    background-color: #32cd32;
+}
+
+.menu button#register:hover {
+    background-color: #28a745;
+}
+
+.menu button#changelogs {
+    background-color: #21ba7d;
+}
+
+.menu button#changelogs:hover {
+    background-color: #018a5a;
+    color: white;
+}
+
+.menu img {
+    position: fixed;
+    top: 0;
+    left: 18%;
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    margin: 10px;
+}
+
+.menu h1, li, label, p {
+    color: white;
+    font-size: 20px;
+    text-shadow: 1px 1px 1px black;
+}
+
+.menu h1 {
+    font-size: 32px;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu h1 img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.menu p#menuUsername {
+    cursor: pointer;
+    color: gold;
+    text-decoration: underline;
+}
+
+.menu p#menuUsername:hover {
+    color: #ffd700;
+}
+
+#loginWarning {
+    font-size: 1rem;
+    color: #ffbf00;
+}
+
+.menu button i {
+    font-size: 18px;
+    margin-right: 5px;
+    color: white;
+}
+
+
+
+::-webkit-scrollbar {
+	width: 15px;
+}
+::-webkit-scrollbar-track {
+	background: #f1f1f1;
+	border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+	background: #888;
+	border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+	background: #555;
+}
+    
+
+
+    
+#databaseError {
+        display: none;
+    }
+    #passwordResetConfirmation {
+        display: none;
+    }
+    #registration-form-2{
+        display: none;
+    }
+    
+    #reset-password {
+        display: none;
+    }
+    .devtools {
+        display: none;
+    }
+    #login-success {
+        text-align: center;
+    }
+    #account-confirmation{
+        text-align: center;
+    }
+    .checkmark-icon {
+        position: absolute;
+        top: 44%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: green;
+        font-size: 4em;
+        background-color: white;
+        border-radius: 50%;
+        padding: 3px;
+        z-index: 999;
+    }
+    #check {
+
+        font-size: 2rem;
+    
+        
+    }
+    #password-text {
+        font-family: 'Poppins', sans-serif;
+        font-size: .9rem;
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
+        margin: 0;
+        margin-bottom: 20;
+        
+    }
+    
+    #loading {
+  display: none;
+  margin: 0 auto;
+  width: 50px;
+  height: 50px;
+  border-image: linear-gradient(0deg, #afd4d9 0%, #5fd8e0 100%) 1;
+        border-inline: 5px;
+  border-width: 5px;
+  border-style: solid;
+  animation: spin 2s ease-in-out infinite;
+  position: absolute;
+  top: 50%;
+  left: 48.5%;
+  background-color: #333;
+}
+
+
+
+      #loading-text {
+        color: white;
+        display: none;
+        /*position middle of screen*/
+        position: absolute;
+        top: 45%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 20px;
+        z-index: 100;
+
+      }
+      /* Animation for the loading spinner */
+      @keyframes spin {
+        to {transform: rotate(360deg);}
+      }
+    
+    
+    form {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px;
+        border-radius: 20px;
+        -webkit-box-shadow: 5px 5px 5px 0px #000000, inset 4px 4px 15px 0px #000000, 5px 5px 15px 18px rgba(0,0,0,0.5); 
+  box-shadow: 5px 5px 5px 0px #000000, inset 4px 4px 15px 0px #000000, 5px 5px 15px 18px rgba(0,0,0,0.5);
+  position: absolute;
+  color: white;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  animation: fade-in 0.75s forwards;
+  max-height: 600px;
+  overflow: auto; /* Only show scrollbar when content overflows */
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 10px;
+        font-size: 1.2em;
+        color: white;
+    }
+    
+    
+    button[type="submit"] {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: none;
+        background-color: #333;
+        color: #fff;
+        font-size: 1.1em;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    
+  
+    
+    #registration-form {
+        top: 50%;
+       
+    }
+    
+    #login-form {
+        top: 50%;
+        display: none;
+        
+    }
+    
+    #registration-form button[type="submit"] {
+        background-color: #669767;
+    }
+    #login-form button[type="submit"] {
+      background-color: #e210c9;
+
+    }
+    #registration-form button[type="submit"]:hover,
+    #login-form button[type="submit"]:hover {
+        background-color: #e210c9;
+    }
+
+    #registration-form-2 button[type="submit"] {
+        background-color: #4CAF50;
+    }
+    
+    #registration-form-2 button[type="submit"]:hover,
+    #login-form button[type="submit"]:hover {
+      background-color: #2b282b;
+    }
+  #registration-form {
+    display: none;
+  }
+
+  
+#scoreContainer {
+    position: fixed;
+    top: 50%;
+    left: 55%;
+    font-size: 40px;
+    font-weight: bolder;
+    color: yellowgreen
+}
+
+#scoreAlert {
+    display: none;
+    animation: slideInUp 1s ease;
+}
+
+
+#deathContainer {
+    position: fixed;
+    top: 50%;
+    right: 55%;
+    font-size: 40px;
+    font-weight: bolder;
+    color: yellowgreen
+}
+
+#deathAlert {
+    display: none;
+    animation: slideInUp 1s ease;
+}
+
+@keyframes slideInUp {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+
+.leaderboard-container {
+    position: absolute;
+    top: 20px; /* Adjust the top position as needed */
+    right: 20px; /* Adjust the right position as needed */
+    background-color: rgba(0, 0, 0, 0.7); /* Set the background color with transparency */
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+}
+
+.endLeaderboard-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+}
+
+
+.table {
+    margin-bottom: 0; /* Remove extra margin at the bottom of the table */
+}
+  </style>
+</head>
+<body>
+
+<div id="menuContainers">
+
+  <div class="container text-center mt-5" id="startMenu">
+    <h1 class="text-primary font-weight-bold">Plankton <span class="text-white ml-2">v0.2</span></h1>
+    <p class="text-warning" id="loginWarning">Login or Create Account to save account stats + more</p>
+    <p class="text-white">Logged In As: <span id="menuUsername" class="text-gold cursor-pointer" onclick="showLoginForm()">N/A</span></p>
+    <button class="btn btn-primary btn-lg" onclick="init()"><i class="fa-solid fa-play mr-2"></i>Play</button>
+    <button class="btn btn-primary btn-lg" onclick="changeClass()"><i class="fa-solid fa-shuffle mr-2"></i>Change Class</button>
+    <button id="login" class="btn btn-primary btn-lg" onclick="showLoginForm()"><i class="fa-solid fa-user-astronaut mr-2"></i>Login</button>
+    <button id="register" class="btn btn-success btn-lg" onclick="showRegistrationForm()"><i class="fa-solid fa-user-plus mr-2"></i>Register</button>
+    <button id="changelogs" class="btn btn-info btn-lg" onclick="openDemo()"><i class="fa-solid fa-inbox mr-2"></i>Changelogs</button>
+</div>
+
+       
+
+<!-- Class Selection Menu -->
+<div class="container mt-5" style="display: none;" id="classSelection">
+  <form>
+      <div class="form-group">
+        <h2 class="text-primary"><i class="fa-solid fa-user-secret fa-beat-fade"></i> Select Your Class</h2>
+
+          <label for="classSelect">Class Options:</label>
+          <select class="form-control" id="classSelect">
+              <option value="warrior">Warrior ⍺  Role: Burst AR</option>
+              <option value="mage">Mage ⌘ Role: Light Burst AR</option>
+              <option value="rogue">Rogue ⍣ Role: Heavy Machine Gun</option>
+              <option value="archer">Archer ⍲ Role: Sniper</option>
+          </select>
+      </div> <br> 
+      <button class="btn btn-primary btn-lg" type="button" onclick="selectClass()">Select <i class="fa-solid fa-arrow-right-long fa-bounce"></i></button>
+  </form>
+</div>
+
+<div class="menu" id="changelogsMenu" style="display: none;">
+  <button onclick="contineLogin()"> Close</button>
+  <h1> <i class="fa-solid fa-folder-open"></i> Changelogs</h1> <hr>
+  <p style="text-decoration: underline;color: burlywood"> v0.2</p>
+  <li style="color: gold; text-shadow: none; font-weight: bold;">Classes Balancing</li>
+  <li> Weapons shooting glitch fix</li> 
+  <li> WIP Game Timer </li> 
+
+  
+  <br> 
+  <p style="text-decoration: underline;color: burlywood"> v0.1</p>
+  <li style="color: gold; text-shadow: none; font-weight: bold;">Initial Version</li>
+
+
+
+</div>
+
+<div id="loading"></div>
+<span id="loading-text">Please Wait....</span>
+ 
+<form id="registration-form">
+    <p style="text-align: center;"> Welcome! Create an account to get started. </p>
+    <label for="email-input">Email:</label> 
+    <input type="email" id="email-input" class="form-control" required> 
+  
+    <label for="password-input">Password:</label>
+    <input type="password" id="password-input" minlength="6" class="form-control" required> 
+    <label for="password-input-confirm">Confirm Password:</label>
+    <input type="password" id="password-input-confirm" minlength="6" class="form-control" required>
+    <p id="password-text"> Password must be at least 6 characters long.</p>
+    <p> Already have an account? Click  <a href="#" onclick="showLoginForm()">here</a> to login. </p>
+
+
+  
+    <button id="continue-button" type="submit">Continue</button>
+</form>
+
+<form id="registration-form-2">
+    <p style="text-align: center;"> Welcome! Choose a username to continue. </p>
+    <label for="username-input" >Username:</label>
+    <input type="text" id="username-input" placeholder="Username" class="form-control" required>
+
+    <p> Click <a href="#" onclick="showRegistrationForm()"> here</a> to go back.</p>
+    <button type="submit">Create Account</button>
+</form>
+
+
+
+
+
+
+
+
+<form id="account-confirmation" style="display: none;">
+    <p> Account Creation Successful! Welcome, <span id="username-welcome" style="font-weight: bold;"> </span>!<br> </p>
+    <br> 
+    <p> Thank you for creating an account! </p>
+    <button type="submit" onclick="showLoginForm()">Log In</button>
+</form>
+
+
+
+<form id="login-form">
+  <p style="text-align: center"> Welcome back! Login to continue. </p>
+  <div class="form-group">
+      <label for="email-input-login">Email:</label>
+      <input type="email" id="email-input-login" name="email" class="form-control" required>
+  </div>
+
+  <div class="form-group">
+      <label for="password-input-login">Password:</label>
+      <input type="password" id="password-input-login" name="password" minlength="6" class="form-control" required>
+  </div>
+  
+  <div class="form-check">
+      <label>
+          <input type="checkbox" id="remember-me" name="remember-me" value="remember-me" class="form-check-input">
+          Remember Me
+      </label>
+  </div>
+
+  <p> Forgot your password? Click <a href="#" onclick="showResetPassword()">here</a> to reset it. </p>
+  <p> Don't have an account? Click <a href="#" onclick="showRegistrationForm()">here</a> to register. </p>
+
+  <button type="submit" class="btn btn-primary">Log In</button>
+</form>
+
+
+
+<form id="login-success" style="display: none;">
+  <div id="stats-container">
+      <h1 style="color: white;"> Welcome, <span id="username-from-database" style="font-weight: bold;"></span></h1>
+  <hr>
+      <h2 style="font-weight: bold; color: white;"><i class="fa-solid fa-medal"></i> My Stats</h2> <br>
+      <h5> Im too lazy to make this work yet</h5> <br> 
+
+      <p>
+          <i class="fa-solid fa-star"></i> Average Score: 
+          <span id="average-score">
+              <span class="loading-spinner" style="margin-left: 5px;">
+                  <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: #ccc; font-weight: bold;"></i>
+              </span>
+          </span>
+      </p>
+      <p>
+          <i class="fa-solid fa-dice"></i> Total Score: 
+          <span id="total-score">
+              <span class="loading-spinner" style="margin-left: 5px;">
+                  <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: #ccc; font-weight: bold;"></i>
+              </span>
+          </span>
+      </p>
+      <p>
+          <i class="fa-solid fa-trophy"></i> Games Completed: 
+          <span id="games-completed">
+              <span class="loading-spinner" style="margin-left: 5px;">
+                  <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: #ccc; font-weight: bold;"></i>
+              </span>
+          </span>
+      </p>
+  </div>
+  
+  
+  
+
+<br>
+<button type="submit" onclick="contineLogin();"><i class="fa-solid fa-angles-right"></i> Continue</button> <br>
+
+<button type="submit" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
+</form>
+
+<form id="reset-password" style="display: none;"> 
+    <p style="text-align: center;"> Enter your email to reset your password. </p>
+    
+    <label for="reset-email">Email:</label>
+    <input type="email" id="reset-email" class="form-control" required>
+    <p> Click <a href="#" onclick="showLoginForm()"> here</a> To go back</p>
+    <button type="submit" onclick="resetPass()"> Reset Password</button>
+</form>
+
+<form id="passwordResetConfirmation"> 
+<p style="text-align: center;"> An email has been sent to <span id="user-email"> </span> <br> <br> <br> <i id="check" class="fas fa-check-circle checkmark-icon" style="color: green;"></i>
+    <br> Please check your email to reset your password. </p>
+    <button type="submit" onclick="showLoginForm()"> Continue</button>
+
+
+</form>
+
+<form id="databaseError">
+    <p style="text-align: center;"> Continue Setting Up Your Account... </p>
+    
+    <label for="databaseErrorUsername">Username:</label>
+    <input type="text" id="databaseErrorUsername" required>
+
+    <button type="submit"> Continue </button>
+</form>
+
+<form id="databaseErrorFixed" style="display: none;"> 
+    <p style="text-align: center;"> Thank you for your patience. Your account has been set-up! </p>
+    <br> <br> 
+    <i id="check" class="fas fa-check-circle checkmark-icon" style="color: green;"></i> <br> 
+    <button type="submit" onclick="showLoginForm()"> Continue </button>
+</form>
+
+<button class="devTools" id="devTools1" onclick="reset()"> Reset local storage /dev testing/ </button>
+
+
+
+</div>
+
+
+
+
+ <div id="gameContainer" style="display: none;">
+  <div id="uiContainer">
+
+    <div id="pingContainer">
+      <p style="color: white;"><i class="fa-solid fa-clock fa-bounce"></i> Time Left: <span id="gameTime">-</span> </p> 
+      <p style="color: white;"><i class="fa-solid fa-signal fa-bounce"></i> Ping: <span id="pingTime">-</span> ms</p> 
+      <p style="color: white;"><i class="fa-solid fa-star fa-bounce"></i> Score: <span id="scoreCount">-</span> </p> 
+      <p style="color: white;"><i class="fa-solid fa-skull fa-bounce"></i> Kills: <span id="killsCount">-</span> </p> 
+    </div> 
+    <div id="ammoContainer" style="color: white;">
+      <h2><i class="fa-solid fa-gun fa-beat-fade"></i> Ammo: <span id="ammoCount">-</span> </h2> 
+
+    </div>
+
+
+    <div id="statsContainerWrapper">
+      <div id="statsContainer"></div>
+    </div>
+    <div id="scoreContainer">
+      <div id="scoreAlert" class="alert">
+          <span id="recentScore">0</span>
+      </div>
+  </div>
+
+  <div id="deathContainer">
+    <div id="deathAlert" class="alert">
+        <span id="deathText">0</span>
+    </div>
+</div>
+  <div class="leaderboard-container" id="gameLeaderboard">
+    <div class="leaderboard">
+        <h2 style="text-align: center;">Leaderboard</h2>
+        <table class="table table-bordered table-striped table-dark" id="leaderboard-table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Score</th>
+                    <th>Kills</th>
+                    <th>Deaths</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Leaderboard data will be added here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+</div>
+
+
+<div class="endLeaderboard-container leaderboard" style="display: none;" id="endLeaderboard">
+  <h1 class="text-center">Game Over! </h1>
+  <table class="table table-striped">
+      <thead>
+          <tr>
+              <th scope="col">#</th>
+              <th scope="col">Player Name</th>
+              <th scope="col">Score</th>
+          </tr>
+      </thead>
+      <tbody id="leaderboardBody">
+          <!-- Leaderboard data will be dynamically added here -->
+      </tbody>
+  </table>
+</div>
+
+        <canvas id="myCanvas"></canvas>
+
+</div>
+
+
+  <!-- Include the Firebase JavaScript library -->
+  <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-auth.js"></script>
+  <script src="https://mrdoob.github.io/stats.js/build/stats.min.js"></script>
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/5e0a1eec4b.js" crossorigin="anonymous"></script>
+
+  <script>
+    let playerColor = "black";
+    // Initialize Firebase (replace with your own config)
+    const firebaseConfig = {
+  apiKey: "AIzaSyBHivxOWVnhRf9wa7twG8s17LmynmABp_o",
+  authDomain: "imagineifthisworkslmao.firebaseapp.com",
+  databaseURL: "https://imagineifthisworkslmao-default-rtdb.firebaseio.com",
+  projectId: "imagineifthisworkslmao",
+  storageBucket: "imagineifthisworkslmao.appspot.com",
+  messagingSenderId: "214964204379",
+  appId: "1:214964204379:web:ba7720fcb900f2dd72e07e",
+  measurementId: "G-HKBJ8Q8HRR"
+};
+
+let classData = ({
+  health: 100,
+  burstRounds: 3,
+  damage: 10,
+  speed: 1.0,
+  ammo: 15,
+  shootInterval: 85,
+  bulletSpeed: 1.0,
+  fireRateCooldown: 500,
+  reloadSpeed: 1.0,
+
+});
+
+firebase.initializeApp(firebaseConfig);
+
+ //declare database variable
+ var database = firebase.database();
+    loggedIn = false;
+    var username;
+    var recievedData = false;
+    var sentData = false;
+    var databaseError = false;
+    var databaseErrorFixed = false;
+    var accountError = false;
+    let selectedClass;
+
+
+//check local storage, if there is a username, set the username variable to the local storage username
+if (localStorage.getItem("username") !== null) {
+
+username = localStorage.getItem("username");
+console.log("Username: " + username);
+
+document.getElementById("menuUsername")
+    .innerHTML = username;
+//if there is a username, set the logged in variable to true
+loggedIn = true;
+document.getElementById("loginWarning")
+    .style.display = "none";
+getUserStats(username);
+
+}
+
+  
+
+    const passwordInput = document.getElementById('password-input');
+  const confirmPasswordInput = document.getElementById('password-input-confirm');
+  
+  function checkPasswordsMatch() {
+    if (passwordInput.value !== confirmPasswordInput.value) {
+      confirmPasswordInput.setCustomValidity("Passwords don't match.");
+    } else {
+      confirmPasswordInput.setCustomValidity('');
+    }
+  }
+  
+  passwordInput.addEventListener('input', checkPasswordsMatch);
+  confirmPasswordInput.addEventListener('input', checkPasswordsMatch);
+    
+  
+
+  
+
+
+    
+
+
+  
+    const registrationForm1 = document.getElementById("registration-form");
+
+
+registrationForm1.addEventListener('submit', (event) => {
+  event.preventDefault();
+  document.getElementById("registration-form").style.display = "none";
+  document.getElementById("registration-form-2").style.display = "block";
+});
+
+    function resetPass(){
+    var auth = firebase.auth();
+        var emailAddress = document.getElementById("reset-email").value;
+        //show loading spinner
+        showSpinner();
+        //hide reset password form
+        document.getElementById("reset-password").style.display = "none";
+
+        auth.sendPasswordResetEmail(emailAddress).then(function() {
+            // Email sent.
+            document.getElementById("passwordResetConfirmation").style.display = "block";
+            document.getElementById("user-email").innerHTML = emailAddress;
+            hideSpinner();
+        }).catch(function(error) {
+            // An error happened.
+            setTimeout(() => {
+                alert("Error: " + error.message); 
+            }, 10);
+            
+            hideSpinner();
+            //show reset password form
+            document.getElementById("reset-password").style.display = "block";
+        });
+    }
+    function hideSpinner() {
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("loading-text").style.display = "none";
+    }
+    function showResetPassword() {
+        //hide login page
+        document.getElementById("login-form").style.display = "none";
+        //show reset password page
+        document.getElementById("reset-password").style.display = "block";
+        
+    }
+    function reset() {
+        localStorage.clear();
+        //reload the page
+        location.reload();
+    }
+//basic functions to show and hide forms
+    function showRegistrationForm() {
+      document.getElementById('startMenu').style.display = 'none'
+        document.getElementById("registration-form").style.display = "block";
+        document.getElementById("login-form").style.display = "none";
+        document.getElementById("account-confirmation").style.display = "none";
+        document.getElementById("login-success").style.display = "none";
+        document.getElementById("registration-form-2").style.display = "none";
+
+
+    }
+
+  
+function showLoginForm() {
+    if (loggedIn) {
+        document.getElementById("login-success")
+            .style.display = "block";
+        document.getElementById("login-form")
+            .style.display = "none";
+        document.getElementById("startMenu")
+            .style.display = "none";
+        document.getElementById("registration-form")
+            .style.display = "none";
+        document.getElementById("username-from-database")
+            .innerHTML = username;
+        getUserStats(username);
+
+    }
+    else {
+        document.getElementById("login-form")
+            .style.display = "block";
+        document.getElementById("registration-form")
+            .style.display = "none";
+        document.getElementById("account-confirmation")
+            .style.display = "none";
+        document.getElementById("login-success")
+            .style.display = "none";
+        document.getElementById("passwordResetConfirmation")
+            .style.display = "none";
+        document.getElementById("reset-password")
+            .style.display = "none";
+        document.getElementById("registration-form-2")
+            .style.display = "none";
+        document.getElementById("databaseErrorFixed")
+            .style.display = "none";
+        document.getElementById("startMenu")
+            .style.display = "none";
+
+        databaseError = false;
+    }
+}
+
+    function showSpinner() {
+      document.getElementById('startMenu').style.display = 'none'
+        document.getElementById("loading").style.display = "block";
+        document.getElementById("loading-text").style.display = "block";
+        document.getElementById("registration-form").style.display = "none";
+        document.getElementById("login-form").style.display = "none";
+        document.getElementById("registration-form-2").style.display = "none";
+    }
+
+    function hideSpinnerAndShowRegistrationForm() {
+    
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("loading-text").style.display = "none";
+        document.getElementById("registration-form").style.display = "block";
+        document.getElementById("login-form").style.display = "none";
+    }
+
+    function hideSpinnerAndShowLoginForm() {
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("loading-text").style.display = "none";
+        document.getElementById("registration-form").style.display = "none";
+        document.getElementById("login-form").style.display = "block";
+    }
+
+    function userIsLoggedIn() {
+        //the user has logged in successfully, redirect to the home page of website...
+        //currently auto directing to google.com with 1.5s delay
+        document.getElementById("login-form").style.display = "none";
+        document.getElementById("login-success").style.display = "block";
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("loading-text").style.display = "none";
+    }
+    function showMenu(){
+      document.getElementById("login-form").style.display = "none";
+      document.getElementById("login-success").style.display = "none";
+      document.getElementById("loading").style.display = "none";
+      document.getElementById("loading-text").style.display = "none";
+      document.getElementById("registration-form").style.display = "none";
+      document.getElementById("registration-form-2").style.display = "none";
+      document.getElementById('startMenu').style.display = 'block'
+    }
+    
+function contineLogin() {
+    event.preventDefault();
+    document.getElementById("login-success")
+        .style.display = "none";
+    document.getElementById("startMenu")
+        .style.display = "block";
+    document.getElementById("login-form")
+        .style.display = "none";
+    document.getElementById("registration-form")
+        .style.display = "none";
+        document.getElementById('changelogsMenu').style.display = 'none';
+
+        if(localStorage.getItem("username")){
+        document.getElementById('menuUsername').innerHTML = localStorage.getItem("username")
+        }
+
+}
+function changeClass(){
+  event.preventDefault();
+  document.getElementById("startMenu").style.display = "none";
+  document.getElementById('classSelection').style.display = "block"
+}
+
+function openDemo(){
+  document.getElementById('changelogsMenu').style.display = 'block';
+  document.getElementById('startMenu').style.display = 'none';
+
+}
+function selectClass() {
+  event.preventDefault();
+    // Get the <select> element by its ID
+    const classSelect = document.getElementById('classSelect');
+    
+    // Get the selected option's value
+    selectedClass = classSelect.value;
+
+    // Use the selectedClass value as needed
+    // You can perform actions based on the selected class here
+    document.getElementById('classSelection').style.display = 'none';
+    document.getElementById('startMenu').style.display = 'block';
+    if(selectedClass === "warrior")
+    {
+console.log('warrior');
+classData = ({
+  health: 100,
+  burstRounds: 3,
+  damage: 10,
+  speed: 1.0,
+  ammo: 15,
+  shootInterval: 85,
+  bulletSpeed: 1.0,
+  fireRateCooldown: 500,
+  reloadSpeed: 1.0,
+
+
+});
+
+  } 
+
+else if (selectedClass === "mage")
+  {
+  console.log('mage');
+  classData = ({
+  health: 65,
+  burstRounds: 6,
+  damage: 2,
+  speed: 1.6,
+  ammo: 40,
+  shootInterval: 65,
+  bulletSpeed: 0.8,
+  fireRateCooldown: 650,
+  reloadSpeed: 0.5,
+});
+  }
+  else if (selectedClass === "rogue")
+  {
+    console.log('rouge');
+    classData = ({
+  health: 120,
+  burstRounds: 1,
+  damage: 15,
+  speed: 0.7,
+  ammo: 18,
+  shootInterval: 250,
+  bulletSpeed: 1.3,
+  fireRateCooldown: 800,
+  reloadSpeed: 1.5,
+});
+  }
+  else if (selectedClass === "archer")
+  {
+    console.log('archer');
+    classData = ({
+  health: 75,
+  burstRounds: 1,
+  damage: 75,
+  speed: 0.85,
+  ammo: 5,
+  shootInterval: 350,
+  bulletSpeed: 1.35,
+  fireRateCooldown: 800,
+  reloadSpeed: 1.2,
+
+});
+  } else {
+    console.log("class error")
+    classData = ({
+  health: 100,
+  burstRounds: 3,
+  damage: 10,
+  speed: 1.0,
+  ammo: 15,
+  shootInterval: 85,
+  bulletSpeed: 1.0,
+  fireRateCooldown: 800,
+  reloadSpeed: 1.0,
+
+});
+  }
+    
+}
+
+function logout() {
+    //hide login success form
+    document.getElementById("login-success")
+        .style.display = "none";
+    //show login form
+    document.getElementById("login-form")
+        .style.display = "block";
+    //set logged in to false
+    loggedIn = false;
+    //clear username variable
+    username = "";
+    console.clear();
+    console.log("Logged out successfully.");
+    //clear local storage username
+    localStorage.removeItem("username");
+    setTimeout(() => {
+        location.reload();
+
+    }, 100);
+}
+
+    
+function getUserStats(username) {
+    var runs = 0;
+    // Get a reference to the Firebase database
+    const database = firebase.database();
+
+    // Search for the user with the given username
+    const userRef = database.ref("users/" + username);
+
+    // Retrieve the user's stats from the database
+    userRef.once("value")
+        .then((snapshot) => {
+            // Get the user's data from the snapshot
+            const userData = snapshot.val();
+
+            // Check if a user with the given username was found
+            if (userData) {
+                //for every run of the game, add 1 to the games completed
+                var runsRef = database.ref('users/' + username + '/runs');
+                //check how many children are in the runs object, and set the runs variable to that number
+                runsRef.once("value")
+                    .then((snapshot) => {
+                        runs = snapshot.numChildren();
+                        document.getElementById("games-completed")
+                            .innerHTML = runs;
+                        let totalScore = 0;
+                        let numRuns = snapshot.numChildren();
+
+                        snapshot.forEach((childSnapshot) => {
+                            let score = childSnapshot.val()
+                                .score;
+                            totalScore += score;
+                        });
+
+                        let averageScore = totalScore / numRuns;
+                        if(!averageScore || averageScore == NaN || averageScore == undefined || averageScore == null){
+                          averageScore = 0;
+                        }
+                        averageScore = averageScore.toFixed(2); // Round to 2 decimal places
+                        document.getElementById("average-score")
+                            .innerHTML = averageScore
+                        document.getElementById("total-score")
+                            .innerHTML = totalScore
+
+                    })
+                    .catch((error) => {
+                        console.error(`Error: ${error.message}`);
+                    });
+
+
+
+
+            }
+            else {
+                // User with matching username not found
+                console.error("Error: User not found in database, " + username);
+            }
+        })
+        .catch((error) => {
+            console.error(`Error: ${error.message}`);
+        });
+}
+
+
+
+
+
+   //start of firebase code
+
+const registrationForm = document.getElementById('registration-form-2');
+registrationForm.addEventListener('submit', (event) => {
+   
+  event.preventDefault();
+
+  const email = document.getElementById('email-input').value;
+  const password = document.getElementById('password-input').value;
+  const username = document.getElementById('username-input').value;
+
+  // show loading spinner and hide form
+  document.getElementById("loading").style.display = "block";
+  document.getElementById("loading-text").style.display = "block";
+  document.getElementById("registration-form").style.display = "none";
+  showSpinner();
+
+  // Query Firebase for the specified username
+  database.ref('users').once('value').then((snapshot) => {
+    let existingUsernames = [];
+
+    if (snapshot.val() !== null) {
+      // Convert all existing usernames to lowercase
+      existingUsernames = Object.keys(snapshot.val()).map(username => username.toLowerCase());
+    }
+
+    // Convert input username to lowercase
+    const lowercaseUsername = username.toLowerCase();
+
+    // If the snapshot exists and the username already exists in the database
+    if (existingUsernames.includes(lowercaseUsername)) {
+      //highlight the username input field
+
+      setTimeout(() => {
+        alert('Username already exists!');
+
+      }, 100);
+
+      //show registration form and hide spinner
+      document.getElementById("registration-form-2").style.display = "block";
+      document.getElementById("loading").style.display = "none";
+      document.getElementById("loading-text").style.display = "none";
+      localStorage.setItem("hasMadeAccount", true);
+    } else {
+      firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          // Account creation successful
+          console.log("Account created successfully");
+          // show account confirmation form and hide spinner
+          document.getElementById("account-confirmation").style.display = "block";
+          document.getElementById("loading").style.display = "none";
+          document.getElementById("loading-text").style.display = "none";
+          // hide registration form
+          document.getElementById("registration-form-2").style.display = "none";
+
+          document.getElementById("username-welcome").innerHTML = username;
+           //clear local storage username
+           localStorage.removeItem("username");
+                        localStorage.removeItem("email");
+
+                        //send username to localStorage
+                        localStorage.setItem("username", username);
+                        console.log("send usernaemt o local storage" + localStorage)
+                        //send email to localStorage
+                        localStorage.setItem("email", email);
+          // create a new entry in the database with the specified username
+          database.ref('users/' + username).set({
+          
+            email: email,
+            // ...
+          }).then(() => {
+            // ...
+          }).catch((error) => {
+            // entry creation failed
+            console.log("Error creating entry in database:", error);
+            // show registration form and hide spinner
+            document.getElementById("registration-form").style.display = "block";
+            document.getElementById("loading").style.display = "none";
+            document.getElementById("loading-text").style.display = "none";
+          });
+
+        })
+        .catch((error) => {
+          // Account creation failed
+          console.log("Error creating account:", error);
+          // show registration form and hide spinner
+          document.getElementById("registration-form").style.display = "block";
+          document.getElementById("loading").style.display = "none";
+          document.getElementById("loading-text").style.display = "none";
+
+          const errorMessage = error.message;
+          alert(errorMessage); // display an alert for all error messages
+        });
+    }
+  });
+
+  setTimeout(() => {
+    //console.clear();
+  }, 1000);
+});
+
+
+
+//login to an existing account
+
+const loginForm = document.getElementById('login-form');
+loginForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const email = document.getElementById('email-input-login').value;
+    const password = document.getElementById('password-input-login').value;
+
+    // show loading spinner
+    document.getElementById("loading").style.display = "block";
+    document.getElementById("loading-text").style.display = "block";
+    document.getElementById("login-form").style.display = "none";
+
+    setTimeout(() => {
+        firebase.auth().signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            
+
+          
+          loggedIn = true
+          const user = firebase.auth().currentUser;
+
+          //get user object:
+          var email = document.getElementById('email-input-login').value;
+    var userRef = database.ref('users');
+    userRef.orderByChild('email').equalTo(email).once('value')
+        .then((snapshot) => {
+            if (snapshot.exists()) {
+                // User with matching email found
+                var userData = snapshot.val();
+                // userData will contain an object with the user(s) that match the email
+                // In case multiple users have the same email address, userData will be an object with multiple keys
+                
+                // Retrieve the username from the user object
+                 username = Object.keys(userData)[0];
+                getUserStats(username)
+                
+                 
+                console.log("User logged in successfully (Step 1)");
+                
+                document.getElementById("username-from-database").innerHTML = username;
+                //show login success form
+                document.getElementById("login-success").style.display = "block";
+                //hide loading spinner
+                document.getElementById("loading").style.display = "none";
+                document.getElementById("loading-text").style.display = "none";
+                //hide login form
+                document.getElementById("login-form").style.display = "none";
+  //clear local storage username
+  localStorage.removeItem("username");
+                        localStorage.removeItem("email");
+
+                        //send username to localStorage
+                        localStorage.setItem("username", username);
+
+
+              
+            } else {
+                databaseError = true;
+            }
+
+                // User with matching email not found
+                if(databaseError == true){
+                    setTimeout(() => {
+                        alert("Error: User not found in database. Please finish setting up your account.");
+                    }, 100);
+                    document.getElementById("loading").style.display = "none";
+                    document.getElementById("loading-text").style.display = "none";
+                    document.getElementById("databaseError").style.display = "block";
+
+
+                }
+            
+        })
+
+        
+        .catch((error) => {
+            console.error(error);
+        });
+        
+        
+
+        })
+        .catch((error) => {
+            // Login failed, display error message
+            const errorMessage = error.message;
+            setTimeout(() => {
+                alert(errorMessage);
+            }, 100);
+            
+
+            // hide loading spinner and show login form
+            document.getElementById("loading").style.display = "none";
+            document.getElementById("loading-text").style.display = "none";
+            document.getElementById("login-form").style.display = "block";
+        });
+    }, 2000);
+
+
+});
+
+
+const input = document.getElementById('databaseErrorUsername');
+
+input.addEventListener('input', () => {
+  const regex = /^[a-zA-Z0-9]+$/;
+  if (!regex.test(input.value)) {
+    input.setCustomValidity('Special characters are not allowed.');
+  } else {
+    input.setCustomValidity('');
+  }
+});
+
+
+// attach an event listener to the database error fix button for form submit 
+const databaseError1 = document.getElementById('databaseError');
+databaseError1.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    var user = firebase.auth().currentUser;
+    // send username to firebase realtime database
+    const username = document.getElementById('databaseErrorUsername').value;
+    const email = document.getElementById('email-input-login').value;
+
+    // Query Firebase for the specified username
+    database.ref('users').once('value').then((snapshot) => {
+      // Convert all existing usernames to lowercase
+      const existingUsernames = Object.keys(snapshot.val() || {}).map(username => username.toLowerCase());
+
+      // Convert input username to lowercase
+      const lowercaseUsername = username.toLowerCase();
+
+      // If the snapshot exists, then the username already exists in the database
+      if (existingUsernames.includes(lowercaseUsername)) {
+        // highlight the username input field
+        alert('Username already exists!');
+        return;
+      }
+
+      database.ref('users/' + username).set({
+       
+        email: email,
+        // ...
+      }).then(() => {
+        // entry creation successful
+        console.log("Account data sent to database successfully (Step 2)");
+        // show login form and hide spinner
+        document.getElementById("databaseError").style.display = "none";
+        document.getElementById("databaseErrorFixed").style.display = "block";
+      }).catch((error) => {
+        // entry creation failed
+        console.log("Error creating entry in database:", error);
+        // show registration form and hide spinner
+        document.getElementById("databaseError").style.display = "block";
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("loading-text").style.display = "none";
+      });
+    }).catch((error) => {
+      // error querying database for existing usernames
+      console.log("Error querying database:", error);
+      // show registration form and hide spinner
+      document.getElementById("databaseError").style.display = "block";
+      document.getElementById("loading").style.display = "none";
+      document.getElementById("loading-text").style.display = "none";
+    });
+
+    // show loading spinner and hide form
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("loading-text").style.display = "none";
+    document.getElementById("databaseError").style.display = "block";
+});
+
+
+    
+
+
+const rememberMeCheckbox = document.getElementById('remember-me');
+const emailInput = document.querySelector('#email-input-login');
+const passwordInput2 = document.querySelector('#password-input-login');
+
+
+// check if there are saved credentials in localStorage
+const savedEmail = localStorage.getItem('email');
+const savedPassword = localStorage.getItem('password');
+if (savedEmail && savedPassword) {
+  // fill in the login form with saved credentials
+  emailInput.value = savedEmail;
+  passwordInput2.value = savedPassword;
+  //check the remember me checkbox
+  rememberMeCheckbox.checked = true;
+}
+
+// add an event listener that listens for the form's submit event
+loginForm.addEventListener('submit', (event) => {
+  // check if the "Remember Me" checkbox is checked
+  if (rememberMeCheckbox.checked) {
+    // save the user's credentials to localStorage
+    localStorage.setItem('email', emailInput.value);
+    localStorage.setItem('password', passwordInput2.value);
+  } else {
+    // remove the user's credentials from localStorage
+    localStorage.removeItem('email');
+    localStorage.removeItem('password');
+  }
+});
+
+function init(){
+  document.getElementById('gameContainer').style.display = 'block';
+  document.getElementById('menuContainers').style.display = 'none';
+
+  
+
+//get the mouse position
+var mouseX = 0,
+mouseY = 0;
+let angleInDegrees;
+
+document.body.addEventListener("mousemove", function(e) {
+  let relativeX = x - cameraX;
+  let relativeY = y - cameraY;
+ 
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+
+  const directionX = mouseX - relativeX;
+  const directionY = mouseY - relativeY;
+
+  // Calculate the angle in radians
+  angleRadians = Math.atan2(directionY, directionX);
+   // Convert the angle to degrees
+   angleDegrees = (angleRadians * 180) / Math.PI;
+  angleInDegrees = angleDegrees.toFixed(0);
+ 
+
+
+});
+window.addEventListener("resize", function(e) {
+  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
+});
+
+
+    // Get a reference to the canvas and canvas ctx
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+    var allPlayersRef = firebase.database().ref("players");
+
+    // Get a reference to the players database
+    var playersRef = firebase.database().ref("players");
+    //set canvas height to window height
+    canvas.height = window.innerHeight;
+    //set canvas width to window width
+    canvas.width = window.innerWidth;
+// Variables for camera position and zoom
+let cameraX = 0;
+let cameraY = 0;
+let zoomLevel = 1;
+let userId;
+let gameOver = false;
+let playerStats = ({
+  totalBullets: 0,
+  totalHits: 0,
+  totalKills: 0,
+  totalDeaths: 0,
+  accuracy: 0,
+  kdr: 0,
+});
+const scoreCanvas = document.getElementById("scoreCanvas");
+    const recentScoreElement = document.getElementById("recentScore");
+    const scoreAlert = document.getElementById("scoreAlert");
+  const ammoElement = document.getElementById('ammoCount');
+
+let  ammoCount = classData.ammo;
+const maxAmmo = classData.ammo;
+  ammoElement.innerHTML = classData.ammo;
+      // Create a stats.js monitor
+      const stats = new Stats();
+    stats.showPanel(0); // 0: FPS, 1: MS (millisecond), 2: MB (megabytes)
+    document.getElementById("statsContainer").appendChild(stats.dom);
+    const bulletsRef = firebase.database().ref("bullets");
+
+// Define an array to store bullets
+const bullets = [];
+
+const blockSize = 135;
+
+const blocks = 
+[[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+[1,0,0,0,0,1,1,0,0,0,0,1,0,0,0,0,0,1,1,0,0,0,0,0,1],
+[1,0,0,0,1,1,1,0,0,0,1,1,1,0,0,0,0,1,1,1,1,0,0,0,1],
+[1,0,0,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,1,0,0,1],
+[1,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,1,1,0,1],
+[1,1,1,1,1,1,1,0,0,0,1,1,1,0,0,0,0,1,1,1,1,1,1,0,1],
+[1,1,1,1,1,1,1,0,0,0,0,1,0,0,0,0,0,0,1,1,1,0,0,0,1],
+[1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1],
+[1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1],
+[1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1],
+[1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1],
+[1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1],
+[1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+[1,0,0,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1],
+[1,0,0,0,0,0,1,1,1,0,0,0,0,0,1,1,1,1,0,0,1,1,0,0,1],
+[1,0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,1,0,0,1,1,0,0,1],
+[1,1,1,1,0,0,0,1,1,0,0,0,1,1,1,1,1,1,0,0,1,1,0,0,1],
+[1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1],
+[1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+[1,1,0,0,1,1,1,1,1,0,0,0,0,0,1,1,0,0,0,1,1,1,1,1,1],
+[1,0,0,0,1,0,0,0,0,0,1,1,1,1,1,1,0,0,0,1,0,0,0,0,1],
+[1,0,0,0,1,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,1],
+[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]]
+
+// Function to handle bullet removal
+function handleBulletRemoval(snapshot) {
+  const bulletId = snapshot.key;
+//console.log("removed bullet: " + bulletId)
+  // Remove the bullet from the local bullets array
+  const index = bullets.findIndex(bullet => bullet.id === bulletId);
+  if (index !== -1) {
+    bullets.splice(index, 1);
+  }
+
+}
+
+
+
+
+
+
+
+
+// Add a listener to handle bullet removal when a child is removed from the database
+bulletsRef.on("child_removed", function(snapshot) {
+  handleBulletRemoval(snapshot);
+});
+
+
+
+// Add a listener to retrieve bullet data from the database
+bulletsRef.on("child_added", function(snapshot) {
+  const bulletData = snapshot.val();
+  bullets.push({
+    id: snapshot.key,
+    ...bulletData
+  });
+});    
+
+
+//wall collision
+function detectCollisions() {
+  for (let i = 0; i < bullets.length; i++) {
+    const bullet = bullets[i];
+
+    // Calculate the grid cell indices for the bullet's position
+    const cellX = Math.floor((bullet.x + cameraX) / blockSize);
+    const cellY = Math.floor((bullet.y + cameraY) / blockSize);
+
+    // Check if the bullet is within the bounds of the blocks array
+    if (
+      cellY >= 0 &&
+      cellY < blocks.length &&
+      cellX >= 0 &&
+      cellX < blocks[cellY].length
+    ) {
+      // Check if the cell at (cellX, cellY) has a value of 1 (a block)
+      if (blocks[cellY][cellX] === 1) {
+        // Handle collision here
+        // You can remove the bullet from the bullets array or perform other actions
+        // For example:
+        bullets.splice(i, 1); // Remove the bullet from the bullets array
+        i--; // Decrement i to account for the removed bullet
+        bulletsRef.child(bullet.id).remove();
+      }
+    }
+  }
+}
+
+
+
+
+
+function removeBullets() {
+  const currentTime = Date.now();
+  const fiveSecondsAgo = currentTime - 5000; // 5 seconds in milliseconds
+
+  for (let i = bullets.length - 1; i >= 0; i--) {
+    const bullet = bullets[i];
+    const bulletTimestamp = bullet.timestamp;
+
+    if (bulletTimestamp < fiveSecondsAgo) {
+      // Remove the bullet from the database
+      bulletsRef.child(bullet.id).remove();
+
+      // Remove the bullet from the local bullets array
+      bullets.splice(i, 1);
+    } 
+   
+  }
+}
+
+
+
+// Initialize the interpolation factor for the current user
+var interpolationFactor = 0.1;
+
+// Set up listeners to draw and remove players as they are added or removed from the database
+playersRef.on("child_added", function(snapshot) {
+  var player = snapshot.val();
+  fetchLeaderboardData();
+
+  
+});
+
+
+playersRef.on("child_removed", function(snapshot) {
+  var player = snapshot.val();
+  clearPlayer(player.x, player.y, snapshot.key);
+});
+
+
+function clearPlayers() {
+  // Get a list of all players in the database
+  playersRef.once("value", function(snapshot) {
+    snapshot.forEach(function(childSnapshot) {
+      var key = childSnapshot.key;
+      var player = childSnapshot.val();
+
+      // If the player is not the current user, delete them from the screen and the database
+      if (key !== userId) {
+        // Delete the player from the screen
+        ctx.clearRect(player.x - 10, player.y - 10, 20, 20);
+
+        // Delete the player from the database
+        playersRef.child(key).remove();
+      }
+    });
+  });
+}
+
+function checkPlayerHealth(playerHealth, playerKey){
+if(playerHealth === 0 && playerKey == userId){
+  console.log('You died');
+
+}
+}
+
+
+
+// Initialize an object to store the current positions of players
+var playersPosition = {};
+
+// ...
+let animationId; // Store the animation frame identifier
+
+// Inside the updateAndDraw function:
+function updateAndDraw() {
+    // Check if another instance of animate() is already running
+    if (animationId !== null) {
+            // Another instance of animate() is already running, cancel it
+            cancelAnimationFrame(animationId);
+        }
+  stats.begin();
+  if(ammoCount === 0){
+    console.log("no ammo")
+    document.getElementById('ammoContainer').style.color = "red";
+  }
+  // Clear the canvas
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const currentTime = Date.now();
+  playersPosition = {};
+
+  drawBullets();
+
+
+  // Get a reference to the players database
+  var playersRef = firebase.database().ref("players");
+
+  // Inside the playersRef.once("value", ...) callback
+  playersRef.once("value", function (snapshot) {
+    snapshot.forEach(function (childSnapshot) {
+      var player = childSnapshot.val();
+   // Store the player's current position in the playersPosition object
+   playersPosition[childSnapshot.key] = { x: player.x, y: player.y };
+      // Interpolate the player's position smoothly
+      var alpha = 2; // Adjust this value for smoother/faster interpolation
+      player.interpolationFactor = 0.5; // Initialize with a lower value for all players
+      player.x = player.prevX * (1 - alpha) + player.x * alpha;
+      player.y = player.prevY * (1 - alpha) + player.y * alpha;
+
+      checkPlayerHealth(player.health, player.key);
+      drawPlayer(player);
+      drawMap();
+      updateHTML(player);
+ 
+
+    });
+  });
+  //
+  //
+  //
+  //
+  //
+  //HOST FUNCTIONS: 
+  removeBullets();
+ 
+  // Request animation frame to continue updating and drawing
+  animationId = requestAnimationFrame(updateAndDraw);
+  stats.end();
+
+}
+
+updateAndDraw();
+
+
+function drawBullets(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const currentTime = Date.now();
+
+      // Loop through bullets and update each one
+  for (let i = 0; i < bullets.length; i++) {
+    const bullet = bullets[i];
+
+        // Calculate the time elapsed since the bullet was created
+    const timeElapsed = (currentTime - bullet.timestamp) / 1000; // Convert to seconds
+
+
+    
+
+    // Adjust the speed factor to make the bullets move faster
+    const speedFactor = 80; // Adjust this value to control bullet speed
+
+    bullet.x =
+  bullet.originX +
+  Math.cos((bullet.angle * Math.PI) / 180) *
+  bullet.speed *
+  speedFactor *
+  timeElapsed -
+  cameraX; // Adjust for cameraX
+bullet.y =
+  bullet.originY +
+  Math.sin((bullet.angle * Math.PI) / 180) *
+  bullet.speed *
+  speedFactor *
+  timeElapsed -
+  cameraY; // Adjust for cameraY
+
+
+
+
+    // Draw the bullet on the canvas
+    ctx.fillStyle = "red"; // Adjust bullet color
+    ctx.beginPath();
+    ctx.arc(bullet.x, bullet.y, 5, 0, 2 * Math.PI);
+    ctx.fill();
+  }
+}
+
+
+
+
+
+
+function drawPlayer(player) {
+  
+  var x = player.x;
+  var y = player.y;
+  var prevX = player.prevX;
+  var prevY = player.prevY;
+  var key = player.key;
+  var playerColor = player.color;
+  var playerAngle = player.angleInDegrees;
+  var playerHealth = player.health;
+  var maxHealth = 100; // Assuming max health is 100
+  var name = player.username;
+  var playerClass = player.class;
+
+ 
+if (name === winnerUsername && winnerUsername !== null) {
+  if(name !== "null"){
+  name = '👑 ' + name;
+  }
+}
+if(playerClass === "warrior"){
+  classText = '⍺'
+} else if (playerClass === "mage"){
+  classText = '⌘'
+}
+else if (playerClass === "rogue"){
+  classText = '⍣'
+}
+else if (playerClass === "archer"){
+  classText = '⍲'
+}
+else {
+  classText = '⍺'
+}
+  // Calculate the interpolated position
+  var interpolatedX = prevX + (x - prevX) * player.interpolationFactor;
+  var interpolatedY = prevY + (y - prevY) * player.interpolationFactor;
+
+  // Get canvas dimensions
+  var canvasWidth = canvas.width;
+  var canvasHeight = canvas.height;
+
+  // Calculate the position relative to the camera
+  var relativeX = interpolatedX - cameraX;
+    var relativeY = interpolatedY - cameraY;
+      
+
+    // Check if the player is within the canvas view
+    if (
+      relativeX >= -25 && relativeX <= canvasWidth + 25 &&
+      relativeY >= -25 && relativeY <= canvasHeight + 25
+    ) // Inside your loop for each player
+{
+  // Draw the player health bar with a natural gradient effect
+// Calculate the center position of the health bar
+var healthBarWidth = 50; // Adjust the width of the health bar
+var healthBarHeight = 10; // Adjust the height of the health bar
+
+// Calculate the center position of the health bar based on player dimensions
+var healthBarX = relativeX - healthBarWidth / 2 -5; // Centered horizontally
+var healthBarY = relativeY + 35; // Adjust the vertical position of the health bar
+
+
+// Rest of the code remains the same
+
+var maxHealth = 100; // Assuming max health is 100
+
+// Calculate the width of the health bar based on the player's health
+var currentHealthWidth = (playerHealth / maxHealth) * healthBarWidth;
+
+// Create a linear gradient for the health bar
+var gradient = ctx.createLinearGradient(
+  healthBarX,
+  healthBarY,
+  healthBarX + healthBarWidth,
+  healthBarY
+);
+
+// Add color stops to create a natural gradient
+gradient.addColorStop(0, "red"); // Low health (red)
+gradient.addColorStop(0.5, "orange"); // Mid health (orange)
+gradient.addColorStop(1, "green"); // Full health (green)
+
+// Draw the background of the health bar with rounded corners
+ctx.fillStyle = "gray";
+ctx.beginPath();
+ctx.moveTo(healthBarX + 5, healthBarY);
+ctx.lineTo(healthBarX + healthBarWidth - 5, healthBarY);
+ctx.arc(healthBarX + healthBarWidth - 5, healthBarY + 5, 5, -Math.PI / 2, 0);
+ctx.lineTo(healthBarX + healthBarWidth, healthBarY + healthBarHeight - 5);
+ctx.arc(healthBarX + healthBarWidth - 5, healthBarY + healthBarHeight - 5, 5, 0, Math.PI / 2);
+ctx.lineTo(healthBarX + 5, healthBarY + healthBarHeight);
+ctx.arc(healthBarX + 5, healthBarY + healthBarHeight - 5, 5, Math.PI / 2, Math.PI);
+ctx.lineTo(healthBarX, healthBarY + 5);
+ctx.arc(healthBarX + 5, healthBarY + 5, 5, Math.PI, -Math.PI / 2);
+ctx.closePath();
+ctx.fill();
+
+// Draw the current health portion with the gradient effect
+ctx.fillStyle = gradient;
+ctx.beginPath();
+ctx.moveTo(healthBarX + 5, healthBarY);
+ctx.lineTo(healthBarX + 5 + currentHealthWidth, healthBarY);
+ctx.arc(healthBarX + 5 + currentHealthWidth, healthBarY + 5, 5, -Math.PI / 2, 0);
+ctx.lineTo(healthBarX + healthBarWidth, healthBarY + healthBarHeight - 5);
+ctx.arc(healthBarX + 5 + currentHealthWidth, healthBarY + healthBarHeight - 5, 5, 0, Math.PI / 2);
+ctx.lineTo(healthBarX + 5, healthBarY + healthBarHeight);
+ctx.arc(healthBarX + 5, healthBarY + healthBarHeight - 5, 5, Math.PI / 2, Math.PI);
+ctx.lineTo(healthBarX, healthBarY + 5);
+ctx.arc(healthBarX + 5, healthBarY + 5, 5, Math.PI, -Math.PI / 2);
+ctx.closePath();
+ctx.fill();
+
+
+
+  ctx.beginPath();
+  if (player.key === userId) {
+    // Draw the user's player turret outlines in green
+    ctx.fillStyle = "green";
+} else {
+    // Draw remote players with red turret outlines
+    ctx.fillStyle = "red";
+}
+
+// Save the current canvas state
+ctx.save();
+
+// Translate to the player's position
+ctx.translate(relativeX, relativeY);
+
+// Rotate by the angle in radians
+ctx.rotate(playerAngle * (Math.PI / 180));
+
+if (playerClass === "mage") {
+    // Draw the turret body (main part)
+    ctx.fillRect(18, -17, 30, 32); // Adjust the dimensions as needed
+    
+    // Draw the inside part with the player's color
+    ctx.fillStyle = playerColor; // Set the player's color
+    ctx.fillRect(22, -12, 22, 22); // Adjust the dimensions as needed
+} else {
+    // Draw the turret body (main part)
+    ctx.fillRect(18, -9, 20, 18); // Adjust the dimensions as needed
+    
+    // Draw the inside part with the player's color
+    ctx.fillStyle = playerColor; // Set the player's color
+    ctx.fillRect(22, -6, 12, 12); // Adjust the dimensions as needed
+}
+
+
+if(playerClass === "archer"){
+// Draw the shorter and slightly intruding barrel
+ctx.fillStyle = "black"; // Set the barrel color
+ctx.fillRect(40, -2, 30, 4); // Adjust the dimensions as needed
+} else {
+  // Draw the shorter and slightly intruding barrel
+ctx.fillStyle = "black"; // Set the barrel color
+ctx.fillRect(40, -2, 10, 4); // Adjust the dimensions as needed
+}
+
+// Reset the canvas transformations
+ctx.restore();
+
+if(playerClass === "rogue"){
+  // Draw the player circle
+ctx.arc(relativeX, relativeY, 28, 0, 2 * Math.PI);
+ctx.fill();
+} else {
+  // Draw the player circle
+ctx.arc(relativeX, relativeY, 25, 0, 2 * Math.PI);
+ctx.fill();
+}
+
+// Draw the player inner circle
+ctx.fillStyle = playerColor; // Set the inner circle color
+ctx.beginPath();
+ctx.arc(relativeX, relativeY, 20, 0, 2 * Math.PI);
+ctx.fill();
+
+  // Get the name of the player and display it above
+  ctx.font = "20px Arial";
+  ctx.zIndex = 1;
+  ctx.textAlign = "center";  // center the text
+  ctx.fontWeight = "bold" // center the text
+  ctx.fillStyle = "white";
+  ctx.fillText(name, relativeX -20, relativeY - 40);  // update the x position to be the center of the player
+ // Get the player class and display symbol
+ctx.font = "bold 20px Arial"; // Make the font bold by including "bold" before the font size
+ctx.textAlign = "center";     // center the text
+ctx.fillStyle = "black";
+ctx.fillText(classText, relativeX, relativeY + 5); // update the x position to be the center of the player
+
+}
+  
+  // Update the interpolation factor for smoother movement
+  player.interpolationFactor = Math.min(player.interpolationFactor + 0.2, 1); // Adjust the smoothing speed
+
+  // Update the previous position
+  player.prevX = interpolatedX;
+  player.prevY = interpolatedY;
+
+  // Store the player's key in the canvas element so we can use it to delete the player later
+  var canvasElement = document.getElementById("myCanvas");
+  canvasElement.setAttribute("data-player-key", key);
+
+
+}
+
+function drawMap() {
+  // Draw all blocks overlapping
+  for (var i = 0; i < blocks.length; i++) {
+    for (var j = 0; j < blocks[i].length; j++) {
+      var blockLeft = j * blockSize * 0.995; // Adjust blockSize according to your game's scale
+      var blockTop = i * blockSize;
+
+      // Calculate the position relative to the camera with a small offset
+      var relativeBlockLeft = blockLeft - cameraX + 0.5; // Add 0.5 to eliminate the gap
+      var relativeBlockTop = blockTop - cameraY + 0.5; // Add 0.5 to eliminate the gap
+
+      if (blocks[i][j] === 1) {
+        var isTopEmpty = i === 0 || blocks[i - 1][j] === 0;
+        var isBottomEmpty = i === blocks.length - 1 || blocks[i + 1][j] === 0;
+        var isLeftEmpty = j === 0 || blocks[i][j - 1] === 0;
+        var isRightEmpty = j === blocks[i].length - 1 || blocks[i][j + 1] === 0;
+
+        var cornerRadius = 30; // Adjust the radius as needed
+
+        ctx.beginPath();
+
+        if (isTopEmpty && isLeftEmpty) {
+          ctx.moveTo(relativeBlockLeft + cornerRadius, relativeBlockTop);
+          ctx.arc(
+            relativeBlockLeft + cornerRadius,
+            relativeBlockTop + cornerRadius,
+            cornerRadius,
+            -Math.PI,
+            -Math.PI / 2
+          );
+        } else {
+          ctx.moveTo(relativeBlockLeft, relativeBlockTop);
+        }
+
+        if (isTopEmpty && isRightEmpty) {
+          ctx.lineTo(relativeBlockLeft + blockSize - cornerRadius, relativeBlockTop);
+          ctx.arc(
+            relativeBlockLeft + blockSize - cornerRadius,
+            relativeBlockTop + cornerRadius,
+            cornerRadius,
+            -Math.PI / 2,
+            0
+          );
+        } else {
+          ctx.lineTo(relativeBlockLeft + blockSize, relativeBlockTop);
+        }
+
+        if (isBottomEmpty && isRightEmpty) {
+          ctx.lineTo(relativeBlockLeft + blockSize, relativeBlockTop + blockSize - cornerRadius);
+          ctx.arc(
+            relativeBlockLeft + blockSize - cornerRadius,
+            relativeBlockTop + blockSize - cornerRadius,
+            cornerRadius,
+            0,
+            Math.PI / 2
+          );
+        } else {
+          ctx.lineTo(relativeBlockLeft + blockSize, relativeBlockTop + blockSize);
+        }
+
+        if (isBottomEmpty && isLeftEmpty) {
+          ctx.lineTo(relativeBlockLeft + cornerRadius, relativeBlockTop + blockSize);
+          ctx.arc(
+            relativeBlockLeft + cornerRadius,
+            relativeBlockTop + blockSize - cornerRadius,
+            cornerRadius,
+            Math.PI / 2,
+            Math.PI
+          );
+        } else {
+          ctx.lineTo(relativeBlockLeft, relativeBlockTop + blockSize);
+        }
+
+        if (isTopEmpty && isLeftEmpty) {
+          ctx.lineTo(relativeBlockLeft, relativeBlockTop + cornerRadius);
+          ctx.arc(
+            relativeBlockLeft + cornerRadius,
+            relativeBlockTop + cornerRadius,
+            cornerRadius,
+            Math.PI,
+            -Math.PI / 2
+          );
+        } else {
+          ctx.lineTo(relativeBlockLeft, relativeBlockTop);
+        }
+
+        ctx.fillStyle = "blue"; // Set the block's color
+        ctx.fill();
+      }
+    }
+  }
+}
+
+
+function updateHTML(player){
+  const key = player.key;
+  const score = player.score;
+  const kills = player.kills
+  if(key === userId){
+    document.getElementById('scoreCount').innerHTML = score;
+    document.getElementById('killsCount').innerHTML = kills;
+  }
+}
+
+
+function getRandomColor() {
+  // Generate random values for red, green, and blue channels
+  var red = Math.floor(Math.random() * 218);
+  var green = Math.floor(Math.random() * 218);
+  var blue = Math.floor(Math.random() * 218);
+
+  // Create a CSS color string in the format "rgb(red, green, blue)"
+  var color = "rgb(" + red + "," + green + "," + blue + ")";
+
+  return color;
+}
+let startTime = null;
+let gameTimeInSeconds = 4 * 60; // Initial game time in seconds (4 minutes)
+const timeRef = firebase.database().ref('gameTime');
+function addPlayer() {
+  
+// Function to format and display time
+function displayTime() {
+  var minutes = Math.floor(gameTimeInSeconds / 60);
+  var seconds = gameTimeInSeconds % 60;
+  const timeLeftFormatted = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  console.log(timeLeftFormatted);
+  document.getElementById('gameTime').innerHTML = timeLeftFormatted;
+  if (timeLeftFormatted === "0:00") {
+    console.log("game over");
+    gameOver = true;
+    console.log("game over lol")
+    cancelAnimationFrame(animationId);
+    document.getElementById('uiContainer').style.opacity = '0';
+    document.getElementById('myCanvas').style.filter = 'blur(5px)';
+    displayEndScreen();
+    setTimeout(() => {
+  gameOver = false;
+  document.getElementById('uiContainer').style.opacity = '1';
+  document.getElementById('uiContainer').style.position = 'fixed';
+  document.getElementById('gameLeaderboard').style.position = 'fixed';
+  document.getElementById('gameLeaderboard').style.zIndex = '9999';
+  document.getElementById('uiContainer').style.zIndex = '9999';
+  document.getElementById('myCanvas').style.filter = 'blur(0px)';
+  document.getElementById('endLeaderboard').style.display = 'none';
+   gameTimeInSeconds = 4 * 60; // Initial game time in seconds (4 minutes)
+   var minutes = Math.floor(gameTimeInSeconds / 60);
+  var seconds = gameTimeInSeconds % 60;
+  const timeLeftFormatted = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+
+  playersRef.once('value', (snapshot) => {
+  const playersData = snapshot.val();
+  // Check if there are players and the first player (child 0) exists
+  if (playersData && Object.keys(playersData).length > 0) {
+    // Get the first player's data
+    const firstPlayerKey = Object.keys(playersData)[0];
+    const firstPlayerData = playersData[firstPlayerKey];
+      // Set the game start time using the timestamp of the first player
+      startTime = Date.now();
+      // Update the timeRef in the database with the new start time
+      timeRef.set(startTime);
+
+    // Now 'firstPlayerData' contains the data of the first player
+    console.log('First player data:', firstPlayerData);
+  } else {
+    timeRef.once('value', (snapshot) => {
+      startTime = snapshot.val();
+    })
+  }
+
+  animationId = requestAnimationFrame(updateAndDraw);
+  displayTime(); // Add this line to update the visual time
+
+});
+
+
+
+}, 5500);
+
+  }
+}
+
+// Function to calculate the remaining time
+function calculateRemainingTime() {
+  const currentTime = Date.now();
+  const elapsedTime = Math.floor((currentTime - startTime) / 1000);
+  gameTimeInSeconds = Math.max(0, 4 * 60 - elapsedTime);
+  console.log(gameTimeInSeconds)
+  displayTime();
+}
+
+// Check the number of players currently playing
+playersRef.once('value', (snapshot) => {
+  const numPlayers = snapshot.numChildren();
+  
+  // If there are 0 players, set the game start time
+  if (numPlayers === 1) {
+    startTime = Date.now();
+    timeRef.set(startTime);
+  } else {
+    timeRef.once('value', (snapshot) => {
+      startTime = snapshot.val();
+    })
+  }
+});
+
+setInterval(calculateRemainingTime, 1000); // Calculate remaining time every second
+
+
+  // Generate random x and y coordinates within the canvas
+ // var x = Math.floor(Math.random() * canvas.width);
+ // var y = Math.floor(Math.random() * canvas.height);
+ const x = 10;
+   const y = 10;
+if(!selectedClass){
+  selectedClass = "warrior"
+}
+
+var spawnX = 200;
+      var spawnY = 895;
+      
+
+// Generate a random number (0 or 1)
+var randomChoice = Math.floor(Math.random() * 7);
+
+// Set x and y based on the random choice
+if (randomChoice === 0) {
+    spawnX = 3165;
+    spawnY = 890;
+} else if (randomChoice === 1){
+    spawnX = 216;
+    spawnY = 3037;
+} else if (randomChoice === 2){
+    spawnX = 880;
+    spawnY = 3173;
+} else if(randomChoice === 4){
+    spawnX = 3171;
+    spawnY = 3161;
+} else if (randomChoice === 5){
+    spawnX = 3162;
+    spawnY = 3048;
+} else if (randomChoice === 6){
+  spawnX = 340;
+  spawnY = 1950;
+}
+
+
+  // Generate a unique ID for the new player
+  var newPlayerRef = playersRef.push();
+  userId = newPlayerRef.key;
+  const color = getRandomColor();
+  console.log(color)
+  if(!username){
+    username = "null"
+  }
+
+  // Add the new player to the database
+  newPlayerRef.set({
+    x: spawnX,
+    y: spawnY,
+    prevX: x,
+    prevY: y,
+    interpolationFactor: 0.5,
+    key: userId,
+    color: color,
+    health: classData.health,
+    score: 0,
+    kills: 0,
+    deaths: 0,
+    username,
+    class: selectedClass,
+  });
+
+  const playerRef = firebase.database().ref(`players/${userId}`);
+  playerRef.onDisconnect().remove();
+    pingDatabase(userId);
+
+    setInterval(() => {
+      if(!angleInDegrees) return;
+  // Update the player's position in the database (This happens every 30ms)
+  playerRef.update({
+      angleInDegrees: angleInDegrees
+    });
+}, 16);
+
+
+  
+
+}
+addPlayer();
+
+    function clearPlayer(x, y, key) {
+      // Clear the canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // Clear the area where the player was drawn
+  ctx.clearRect(x - 10, y - 10, 20, 20);
+
+  // Get the player's key from the database
+  var playerKey = key;
+
+  // Delete the player from the database
+  playersRef.child(playerKey).remove();
+}
+ // Function to ping the database and update ping response time
+ function pingDatabase(userId) {
+  const pingTimeElement = document.getElementById('pingTime');
+
+  if (userId) {
+                            setInterval(() => {
+                                // Send a ping under the current user's username to the Firebase database to measure response time
+                                const pingStart = performance.now();
+                                firebase.database()
+                                    .ref(`players/${userId}/ping`)
+                                    .set(Date.now())
+                                    .then(function () {
+                                        // Read the ping value from the Firebase database and calculate the response time
+                                        firebase.database()
+                                            .ref(`players/${userId}/ping`)
+                                            .once("value")
+                                            .then(function (snapshot) {
+                                                const pingEnd = performance.now();
+                                                const pingTime = pingEnd - pingStart;
+                                                const pingValue = snapshot.val();
+                                                const pingResponseTime = Date.now() - pingValue;
+                                                pingTimeElement.innerHTML = pingResponseTime;
+
+                                            });
+                                    });
+                            }, 500);
+
+
+                        }
+    }
+
+
+
+
+// Set up an object to store the state of the keys
+var keys = {};
+
+// Add event listeners to update the keys object when a key is pressed or released
+document.addEventListener("keydown", function(event) {
+  keys[event.key] = true;
+});
+document.addEventListener("keyup", function(event) {
+  keys[event.key] = false;
+
+});
+async function checkCollisions() {
+  for (let i = 0; i < bullets.length; i++) {
+    const bullet = bullets[i];
+
+    for (var playerId in playersPosition) {
+      const playerPos = playersPosition[playerId];
+
+      if (playerId === bullet.owner) {
+        continue;
+      }
+
+      const dx = playerPos.x - (bullet.x + cameraX);
+      const dy = playerPos.y - (bullet.y + cameraY);
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance < 25) {
+        if (!playersHitThisFrame[playerId]) {
+          // Collision detected
+          bullets.splice(i, 1);
+          i--; // Adjust the index to account for the removed bullet
+          await removeBulletFromDatabase(bullet.id);
+          playersHitThisFrame[playerId] = true;
+
+          // Handle the collision
+          await handleBulletCollision(bullet.owner, playerId);
+        }
+      }
+    }
+  }
+
+  playersHitThisFrame = {};
+}
+
+async function removeBulletFromDatabase(bulletId) {
+  try {
+    await bulletsRef.child(bulletId).remove();
+  } catch (error) {
+    console.error('Error removing bullet from database:', error);
+  }
+}
+
+async function handleBulletCollision(bulletOwner, playerId) {
+  try {
+    const playerSnapshot = await playersRef.child(playerId).once('value');
+    const player = playerSnapshot.val();
+
+    if (player) {
+      player.health = Math.max(0, player.health - classData.damage);
+
+      if (player.health === 0) {
+        const bulletOwnerSnapshot = await playersRef.child(bulletOwner).once('value');
+        const bulletOwnerPlayer = bulletOwnerSnapshot.val();
+
+        if (bulletOwnerPlayer && !bulletOwnerPlayer.scoreAdded) {
+          bulletOwnerPlayer.score = (bulletOwnerPlayer.score || 0) + 100;
+          bulletOwnerPlayer.scoreAdded = true;
+          bulletOwnerPlayer.kills = (bulletOwnerPlayer.kills || 0) + 1;
+
+          setTimeout(() => {
+            bulletOwnerPlayer.scoreAdded = false;
+            const updateData = {
+              scoreAdded: false,
+              // Add any other properties you want to update here
+            };
+            playersRef.child(bulletOwner).update(updateData);
+          }, 1000);
+
+          await playersRef.child(bulletOwner).set(bulletOwnerPlayer);
+
+          console.log('kill');
+          playerStats.totalKills++;
+          displayRecentScore('+100', bulletOwner);
+          const playerDeaths = player.deaths + 1;
+
+          await playersRef.child(playerId).update({ deaths: playerDeaths });
+        }
+      }
+
+      await playersRef.child(playerId).set(player);
+    }
+  } catch (error) {
+    console.error('Error handling bullet collision:', error);
+  }
+}
+
+
+// Function to display recent score
+function displayRecentScore(score, bulletOwner) {
+  if(bulletOwner === userId){
+        recentScoreElement.textContent = score;
+        scoreAlert.style.display = "block";
+
+        setTimeout(function() {
+            scoreAlert.style.display = "none";
+        }, 2000); // Hide after 2 seconds
+    } 
+  }
+
+
+  
+// Function to display recent score
+function displayRecentDeath() {
+  console.log("death kasdkjdsakjdsa")
+ recentDeathElement = document.getElementById('deathText');
+  recentDeathElement.style.display = 'fixed'
+        recentDeathElement.textContent = "You Died!"
+       recentDeathElement.style.display = "block";
+console.log(recentDeathElement.style.display)
+        setTimeout(function() {
+            recentDeathElement.style.display = "none";
+        }, 2000); // Hide after 2 seconds
+} 
+  
+
+
+
+
+
+
+
+
+let velX = 0;
+let velY = 0;
+let x;
+let y;
+let lastUpdateTime = Date.now();
+
+function roundToFiveDecimals(value) {
+  return parseFloat(value.toFixed(5));
+}
+
+
+
+function updatePlayer() {
+  if (!userId) return;
+
+  // Get the player's current position
+  var playerRef = playersRef.child(userId);
+  playerRef.once("value", function (snapshot) {
+    var player = snapshot.val();
+    var originalX = player.x;
+    var originalY = player.y;
+    x = player.x;
+    y = player.y;
+    var friction = 0.970; // Gradual deceleration
+    var acceleration = 0.20; // Gradual acceleration
+    var playerHealth = player.health;
+
+    // Update the player's velocity based on the keys that are being pressed
+    // Round acceleration values to 5 decimals
+    var roundedAcceleration = roundToFiveDecimals(acceleration);
+
+    // Update the player's velocity based on the keys that are being pressed
+    if (keys["w"]) {
+      velY = roundToFiveDecimals(velY - roundedAcceleration);
+    }
+    if (keys["a"]) {
+      velX = roundToFiveDecimals(velX - roundedAcceleration);
+    }
+    if (keys["s"]) {
+      velY = roundToFiveDecimals(velY + roundedAcceleration);
+    }
+    if (keys["d"]) {
+      velX = roundToFiveDecimals(velX + roundedAcceleration);
+    }
+    if (keys["r"]) {
+      reloadWeapon();
+    }
+
+    // If no keys are being pressed, apply friction for gradual deceleration
+    if (!keys["w"] && !keys["a"] && !keys["s"] && !keys["d"]) {
+      velX = roundToFiveDecimals(velX * friction);
+      velY = roundToFiveDecimals(velY * friction);
+    }
+
+    // Apply a maximum velocity limit (speed)
+    var maxSpeed = 7.5 * classData.speed;
+    var currentSpeed = Math.sqrt(velX * velX + velY * velY);
+    if (currentSpeed > maxSpeed) {
+      var factor = maxSpeed / currentSpeed;
+      velX = roundToFiveDecimals(velX * factor);
+      velY = roundToFiveDecimals(velY * factor);
+    }
+
+    var currentTime = Date.now();
+    var deltaTime = currentTime - lastUpdateTime;
+    lastUpdateTime = currentTime;
+
+    // Predict the player's position based on velocity
+    x += velX * (deltaTime / 1000) * 35;
+    y += velY * (deltaTime / 1000) * 35;
+
+    // Round the predicted position to one decimal
+    x = Math.round(x);
+    y = Math.round(y);
+
+    // Center the camera on the current player
+    cameraX = x - canvas.width / (2 * zoomLevel);
+    cameraY = y - canvas.height / (2 * zoomLevel);
+
+    // Check for collisions with blocks
+    if (checkCollisionWithBlocks(x, y)) {
+      // If a collision is detected, reset the player's position
+      x = originalX;
+      y = originalY;
+    }
+
+    // Update the player's position in the database (This happens every 30ms)
+    playerRef.update({
+      x: x,
+      y: y,
+    });
+
+      // Check player's health and reset position if health is 0
+      if (playerHealth === 0) {
+        displayRecentDeath();
+        playerStats.totalDeaths ++  
+       // Reset the player's position to (100, 100) or any desired respawn location
+       var spawnX = 200;
+      var spawnY = 895;
+      
+
+// Generate a random number (0 -6)
+var randomChoice = Math.floor(Math.random() * 7);
+
+// Set x and y based on the random choice
+if (randomChoice === 0) {
+    spawnX = 3165;
+    spawnY = 890
+} else if (randomChoice === 1){
+    spawnX = 216;
+    spawnY = 3037;
+} else if (randomChoice === 2){
+    spawnX = 880;
+    spawnY = 3173;
+} else if(randomChoice === 4){
+    spawnX = 3171;
+    spawnY = 3161;
+} else if (randomChoice === 5){
+    spawnX = 3162;
+    spawnY = 3048;
+}  else if (randomChoice === 6){
+  spawnX = 340;
+  spawnY = 1950;
+}
+      playerRef.update({
+        x: spawnX,
+        y: spawnY, //original pos: later, implement spawn points
+        health: classData.health,
+      });
+      
+    }
+    
+  });
+}
+let reloading = false;
+function reloadWeapon(){
+  if(ammoCount === maxAmmo) return;
+  if(reloading) return;
+  ammoCount = 0;
+  ammoElement.innerHTML = '<i class="fa-solid fa-arrows-rotate fa-spin-pulse"></i>';
+  reloading = true;
+  setTimeout(() => {
+    ammoCount = maxAmmo;
+    console.log('Reload finished');
+    reloading = false;
+    ammoElement.innerHTML = ammoCount;
+    document.getElementById('ammoContainer').style.color = "white"
+  }, 1500 * classData.reloadSpeed);
+  console.log('Reloading')
+}
+function checkCollisionWithBlocks(x, y) {
+  // Assuming blocks is your 2D array representing the game world
+  var playerSize = 50; // Adjust this according to your player's size
+  var playerLeft = x - playerSize / 2;
+  var playerRight = x + playerSize / 2;
+  var playerTop = y - playerSize / 2;
+  var playerBottom = y + playerSize / 2;
+  var collided = false;
+
+  // Iterate through the blocks array and check for collisions
+  for (var i = 0; i < blocks.length; i++) {
+    for (var j = 0; j < blocks[i].length; j++) {
+      if (blocks[i][j] === 1) {
+        var blockLeft = j * blockSize; // Adjust blockSize according to your game's scale
+        var blockRight = blockLeft + blockSize;
+        var blockTop = i * blockSize;
+        var blockBottom = blockTop + blockSize;
+
+        // Check for overlap between the player and the block
+        if (
+          playerRight > blockLeft &&
+          playerLeft < blockRight &&
+          playerBottom > blockTop &&
+          playerTop < blockBottom
+        ) {
+          // Collision detected
+          collided = true;
+          
+          // Calculate overlap on each side
+          var overlapLeft = playerRight - blockLeft;
+          var overlapRight = blockRight - playerLeft;
+          var overlapTop = playerBottom - blockTop;
+          var overlapBottom = blockBottom - playerTop;
+
+          // Determine the direction of the collision
+          if (
+            overlapLeft < overlapRight &&
+            overlapLeft < overlapTop &&
+            overlapLeft < overlapBottom
+          ) {
+            // Left side collision
+            velX = Math.max(0, velX); // Prevent movement to the left
+          } else if (
+            overlapRight < overlapLeft &&
+            overlapRight < overlapTop &&
+            overlapRight < overlapBottom
+          ) {
+            // Right side collision
+            velX = Math.min(0, velX); // Prevent movement to the right
+          } else if (
+            overlapTop < overlapLeft &&
+            overlapTop < overlapRight &&
+            overlapTop < overlapBottom
+          ) {
+            // Top side collision
+            velY = Math.max(0, velY); // Prevent upward movement
+          } else {
+            // Bottom side collision
+            velY = Math.min(0, velY); // Prevent downward movement
+          }
+        }
+      }
+    }
+  }
+
+  return collided;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class ShootingController {
+  constructor() {
+    this.shooting = false;
+    this.classData = {
+      burstRounds: classData.burstRounds,
+      shootInterval: classData.shootInterval,
+      fireRateCooldown: classData.fireRateCooldown,
+    };
+    console.log(classData.fireRateCooldown)
+    this.lastShotTime = 0;
+    this.mouseDownHandler = this.handleMouseDown.bind(this);
+    this.mouseUpHandler = this.handleMouseUp.bind(this);
+    document.addEventListener("mousedown", this.mouseDownHandler);
+    document.addEventListener("mouseup", this.mouseUpHandler);
+  }
+
+
+// Function to shoot a single bullet
+shootBullet(event) {
+  if(ammoCount === 0) return;
+  ammoCount--;
+  playerStats.totalBullets ++ 
+  ammoElement.innerHTML = ammoCount;
+  // Calculate the direction vector from the player's position (x, y) to the mouse position (event.clientX, event.clientY)
+  let relativeX = x - cameraX;
+  let relativeY = y - cameraY;
+  const directionX = mouseX - relativeX;
+  const directionY = mouseY - relativeY;
+
+  // Calculate the angle in radians
+  const angleRadians = Math.atan2(directionY, directionX);
+
+  // Convert the angle to degrees
+  angleDegrees = (angleRadians * 180) / Math.PI;
+  angleDegrees = angleDegrees.toFixed(0);
+
+  // Get the current timestamp
+  const timestamp = Date.now();
+
+  // Create a new bullet object with angle, origin, and timestamp
+  const newBullet = {
+    angle: angleDegrees, // Angle in degrees
+    originX: x, // The player's current x position
+    originY: y, // The player's current y position
+    speed: 25 *classData.bulletSpeed, // Adjust bullet speed as needed
+    timestamp: timestamp, // Add a timestamp to the bullet
+    owner: userId,
+  };
+
+  // Send the bullet information to the server for synchronization
+  // You can use Firebase Realtime Database or your preferred networking method to transmit this data
+  firebase.database().ref("bullets").push(newBullet);
+}
+  handleMouseDown(event) {
+    if (!this.shooting) {
+      this.shooting = true;
+      this.shoot(event);
+    }
+  }
+
+  handleMouseUp() {
+    this.shooting = false;
+  }
+
+  shoot(event) {
+    const currentTime = Date.now();
+    if (currentTime - this.lastShotTime >= this.classData.fireRateCooldown) {
+      this.lastShotTime = currentTime;
+
+      for (let i = 0; i < this.classData.burstRounds; i++) {
+        setTimeout(() => this.shootBullet(event), i * this.classData.shootInterval);
+      }
+
+      setTimeout(() => {
+        if (this.shooting) {
+          this.shoot(event); // Continue shooting if the mouse button is still held down
+        }
+      }, this.classData.fireRateCooldown);
+    }
+  }
+
+  destroy() {
+    document.removeEventListener("mousedown", this.mouseDownHandler);
+    document.removeEventListener("mouseup", this.mouseUpHandler);
+  }
+}
+
+// Usage:
+
+// To destroy the shooting controller when it's no longer needed:
+// shootingController.destroy();
+
+
+
+// Usage:
+const shootingController = new ShootingController();
+
+// To destroy the shooting controller when it's no longer needed:
+// shootingController.destroy();
+
+
+
+
+
+setInterval(() => {
+ //bullet collisions vs player
+  detectCollisions()
+}, 13);
+setInterval(() => {
+ // wall colliisons vs bullet
+  checkCollisions();
+
+}, 13);
+
+
+// Set up a timer to update the player's position and velocity every 30 milliseconds
+setInterval(updatePlayer, 5);
+
+let winnerUsername;
+setInterval(() => {
+  console.log(winnerUsername)
+}, 1000);
+
+
+// Function to update the leaderboard
+function updateLeaderboard(data) {
+    // Get the leaderboard table
+    const leaderboardTable = document.getElementById('leaderboard-table');
+
+    // Get the tbody element where the leaderboard data will be added
+    const tbody = leaderboardTable.querySelector('tbody');
+
+    // Clear the existing leaderboard data
+    tbody.innerHTML = '';
+
+    // Sort the player data by score (assuming data is an array of player objects)
+    data.sort((a, b) => b.score - a.score);
+
+    // Loop through the player data and add rows to the leaderboard table
+    data.forEach((player, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${index === 0 ? '<i class="fa-solid fa-crown"></i> ' : ''}${player.username}</td>
+            <td>${player.score}</td>
+            <td>${player.kills}</td>
+            <td>${player.deaths}</td>
+        `;
+        tbody.appendChild(row);
+        // Update the global variable with the username of player #1
+        if (index === 0) {
+            winnerUsername = player.username;
+        }
+    });
+}
+
+// Function to fetch and update leaderboard data from Firebase
+function fetchLeaderboardData() {
+    // Reference to the "players" node in Firebase
+    const playersNodeRef = firebase.database().ref('players');
+
+    // Listen for changes in the "players" node
+    playersNodeRef.on('value', (snapshot) => {
+        const playersData = [];
+
+        // Iterate through the player data and push it to the array
+        snapshot.forEach((childSnapshot) => {
+            const playerData = childSnapshot.val();
+            playersData.push(playerData);
+        });
+
+        
+        if(gameOver){
+        updateEndLeaderboard(playersData);
+        } else {
+// Update the leaderboard with the fetched data
+updateLeaderboard(playersData);
+        }
+
+    });
+
+
+}
+
+// Function to display the end screen leaderboard
+function displayEndScreen() {
+  if(gameOver){
+            fetchLeaderboardData();
+  }
+        }
+
+
+    // Function to update the leaderboard
+function updateEndLeaderboard(data) {
+  console.log("Balls")
+  if(!gameOver) return;
+    // Get the leaderboard table body element
+    const leaderboardBody = document.getElementById('leaderboardBody');
+    const endLeaderboard = document.getElementById('endLeaderboard');
+    endLeaderboard.style.display = 'block';
+    endLeaderboard.style.zIndex = '9999'
+
+    // Clear the existing leaderboard data
+    leaderboardBody.innerHTML = '';
+
+    // Sort the player data by score (assuming data is an array of player objects)
+    data.sort((a, b) => b.score - a.score);
+
+    // Loop through the player data and add rows to the leaderboard table
+    data.forEach((player, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <th scope="row">${index + 1}</th>
+            <td>${player.username}</td>
+            <td>${player.score}</td>
+        `;
+        leaderboardBody.appendChild(row);
+    });
+}
+
+     
+
+
+function deleteNodesWithoutUsername() {
+  const playersNodeRef = firebase.database().ref('players');
+
+  playersNodeRef.once('value', (snapshot) => {
+    snapshot.forEach((childSnapshot) => {
+      const playerData = childSnapshot.val();
+      if (!playerData.username) {
+        // Node does not have a username, delete it
+        playersNodeRef.child(childSnapshot.key).remove()
+          .then(() => {
+            console.log(`Node with key ${childSnapshot.key} deleted.`);
+          })
+          .catch((error) => {
+            console.error(`Error deleting node with key ${childSnapshot.key}: ${error}`);
+          });
+      }
+    });
+  });
+}
+
+setInterval(() => {
+    deleteNodesWithoutUsername();
+}, 100);
+//
+//
+//
+//
+//
+//
+//
+//
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </script>
+</body>
+</html>
