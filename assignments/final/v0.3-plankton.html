@@ -431,7 +431,7 @@ height: 100%;
 }
 
 
-.table {
+.table, .endLeaderboard-container {
     margin-bottom: 0; /* Remove extra margin at the bottom of the table */
 }
   </style>
@@ -698,7 +698,7 @@ height: 100%;
 </div>
 
 
-<div class="endLeaderboard-container leaderboard" style="display: none;" id="endLeaderboard">
+<div class="endLeaderboard-container" style="display: none;" id="endLeaderboard">
   <h1 class="text-center">Game Over! </h1>
   <table class="table table-striped">
       <thead>
@@ -745,12 +745,12 @@ height: 100%;
 let classData = ({
   health: 100,
   burstRounds: 3,
-  damage: 10,
+  damage: 13,
   speed: 1.0,
   ammo: 15,
   shootInterval: 85,
-  bulletSpeed: 1.0,
-  fireRateCooldown: 500,
+  bulletSpeed: 1.2,
+  fireRateCooldown: 600,
   reloadSpeed: 1.0,
 
 });
@@ -999,12 +999,12 @@ console.log('warrior');
 classData = ({
   health: 100,
   burstRounds: 3,
-  damage: 10,
+  damage: 13,
   speed: 1.0,
   ammo: 15,
   shootInterval: 85,
-  bulletSpeed: 1.0,
-  fireRateCooldown: 500,
+  bulletSpeed: 1.2,
+  fireRateCooldown: 600,
   reloadSpeed: 1.0,
 
 
@@ -1017,13 +1017,13 @@ else if (selectedClass === "mage")
   console.log('mage');
   classData = ({
   health: 65,
-  burstRounds: 6,
-  damage: 2,
-  speed: 1.6,
+  burstRounds: 1,
+  damage: 4,
+  speed: 1.55,
   ammo: 40,
-  shootInterval: 65,
+  shootInterval: 85,
   bulletSpeed: 0.8,
-  fireRateCooldown: 650,
+  fireRateCooldown: 150,
   reloadSpeed: 0.5,
 });
   }
@@ -1033,13 +1033,13 @@ else if (selectedClass === "mage")
     classData = ({
   health: 120,
   burstRounds: 1,
-  damage: 15,
+  damage: 10,
   speed: 0.7,
-  ammo: 18,
-  shootInterval: 250,
-  bulletSpeed: 1.3,
-  fireRateCooldown: 800,
-  reloadSpeed: 1.5,
+  ammo: 20,
+  shootInterval: 175,
+  bulletSpeed: 1.0,
+  fireRateCooldown: 225,
+  reloadSpeed: 2,
 });
   }
   else if (selectedClass === "archer")
@@ -1049,12 +1049,12 @@ else if (selectedClass === "mage")
   health: 75,
   burstRounds: 1,
   damage: 75,
-  speed: 0.85,
-  ammo: 5,
-  shootInterval: 350,
-  bulletSpeed: 1.35,
-  fireRateCooldown: 800,
-  reloadSpeed: 1.2,
+  speed: 1.25,
+  ammo: 6,
+  shootInterval: 150,
+  bulletSpeed: 1.25,
+  fireRateCooldown: 250,
+  reloadSpeed: 3,
 
 });
   } else {
@@ -1634,12 +1634,11 @@ function detectCollisions() {
     ) {
       // Check if the cell at (cellX, cellY) has a value of 1 (a block)
       if (blocks[cellY][cellX] === 1) {
-        // Handle collision here
-        // You can remove the bullet from the bullets array or perform other actions
-        // For example:
-        bullets.splice(i, 1); // Remove the bullet from the bullets array
+        if(bullet.owner === userId){
+          bullets.splice(i, 1); // Remove the bullet from the bullets array
         i--; // Decrement i to account for the removed bullet
         bulletsRef.child(bullet.id).remove();
+        }
       }
     }
   }
@@ -1647,26 +1646,6 @@ function detectCollisions() {
 
 
 
-
-
-function removeBullets() {
-  const currentTime = Date.now();
-  const fiveSecondsAgo = currentTime - 5000; // 5 seconds in milliseconds
-
-  for (let i = bullets.length - 1; i >= 0; i--) {
-    const bullet = bullets[i];
-    const bulletTimestamp = bullet.timestamp;
-
-    if (bulletTimestamp < fiveSecondsAgo) {
-      // Remove the bullet from the database
-      bulletsRef.child(bullet.id).remove();
-
-      // Remove the bullet from the local bullets array
-      bullets.splice(i, 1);
-    } 
-   
-  }
-}
 
 
 
@@ -1722,8 +1701,10 @@ var playersPosition = {};
 // ...
 let animationId; // Store the animation frame identifier
 
-// Inside the updateAndDraw function:
-function updateAndDraw() {
+
+
+// Inside the updateAndDraw function, which should be declared as async:
+async function updateAndDraw() {
     // Check if another instance of animate() is already running
     if (animationId !== null) {
             // Another instance of animate() is already running, cancel it
@@ -1731,13 +1712,12 @@ function updateAndDraw() {
         }
   stats.begin();
   if(ammoCount === 0){
-    console.log("no ammo")
     document.getElementById('ammoContainer').style.color = "red";
   }
   // Clear the canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   const currentTime = Date.now();
-  playersPosition = {};
+  detectCollisions()
 
   drawBullets();
 
@@ -1745,12 +1725,15 @@ function updateAndDraw() {
   // Get a reference to the players database
   var playersRef = firebase.database().ref("players");
 
-  // Inside the playersRef.once("value", ...) callback
-  playersRef.once("value", function (snapshot) {
+  try {
+    const snapshot = await playersRef.once("value");
+
+    playersPosition = {};
+
     snapshot.forEach(function (childSnapshot) {
       var player = childSnapshot.val();
-   // Store the player's current position in the playersPosition object
-   playersPosition[childSnapshot.key] = { x: player.x, y: player.y };
+      // Store the player's current position in the playersPosition object
+      playersPosition[childSnapshot.key] = { x: player.x, y: player.y };
       // Interpolate the player's position smoothly
       var alpha = 2; // Adjust this value for smoother/faster interpolation
       player.interpolationFactor = 0.5; // Initialize with a lower value for all players
@@ -1761,25 +1744,21 @@ function updateAndDraw() {
       drawPlayer(player);
       drawMap();
       updateHTML(player);
- 
-
     });
-  });
-  //
-  //
-  //
-  //
-  //
-  //HOST FUNCTIONS: 
-  removeBullets();
- 
+  } catch (error) {
+    console.error("Error fetching player data:", error);
+  }
+
   // Request animation frame to continue updating and drawing
   animationId = requestAnimationFrame(updateAndDraw);
   stats.end();
-
 }
 
+// Call the async function to start the update loop
 updateAndDraw();
+
+
+
 
 
 function drawBullets(){
@@ -2165,12 +2144,9 @@ function displayTime() {
   var minutes = Math.floor(gameTimeInSeconds / 60);
   var seconds = gameTimeInSeconds % 60;
   const timeLeftFormatted = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-  console.log(timeLeftFormatted);
   document.getElementById('gameTime').innerHTML = timeLeftFormatted;
   if (timeLeftFormatted === "0:00") {
-    console.log("game over");
     gameOver = true;
-    console.log("game over lol")
     cancelAnimationFrame(animationId);
     document.getElementById('uiContainer').style.opacity = '0';
     document.getElementById('myCanvas').style.filter = 'blur(5px)';
@@ -2203,7 +2179,6 @@ function displayTime() {
       timeRef.set(startTime);
 
     // Now 'firstPlayerData' contains the data of the first player
-    console.log('First player data:', firstPlayerData);
   } else {
     timeRef.once('value', (snapshot) => {
       startTime = snapshot.val();
@@ -2227,7 +2202,6 @@ function calculateRemainingTime() {
   const currentTime = Date.now();
   const elapsedTime = Math.floor((currentTime - startTime) / 1000);
   gameTimeInSeconds = Math.max(0, 4 * 60 - elapsedTime);
-  console.log(gameTimeInSeconds)
   displayTime();
 }
 
@@ -2495,7 +2469,6 @@ function displayRecentDeath() {
   recentDeathElement.style.display = 'fixed'
         recentDeathElement.textContent = "You Died!"
        recentDeathElement.style.display = "block";
-console.log(recentDeathElement.style.display)
         setTimeout(function() {
             recentDeathElement.style.display = "none";
         }, 2000); // Hide after 2 seconds
@@ -2652,12 +2625,10 @@ function reloadWeapon(){
   reloading = true;
   setTimeout(() => {
     ammoCount = maxAmmo;
-    console.log('Reload finished');
     reloading = false;
     ammoElement.innerHTML = ammoCount;
     document.getElementById('ammoContainer').style.color = "white"
   }, 1500 * classData.reloadSpeed);
-  console.log('Reloading')
 }
 function checkCollisionWithBlocks(x, y) {
   // Assuming blocks is your 2D array representing the game world
@@ -2687,38 +2658,40 @@ function checkCollisionWithBlocks(x, y) {
           // Collision detected
           collided = true;
           
-          // Calculate overlap on each side
-          var overlapLeft = playerRight - blockLeft;
-          var overlapRight = blockRight - playerLeft;
-          var overlapTop = playerBottom - blockTop;
-          var overlapBottom = blockBottom - playerTop;
+         
+  // Determine the direction of the collision
+  var overlapLeft = playerRight - blockLeft;
+  var overlapRight = blockRight - playerLeft;
+  var overlapTop = playerBottom - blockTop;
+  var overlapBottom = blockBottom - playerTop;
 
-          // Determine the direction of the collision
-          if (
-            overlapLeft < overlapRight &&
-            overlapLeft < overlapTop &&
-            overlapLeft < overlapBottom
-          ) {
-            // Left side collision
-            velX = Math.max(0, velX); // Prevent movement to the left
-          } else if (
-            overlapRight < overlapLeft &&
-            overlapRight < overlapTop &&
-            overlapRight < overlapBottom
-          ) {
-            // Right side collision
-            velX = Math.min(0, velX); // Prevent movement to the right
-          } else if (
-            overlapTop < overlapLeft &&
-            overlapTop < overlapRight &&
-            overlapTop < overlapBottom
-          ) {
-            // Top side collision
-            velY = Math.max(0, velY); // Prevent upward movement
-          } else {
-            // Bottom side collision
-            velY = Math.min(0, velY); // Prevent downward movement
-          }
+  // Store the original velocities
+  var originalVelX = velX;
+  var originalVelY = velY;
+
+  // Adjust the velocity based on the direction of collision
+  if (overlapLeft < overlapRight && overlapLeft < overlapTop && overlapLeft < overlapBottom) {
+    // Left side collision
+    velX = Math.max(0, velX); // Stop movement to the left
+  } else if (overlapRight < overlapLeft && overlapRight < overlapTop && overlapRight < overlapBottom) {
+    // Right side collision
+    velX = Math.min(0, velX); // Stop movement to the right
+  } else if (overlapTop < overlapLeft && overlapTop < overlapRight && overlapTop < overlapBottom) {
+    // Top side collision
+    velY = Math.max(0, velY); // Stop upward movement
+  } else {
+    // Bottom side collision
+    velY = Math.min(0, velY); // Stop downward movement
+  }
+
+  // Check if any velocity change occurred
+  if (originalVelX !== velX || originalVelY !== velY) {
+    // A collision happened, so adjust the player's position
+    // based on the remaining velocity in the non-collision direction
+    x += velX;
+    y += velY;
+  }
+
         }
       }
     }
@@ -2750,7 +2723,6 @@ class ShootingController {
       shootInterval: classData.shootInterval,
       fireRateCooldown: classData.fireRateCooldown,
     };
-    console.log(classData.fireRateCooldown)
     this.lastShotTime = 0;
     this.mouseDownHandler = this.handleMouseDown.bind(this);
     this.mouseUpHandler = this.handleMouseUp.bind(this);
@@ -2846,10 +2818,7 @@ const shootingController = new ShootingController();
 
 
 
-setInterval(() => {
- //bullet collisions vs player
-  detectCollisions()
-}, 13);
+
 setInterval(() => {
  // wall colliisons vs bullet
   checkCollisions();
@@ -2861,9 +2830,7 @@ setInterval(() => {
 setInterval(updatePlayer, 5);
 
 let winnerUsername;
-setInterval(() => {
-  console.log(winnerUsername)
-}, 1000);
+
 
 
 // Function to update the leaderboard
@@ -2935,7 +2902,6 @@ function displayEndScreen() {
 
     // Function to update the leaderboard
 function updateEndLeaderboard(data) {
-  console.log("Balls")
   if(!gameOver) return;
     // Get the leaderboard table body element
     const leaderboardBody = document.getElementById('leaderboardBody');
