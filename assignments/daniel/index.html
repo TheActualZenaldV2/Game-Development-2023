@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spinning 3D Model</title>
+    <style>
+        body {
+            margin: 0;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/js/loaders/MTLLoader.js"></script>
+    <script src="https://cdn.rawgit.com/mrdoob/three.js/r87/examples/js/loaders/OBJLoader.js"></script>
+
+
+<script>
+// Create a scene
+const scene = new THREE.Scene();
+
+    // Create the camera
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+
+
+// Create an ambient light for overall scene illumination
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // Adjust the color and intensity as needed
+scene.add(ambientLight);
+
+// Create a directional light (sunlight-like)
+const directionalLight = new THREE.DirectionalLight(0xffffff, 1); // Adjust the color and intensity as needed
+directionalLight.position.set(1, 1, 1); // Set the direction of the light
+scene.add(directionalLight);
+
+
+
+
+
+
+directionalLight.position.set(1, 1, 1);
+directionalLight.castShadow = true; // Enable shadow casting
+
+// Configure shadow properties
+directionalLight.shadow.mapSize.width = 1024; // Shadow map width
+directionalLight.shadow.mapSize.height = 1024; // Shadow map height
+directionalLight.shadow.camera.near = 0.1; // Near plane of the shadow camera
+directionalLight.shadow.camera.far = 10; // Far plane of the shadow camera
+
+scene.add(directionalLight);
+
+
+
+
+// Add linear fog to the scene
+
+
+const smokeGeometry = new THREE.SphereGeometry(0.1, 16, 16); // Adjust the size and resolution
+const smokeMaterial = new THREE.MeshBasicMaterial({
+    color: 0xCCCCCC, // Adjust the color of the smoke
+    transparent: true,
+    opacity: 0.5, // Adjust the opacity for the smoke effect
+});
+
+const smokeParticles = new THREE.Group();
+
+for (let i = 0; i < 500; i++) {
+    const smokeParticle = new THREE.Mesh(smokeGeometry, smokeMaterial);
+
+    // Randomly position the smoke particles anywhere in the scene
+    smokeParticle.position.set(
+        Math.random() * 20 - 10, // Adjust the X position range
+        Math.random() * 20 - 10, // Adjust the Y position range
+        Math.random() * 20 - 10  // Adjust the Z position range
+    );
+
+    smokeParticles.add(smokeParticle);
+}
+
+scene.add(smokeParticles);
+
+
+
+// Create a renderer
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+let gun; // Rename 'model' to 'gun'
+
+
+// Create a scene, camera, and renderer (as you've done before)
+
+// Create an instance of MTLLoader
+const mtlLoader = new THREE.MTLLoader();
+
+// Load the MTL file (replace 'model.mtl' with the path to your MTL file)
+mtlLoader.load('https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/baked-mesh.mtl', (materials) => {
+    // Create an instance of OBJLoader
+    const objLoader = new THREE.OBJLoader();
+
+    // Set the materials loaded from the MTL file
+    objLoader.setMaterials(materials);
+
+    // Load the OBJ model (replace 'model.obj' with the path to your OBJ file)
+    objLoader.load('https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/baked-mesh.obj', (object) => {
+        // Add the loaded object to the scene
+
+        gun = object;
+        scene.add(gun); // Add the loaded model to the scene
+    // Set the position of the camera behind the gun
+    const cameraDistance = 1; // Adjust the distance as needed
+    const cameraHeight = 0;   // Adjust the height as needed
+
+    camera.position.set(
+        gun.position.x - cameraDistance,
+        gun.position.y + cameraHeight,
+        gun.position.z
+    );
+
+    // Point the camera at the gun
+    camera.lookAt(gun.position);
+
+        // Optionally, you can manipulate the loaded object or set its position, rotation, and scale here
+    });
+});
+
+
+
+
+// Set up animation
+const animate = () => {
+    requestAnimationFrame(animate);
+
+    // Rotate the model (change 'model' to 'gun')
+    if (gun) {
+        gun.rotation.y -= 0.005;
+   
+
+
+    }
+    smokeParticles.children.forEach((particle) => {
+        // Update particle positions
+        particle.position.z += 0.005; // Adjust the drift speed along the Z-axis
+        particle.position.y += 0.005; // Adjust the drift speed along the Y-axis
+
+        // Check if a particle is out of bounds
+        if (particle.position.z > 10) {
+            // Reposition the particle at a random position within the scene
+            particle.position.set(
+                Math.random() * 20 - 10, // Adjust the X position range
+        Math.random() * 20 - 10, // Adjust the Y position range
+        Math.random() * 20 - 10  // Adjust the Z position range
+            );
+        }
+    });
+
+    renderer.render(scene, camera);
+};
+
+// Handle window resize
+window.addEventListener('resize', () => {
+    const newWidth = window.innerWidth;
+    const newHeight = window.innerHeight;
+
+    camera.aspect = newWidth / newHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(newWidth, newHeight);
+});
+
+animate();
+
+    </script>
+</body>
+</html>
+
