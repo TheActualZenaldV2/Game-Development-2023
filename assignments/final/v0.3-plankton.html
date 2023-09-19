@@ -1,4 +1,4 @@
-
+\
 
 
 
@@ -419,16 +419,7 @@ height: 100%;
     color: white;
 }
 
-.endLeaderboard-container {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(0, 0, 0, 0.7);
-    padding: 10px;
-    border-radius: 5px;
-    color: white;
-}
+
 
 
 .table, .endLeaderboard-container {
@@ -441,6 +432,28 @@ height: 100%;
 letter-spacing: .1em;
 text-shadow: 0 -1px 0 #fff, 0 1px 0 #2e2e2e, 0 2px 0 #2c2c2c, 0 3px 0 #2a2a2a, 0 4px 0 #282828, 0 5px 0 #262626, 0 6px 0 #242424, 0 7px 0 #222, 0 8px 0 #202020, 0 9px 0 #1e1e1e, 0 10px 0 #1c1c1c, 0 11px 0 #1a1a1a, 0 12px 0 #181818, 0 13px 0 #161616, 0 14px 0 #141414, 0 15px 0 #121212, 0 22px 30px rgba(0,0,0,0.9);
 }
+.container1 {
+    max-width: 75%;
+    min-width: 75%;
+    background-color: #333; /* Dark background color */
+    color: #fff; /* Text color */
+    border: 1px solid #555; /* Border color */
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px #000; /* Box shadow color */
+    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#endLeaderboard{
+
+
+}
+
+
   </style>
 </head>
 <body>
@@ -714,21 +727,82 @@ text-shadow: 0 -1px 0 #fff, 0 1px 0 #2e2e2e, 0 2px 0 #2c2c2c, 0 3px 0 #2a2a2a, 0
 </div>
 
 
-<div class="endLeaderboard-container" style="display: none;" id="endLeaderboard">
-  <h1 class="text-center">Game Over! </h1>
-  <table class="table table-striped">
-      <thead>
-          <tr>
-              <th scope="col">#</th>
-              <th scope="col">Player Name</th>
-              <th scope="col">Score</th>
-          </tr>
-      </thead>
-      <tbody id="leaderboardBody">
-          <!-- Leaderboard data will be dynamically added here -->
-      </tbody>
-  </table>
+<div class="container1" id="endGameLeaderboardContainer" style="display: none;">
+  <ul class="nav nav-tabs" id="myTab4" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active section-title" id="tab13-tab" data-bs-toggle="tab" data-bs-target="#tab13" type="button" role="tab" aria-controls="tab13" aria-selected="true">Leaderboard</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link section-title" id="tab14-tab" data-bs-toggle="tab" data-bs-target="#tab14" type="button" role="tab" aria-controls="tab14" aria-selected="false">My Stats</button>
+    </li>
+
+  </ul>
+
+  <div class="tab-content mt-3" id="myTabContent4">
+<div class="tab-pane fade show active" id="tab13" role="tabpanel" aria-labelledby="tab13-tab">
+
+      <div class="endLeaderboard-container"  id="endLeaderboard">
+        <h1 class="text-center">Game Over! </h1>
+        <table class="table table-bordered table-striped table-dark">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Player Name</th>
+                    <th scope="col">Score</th>
+                </tr>
+            </thead>
+            <tbody id="leaderboardBody">
+                <!-- Leaderboard data will be dynamically added here -->
+            </tbody>
+        </table>
+      </div>
 </div>
+
+<div class="tab-pane fade" id="tab14" role="tabpanel" aria-labelledby="tab14-tab">
+  <p>
+    <i class="fa-solid fa-star"></i> Average Score: 
+    <span id="average-score">
+        <span class="loading-spinner" style="margin-left: 5px;">
+            <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: #ccc; font-weight: bold;"></i>
+        </span>
+    </span>
+</p>
+<p>
+    <i class="fa-solid fa-dice"></i> Total Score: 
+    <span id="total-score">
+        <span class="loading-spinner" style="margin-left: 5px;">
+            <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: #ccc; font-weight: bold;"></i>
+        </span>
+    </span>
+</p>
+<p>
+    <i class="fa-solid fa-trophy"></i> Games Completed: 
+    <span id="games-completed">
+        <span class="loading-spinner" style="margin-left: 5px;">
+            <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: #ccc; font-weight: bold;"></i>
+        </span>
+    </span>
+</p>
+
+<br> <hr> <br>
+<h2> Game Stats</h2>
+<p>Accuracy: <span id="endAccuracy"> </span> </p>
+<p>KDR: <span id="endKdr"> </span> </p>
+<p>Deaths: <span id="endDeaths"> </span> </p>
+<p>Kills: <span id="endKills"> </span> </p>
+
+
+
+</div>
+
+
+  </div>
+</div>
+
+
+
+
+
 
         <canvas id="myCanvas"></canvas>
 
@@ -2161,7 +2235,11 @@ function displayTime() {
   var seconds = gameTimeInSeconds % 60;
   const timeLeftFormatted = `${minutes}:${seconds.toString().padStart(2, '0')}`;
   document.getElementById('gameTime').innerHTML = timeLeftFormatted;
-  if (timeLeftFormatted === "0:00") {
+  if (timeLeftFormatted === "3:40") {
+    document.getElementById('endGameLeaderboardContainer').style.position = 'fixed';
+    document.getElementById('endGameLeaderboardContainer').style.zIndex = '99999999999';
+    document.getElementById('endGameLeaderboardContainer').style.display = 'block';
+sendStats(username);
     gameOver = true;
     cancelAnimationFrame(animationId);
     document.getElementById('uiContainer').style.opacity = '0';
@@ -2175,7 +2253,7 @@ function displayTime() {
   document.getElementById('gameLeaderboard').style.zIndex = '9999';
   document.getElementById('uiContainer').style.zIndex = '9999';
   document.getElementById('myCanvas').style.filter = 'blur(0px)';
-  document.getElementById('endLeaderboard').style.display = 'none';
+  document.getElementById('endGameLeaderboardContainer').style.display = 'none';
    gameTimeInSeconds = 4 * 60; // Initial game time in seconds (4 minutes)
    var minutes = Math.floor(gameTimeInSeconds / 60);
   var seconds = gameTimeInSeconds % 60;
@@ -2208,7 +2286,7 @@ function displayTime() {
 
 
 
-}, 5500);
+}, 10500);
 
   }
 }
@@ -2426,6 +2504,7 @@ async function handleBulletCollision(bulletOwner, playerId) {
 
     if (player) {
       player.health = Math.max(0, player.health - classData.damage);
+      playerStats.totalHits ++;
 
       if (player.health === 0) {
         const bulletOwnerSnapshot = await playersRef.child(bulletOwner).once('value');
@@ -2941,6 +3020,52 @@ function updateEndLeaderboard(data) {
         `;
         leaderboardBody.appendChild(row);
     });
+}
+
+function sendStats(username){
+  const userRef = database.ref("users/" + username);
+  playerStats.accuracy = (playerStats.totalHits / playerStats.totalBullets) * 100;
+  playerStats.accuracy = playerStats.accuracy.toFixed(1);
+
+  if (playerStats.totalDeaths === 0) {
+    playerStats.kdr = playerStats.totalKills;
+} else {
+    playerStats.kdr = playerStats.totalKills / playerStats.totalDeaths;
+}
+console.log(playerStats)
+document.getElementById("endAccuracy").innerHTML = playerStats.accuracy + '%';
+document.getElementById("endKdr").innerHTML = playerStats.kdr;
+document.getElementById("endDeaths").innerHTML = playerStats.totalDeaths;
+document.getElementById("endKills").innerHTML = playerStats.totalKills;
+
+
+
+    // Retrieve the user's stats from the database
+    userRef.once("value")
+        .then((snapshot) => {
+          
+            // Get the user's data from the snapshot
+            const userData = snapshot.val();
+            if(userData){
+const updateData = ({
+
+})
+
+            } else {
+                // User with matching username not found
+                console.error("Error: User not found in database, " + username);
+            }
+
+        });
+         playerStats = ({
+  totalBullets: 0,
+  totalHits: 0,
+  totalKills: 0,
+  totalDeaths: 0,
+  accuracy: 0,
+  kdr: 0,
+});
+       
 }
 
      
