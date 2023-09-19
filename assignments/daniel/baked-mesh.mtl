@@ -1,8 +1,16 @@
-#  
-#  Wavefront MTL
-#  
-#  
+# Wavefront MTL
+# 
 
 newmtl g0
-norm baked_mesh_norm0.png
-#  
+Ka 1.000 1.000 1.000
+Kd 1.000 1.000 1.000
+Ks 0.000 0.000 0.000
+illum 2
+Ns 96.078431
+
+map_Ka baked_mesh_tex0.png
+map_Kd baked_mesh_tex0.png
+map_Ks baked_mesh_tex0.png
+map_Ns baked_mesh_norm0.png
+map_bump baked_mesh_norm0.png
+map_d baked_mesh_ao0.png
