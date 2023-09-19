@@ -1,1 +1,3 @@
-this si a cool model of daniel!
+cool planets and shit 
+
+no copy code ploz 
