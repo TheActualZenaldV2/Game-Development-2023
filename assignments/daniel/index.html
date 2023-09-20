@@ -555,7 +555,7 @@ const descriptionText = document.getElementById('descriptionText');
 // Function to load and switch to the next model
 function loadNextModel() {
     currentModelText.innerHTML = `<strong>Loading...</strong>`;
-    descriptionText.innerHTML = `<strong>Loading...</strong>`;
+    descriptionText.innerHTML = ``;
 
     currentModelIndex = (currentModelIndex + 1) % modelUrls.length;
     loadModel(modelUrls[currentModelIndex]);
