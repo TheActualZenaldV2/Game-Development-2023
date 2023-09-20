@@ -579,10 +579,10 @@ function loadPrevModel() {
 
 // Load all planet models with their respective orbit radii and speeds
 const planetData = [
-    { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Sun_1_1391000.glb', radius: 0, speed: 0 },
-    { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Moon_1_3474.glb', radius: 55, speed: 0.01 },
-    { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/Venus(surface)_1_12103.glb', radius: 75, speed: 0.008 },
-    { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Earth_1_12756 (1).glb', radius: 95, speed: 0.007 },
+    { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Sun_1_1391000.glb', radius: 0, speed: 0,  },
+    { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Moon_1_3474.glb', radius: 55, speed: 0.01, semiMajorAxis: 55, eccentricity: 0.02, inclination: 0, ascendingNode: 0, periapsisArg: 0, initialMeanAnomaly: 0 },
+    { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/Venus(surface)_1_12103.glb', radius: 75, speed: 0.008, semiMajorAxis: 75, eccentricity: 0.01, inclination: 0, ascendingNode: 0, periapsisArg: 0, initialMeanAnomaly: 0 },
+    { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Earth_1_12756 (1).glb', radius: 95, speed: 0.007, semiMajorAxis: 95, eccentricity: 0.0167, inclination: 0, ascendingNode: 0, periapsisArg: 0, initialMeanAnomaly: 0  },
     // Add data for other planets
 ];
 
@@ -629,6 +629,48 @@ function loadPlanetModel(modelUrl, orbitRadius, orbitSpeed) {
         }
     );
 }
+
+
+// Function to calculate the position of each planet in its orbit based on time
+function calculatePlanetPosition(planetInfo, time) {
+    const {
+        semiMajorAxis,
+        eccentricity,
+        inclination,
+        ascendingNode,
+        periapsisArg,
+        initialMeanAnomaly,
+    } = planetInfo;
+
+    // Calculate the mean anomaly based on time
+    const meanMotion = Math.sqrt((G * sunMass) / Math.pow(semiMajorAxis, 3));
+    const meanAnomaly = initialMeanAnomaly + meanMotion * time;
+
+    // Calculate the true anomaly using Kepler's equation
+    const eccentricAnomaly = calculateEccentricAnomaly(meanAnomaly, eccentricity);
+    const trueAnomaly = 2 * Math.atan(Math.sqrt((1 + eccentricity) / (1 - eccentricity)) * Math.tan(eccentricAnomaly / 2));
+
+    // Calculate the planet's position in its orbit
+    const x = semiMajorAxis * (Math.cos(trueAnomaly) - eccentricity);
+    const z = 0; // Assuming orbits are in the x-z plane
+    const y = semiMajorAxis * Math.sin(trueAnomaly) * Math.cos(inclination);
+
+    return { x, y, z };
+}
+
+
+// Animation loop
+function animatePlanets(time) {
+    planetData.forEach((planetInfo, index) => {
+        const planet = planetsGroup.children[index];
+        const { x, y, z } = calculatePlanetPosition(planetInfo, time);
+        planet.position.set(x, y, z);
+    });
+
+    requestAnimationFrame(animatePlanets);
+    renderer.render(scene, camera);
+}
+
 
 // Function to start the animation when all models are loaded
 function startAnimation() {
