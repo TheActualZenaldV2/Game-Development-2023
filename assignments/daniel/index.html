@@ -76,7 +76,7 @@
 }
 #current-model-text {
   position: fixed;
-  top: 10px; /* Adjust the top position as needed */
+  top: 10px;
   left: 50%;
   transform: translateX(-50%);
   background-color: rgba(0, 0, 0, 0.7);
@@ -85,7 +85,304 @@
   border-radius: 5px;
   font-size: 1.5em;
   z-index: 1000;
+  text-align: center; /* Center the text horizontally */
+  width: auto; /* Allow the width to adjust based on content */
 }
+#descriptionText {
+  position: fixed;
+  top: 50px;
+  right: 10px;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 1.5em;
+  z-index: 1000;
+  text-align: center; /* Center the text horizontally */
+  width: auto; /* Allow the width to adjust based on content */
+  max-width: 500px;
+}
+
+#clockContainer {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  padding: 5px 10px;
+  border-radius: 5px;
+
+    
+}
+#clock{
+    font-size: 5.5rem;
+  z-index: 1000;    font-weight: bold;
+    user-select: none;
+    color: rgb(59, 57, 57);
+
+    text-shadow: 0 0 1px #FFF, 0 0 10px #FFF, 0 0 15px #FFF, 0 0 20px #525252, 0 0 30px rgb(117, 117, 117), 0 0 40px #383838, 0 0 55px #1d1d1d, 0 0 75px rgb(0, 0, 0);
+    font-weight: bold;
+    animation: flicker-5 3s linear infinite both;
+}
+
+
+@keyframes flicker-5 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  0.02% {
+    opacity: 1;
+  }
+  0% {
+    opacity: 1;
+  }
+  1% {
+    opacity: 1;
+  }
+  1.02% {
+    opacity: 1;
+  }
+  8.98% {
+    opacity: 1;
+  }
+  9% {
+    opacity: 0;
+  }
+  9.8% {
+    opacity: 0;
+  }
+  9.82% {
+    opacity: 1;
+  }
+  9.48% {
+    opacity: 1;
+  }
+  9.5% {
+    opacity: 1;
+  }
+  9.6% {
+    opacity: 1;
+  }
+  9.62% {
+    opacity: 1;
+  }
+  14.98% {
+    opacity: 1;
+  }
+  15% {
+    opacity: 0.5;
+  }
+  15.8% {
+    opacity: 0.5;
+  }
+  15.82% {
+    opacity: 1;
+  }
+  15.18% {
+    opacity: 1;
+  }
+  15.2% {
+    opacity: 0.7;
+  }
+  16% {
+    opacity: 0.7;
+  }
+  16.02% {
+    opacity: 1;
+  }
+  15.48% {
+    opacity: 1;
+  }
+  15.5% {
+    opacity: 0.5;
+  }
+  16.2% {
+    opacity: 0.5;
+  }
+  16.22% {
+    opacity: 1;
+  }
+  16.98% {
+    opacity: 1;
+  }
+  17% {
+    opacity: 1;
+  }
+  17.8% {
+    opacity: 1;
+  }
+  17.82% {
+    opacity: 1;
+  }
+  20.48% {
+    opacity: 1;
+  }
+  20.5% {
+    opacity: 0.9;
+  }
+  21.3% {
+    opacity: 0.9;
+  }
+  21.32% {
+    opacity: 1;
+  }
+  20.98% {
+    opacity: 1;
+  }
+  21% {
+    opacity: 1;
+  }
+  22% {
+    opacity: 1;
+  }
+  22.02% {
+    opacity: 1;
+  }
+  39.98% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 1;
+  }
+  41% {
+    opacity: 1;
+  }
+  41.02% {
+    opacity: 1;
+  }
+  40.48% {
+    opacity: 1;
+  }
+  40.5% {
+    opacity: 0.6;
+  }
+  41.4% {
+    opacity: 0.6;
+  }
+  41.42% {
+    opacity: 1;
+  }
+  41.98% {
+    opacity: 1;
+  }
+  42% {
+    opacity: 1;
+  }
+  42.8% {
+    opacity: 1;
+  }
+  42.82% {
+    opacity: 1;
+  }
+  59.98% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 1;
+  }
+  61% {
+    opacity: 1;
+  }
+  61.02% {
+    opacity: 1;
+  }
+  60.18% {
+    opacity: 1;
+  }
+  60.2% {
+    opacity: 0.2;
+  }
+  61% {
+    opacity: 0.2;
+  }
+  61.02% {
+    opacity: 1;
+  }
+  60.78% {
+    opacity: 1;
+  }
+  60.8% {
+    opacity: 0.4;
+  }
+  61.6% {
+    opacity: 0.4;
+  }
+  61.62% {
+    opacity: 1;
+  }
+  61.38% {
+    opacity: 1;
+  }
+  61.4% {
+    opacity: 0;
+  }
+  62.2% {
+    opacity: 0;
+  }
+  62.22% {
+    opacity: 1;
+  }
+  61.78% {
+    opacity: 1;
+  }
+  61.8% {
+    opacity: 1;
+  }
+  62.8% {
+    opacity: 1;
+  }
+  62.82% {
+    opacity: 1;
+  }
+  75.98% {
+    opacity: 1;
+  }
+  76% {
+    opacity: 1;
+  }
+  77% {
+    opacity: 1;
+  }
+  77.02% {
+    opacity: 1;
+  }
+  77.98% {
+    opacity: 1;
+  }
+  78% {
+    opacity: 0.7;
+  }
+  78.8% {
+    opacity: 0.7;
+  }
+  78.82% {
+    opacity: 1;
+  }
+  78.98% {
+    opacity: 1;
+  }
+  79% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  80.02% {
+    opacity: 1;
+  }
+  99.98% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+  101% {
+    opacity: 1;
+  }
+  101.02% {
+    opacity: 1;
+  }
+}
+
 
     </style>
 </head>
@@ -97,8 +394,14 @@
 <button id="next-model">Next  <i class="fas fa-arrow-right"></i></button>
 <div id="current-model-text">
     <i class="fa-solid fa-earth-africa"></i>  <span id="currentModelText"> Loading...</span>
+
   </div>
-  
+
+  <div id="clockContainer"> <strong> 
+    <h1 id="clock">12:00:00</h1></strong>
+</div>
+<strong>  <span id="descriptionText"> </span> </strong> 
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/GLTFLoader.js"></script>
@@ -182,8 +485,7 @@ let gun; // Rename 'model' to 'gun'
 
 const gltfLoader = new THREE.GLTFLoader();
 let model;
-
-
+let currentModel;
 
 // ... (your existing code here)
 const modelUrls = [
@@ -192,29 +494,68 @@ const modelUrls = [
     'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Jupiter_1_142984.glb',
     'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Earth_1_12756 (1).glb',
     'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Neptune_1_49528.glb',
+    'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Triton_1_2707.glb',
+    'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Sun_1_1391000.glb',
+    'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Saturn_1_120536.glb',
+    'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Moon_1_3474.glb',
+    'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Callisto_1_4821.glb',
+    
+    
+    
+
+    
 ];
 const planetInfo = {
   'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Mars_1_6792.glb': {
     name: 'Mars',
+    description: 'Mars: The fourth planet from the Sun, known for its reddish appearance and extensive history of robotic exploration.',
   },
   'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/Venus(surface)_1_12103.glb': {
     name: 'Venus',
+    description: 'Venus: The second planet from the Sun, often called Earths sister planet due to its similar size and composition but extreme temperatures and a thick, toxic atmosphere',
   },
   'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Jupiter_1_142984.glb': {
     name: 'Jupiter',
+    description: 'Jupiter: The largest planet in our solar system, known for its massive size and iconic swirling cloud patterns, including the Great Red Spot',
+  },
+  'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Callisto_1_4821.glb': {
+    name: 'Callisto',
+    description: 'Callisto: One of Jupiters largest moons, known for its heavily cratered surface and potential interest for future exploration',
   },
   'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Earth_1_12756 (1).glb': {
     name: 'Earth',
+    description: 'Earth: The third planet from the Sun, uniquely known for supporting life and having diverse ecosystems, including oceans, continents, and a protective atmosphere',
+  },
+  'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Moon_1_3474.glb' : {
+    name : 'Moon',
+    description: 'Moon: Earths natural satellite, responsible for tides and serving as a target for human space exploration',
   },
   'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Neptune_1_49528.glb': {
     name: 'Neptune',
+    description: 'Neptune: The eighth and farthest known planet from the Sun, characterized by its striking blue color and strong winds',
   },
+  'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Triton_1_2707.glb': {
+    name: 'Triton',
+    description: 'Triton: Neptunes largest moon, known for its geysers and retrograde orbit around its parent planet',
+  }, 
+  'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Sun_1_1391000.glb': {
+    name: 'Sun',
+    description: 'Sun: The center of our solar system, a massive ball of hot, glowing gas that provides the energy necessary for life on Earth',
+  },
+  'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Saturn_1_120536.glb': {
+    name: 'Saturn',
+    description: 'Saturn: The sixth planet from the Sun, famous for its stunning ring system made up of icy particles and rocks.',
+  },
+  
+  
 };
 let currentModelIndex = 0;
+const descriptionText = document.getElementById('descriptionText');
 
 // Function to load and switch to the next model
 function loadNextModel() {
     currentModelText.innerHTML = `<strong>Loading...</strong>`;
+    descriptionText.innerHTML = `<strong>Loading...</strong>`;
 
     currentModelIndex = (currentModelIndex + 1) % modelUrls.length;
     loadModel(modelUrls[currentModelIndex]);
@@ -228,6 +569,7 @@ function loadPrevModel() {
 }
 // Function to load a model by URL
 function loadModel(modelUrl) {
+    currentModel = null;
 
     // Show the loading screen
     const loadingScreen = document.getElementById('loading-screen');
@@ -244,12 +586,17 @@ function loadModel(modelUrl) {
   if (modelInfo) {
     // Update the current model text with the planet name and description
     const currentModelText = document.getElementById('currentModelText');
-    currentModelText.innerHTML = `<strong>${modelInfo.name}</strong>`;
+    currentModelText.innerHTML = `<strong style="text-alig: center;">${modelInfo.name}</strong>`;
+    descriptionText.innerHTML = `<hr><i class="fa-solid fa-circle-info"></i> <span style="font-size: 15px">${modelInfo.description} </span>`
+    currentModel = modelInfo.name;
   }
 
         cameraZ = 0;
         cameraHeight = 1;
         cameraDistance = 10;
+        if(currentModel === 'Saturn'){
+            cameraDistance = 15;
+        }
 
         model = gltf.scene;
       
@@ -296,14 +643,15 @@ const animate = () => {
 
     // Rotate the model (change 'model' to 'gun')
     if (model) {
-        model.rotation.y -= 0.0005;
+        if(currentModel === 'Saturn'){
+            model.rotation.y -= 0.0005;
+
+        } else {
+            model.rotation.y -= 0.0005;
         model.rotation.z += 0.0002;
         model.rotation.x += 0.0001;
-
-
-   
-
-
+        }
+        
     }
   
 starParticles.geometry.attributes.position.needsUpdate = true;
@@ -328,7 +676,25 @@ const controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true; // Enable smooth camera movement
 controls.dampingFactor = 1; // Adjust the damping factor for smoother movement
 controls.rotateSpeed = 0.2; // Adjust the rotation speed
+const clock = document.getElementById('clock');
 
+//clock function
+function clockTime() {
+  //get current time
+  let date = new Date();
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  let seconds = date.getSeconds();
+  //add 0 to minutes and seconds if less than 10
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+  seconds = seconds < 10 ? `0${seconds}` : seconds;
+  //set time
+  clock.textContent = `${hours}:${minutes}:${seconds}`;
+  //call clockTime every second
+  setTimeout(clockTime, 1000);
+}
+//call clockTime
+clockTime();
 
 animate();
 
