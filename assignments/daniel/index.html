@@ -96,7 +96,7 @@
     <button id="prev-model"><i class="fas fa-arrow-left"></i> Previous </button>
 <button id="next-model">Next  <i class="fas fa-arrow-right"></i></button>
 <div id="current-model-text">
-    <i class="fa-solid fa-earth-africa"></i>  <span id="currentModelText"></span>
+    <i class="fa-solid fa-earth-africa"></i>  <span id="currentModelText"> Loading...</span>
   </div>
   
 
@@ -214,12 +214,15 @@ let currentModelIndex = 0;
 
 // Function to load and switch to the next model
 function loadNextModel() {
+    currentModelText.innerHTML = `<strong>Loading...</strong>`;
+
     currentModelIndex = (currentModelIndex + 1) % modelUrls.length;
     loadModel(modelUrls[currentModelIndex]);
 }
 
 // Function to load and switch to the previous model
 function loadPrevModel() {
+    currentModelText.innerHTML = `<strong>Loading...</strong>`;
     currentModelIndex = (currentModelIndex - 1 + modelUrls.length) % modelUrls.length;
     loadModel(modelUrls[currentModelIndex]);
 }
