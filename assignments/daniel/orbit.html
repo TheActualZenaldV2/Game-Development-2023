@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -88,10 +89,11 @@
   text-align: center; /* Center the text horizontally */
   width: auto; /* Allow the width to adjust based on content */
 }
-#descriptionText {
-  position: fixed;
-  top: 50px;
-  right: 10px;
+#modelsLoaded {
+  position: absolute;
+  top: 65%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   color: white;
   padding: 5px 10px;
   border-radius: 5px;
@@ -101,15 +103,53 @@
   width: auto; /* Allow the width to adjust based on content */
   max-width: 500px;
 }
+#loadingText1 {
+  position: absolute;
+  top: 75%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 1.5em;
+  z-index: 1000;
+  text-align: center; /* Center the text horizontally */
+  width: auto; /* Allow the width to adjust based on content */
+  max-width: 500px;
+}
+#loadingError {
+  position: absolute;
+  top: 85%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: red;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 1.5em;
+  z-index: 1000;
+  text-align: center; /* Center the text horizontally */
+  width: auto; /* Allow the width to adjust based on content */
+  max-width: 500px;
+  font-weight: bolder;
+}
+
 
 
 
     </style>
 </head>
 <body>
-    <div id="loading-screen">
-        <i class="fa fa-spinner fa-spin"></i>
+    <div id="loadingElements">
+        <div id="loading-screen">
+            <i class="fa fa-spinner fa-spin"></i>
+        </div>
+        <div id="modelsLoaded" style="color: white;"><i class="fa-solid fa-download"></i> Models Loaded: <strong> <span id="modelsLoadedText"> </span> </strong></div>
+        <div id="loadingText1"> Loading for the first time will take a few minutes...</div>
+        <div id="loadingError"> <strong> <span id="errorText"></span></strong></div>
+
     </div>
+   
+
 
 <div id="current-model-text">
     <i class="fa-solid fa-earth-africa"></i>  <span id="currentModelText"> The Plannetary System</span>
@@ -219,7 +259,7 @@ let cameraPosition = new THREE.Vector3(0, 0, 10);
 let cameraSpeed = 0.1;
 
 const planetData = [
-    { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Sun_1_1391000.glb', scale: '1', name: 'sun', radius: 0, speed: 0 },
+    { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Sun_1_1391000.glb', scale: '10', name: 'sun', radius: 0, speed: 0 },
     { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Mercury_1_4878.glb', scale: '1', name: 'mercury', radius: 35, speed: 0.01, semiMajorAxis: 15, eccentricity: 0.2056, inclination: 7.0047, ascendingNode: 48.3317, periapsisArg: 29.1241, initialMeanAnomaly: 174.7958 },
     { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/Venus(surface)_1_12103.glb', scale: '2', name: 'venus', radius: 65, speed: 0.008, semiMajorAxis: 25, eccentricity: 0.0067, inclination: 3.3947, ascendingNode: 76.6807, periapsisArg: 54.8840, initialMeanAnomaly: 50.4160 },
     { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Earth_1_12756 (1).glb', scale: '1.5', name: 'earth', radius: 95, speed: 0.007, semiMajorAxis: 30, eccentricity: 0.0167, inclination: 0, ascendingNode: 348.7394, periapsisArg: 114.2078, initialMeanAnomaly: 357.5172 },
@@ -298,7 +338,7 @@ function loadPlanetModel(modelUrl, orbitRadius, orbitSpeed, planetName, planetSc
         (gltf) => {
             const planet = gltf.scene;
             if (planetName === 'sun') {
-    planet.scale.set(0.03, 0.03, 0.03);
+    planet.scale.set(0.055, 0.055, 0.055);
 } else {
     // Use a default scale of 1 if not specified in planetInfo
     const baseScale = 0.01;
@@ -318,12 +358,13 @@ function loadPlanetModel(modelUrl, orbitRadius, orbitSpeed, planetName, planetSc
 
             // Increment the loaded models count
             loadedModelsCount++;
+            document.getElementById('modelsLoadedText').innerHTML = loadedModelsCount + "/ " + planetData.length;
             console.log("Loaded Model");
 
             // Check if all models are loaded
             if (loadedModelsCount === totalModelsCount) {
                 console.log("All models loaded.");
-                document.getElementById('loading-screen').style.display = 'none';
+                document.getElementById('loadingElements').style.display = 'none';
                 // Start the animation when all models are loaded
                 startAnimation();
                 document.addEventListener("click", lockControls);
@@ -337,6 +378,7 @@ camera.lookAt(-1000, 0, 0);
         undefined,
         (error) => {
             console.error('Error loading GLB model:', error);
+            document.getElementById('errorText').innerHTML = "Loading Error, please reload and try again"
         }
     );
 }
