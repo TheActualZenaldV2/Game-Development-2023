@@ -102,286 +102,6 @@
   max-width: 500px;
 }
 
-#clockContainer {
-    position: fixed;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-  padding: 5px 10px;
-  border-radius: 5px;
-
-    
-}
-#clock{
-    font-size: 5.5rem;
-  z-index: 1000;    font-weight: bold;
-    user-select: none;
-    color: rgb(59, 57, 57);
-
-    text-shadow: 0 0 1px #FFF, 0 0 10px #FFF, 0 0 15px #FFF, 0 0 20px #525252, 0 0 30px rgb(117, 117, 117), 0 0 40px #383838, 0 0 55px #1d1d1d, 0 0 75px rgb(0, 0, 0);
-    font-weight: bold;
-    animation: flicker-5 3s linear infinite both;
-}
-
-
-@keyframes flicker-5 {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  0.02% {
-    opacity: 1;
-  }
-  0% {
-    opacity: 1;
-  }
-  1% {
-    opacity: 1;
-  }
-  1.02% {
-    opacity: 1;
-  }
-  8.98% {
-    opacity: 1;
-  }
-  9% {
-    opacity: 0;
-  }
-  9.8% {
-    opacity: 0;
-  }
-  9.82% {
-    opacity: 1;
-  }
-  9.48% {
-    opacity: 1;
-  }
-  9.5% {
-    opacity: 1;
-  }
-  9.6% {
-    opacity: 1;
-  }
-  9.62% {
-    opacity: 1;
-  }
-  14.98% {
-    opacity: 1;
-  }
-  15% {
-    opacity: 0.5;
-  }
-  15.8% {
-    opacity: 0.5;
-  }
-  15.82% {
-    opacity: 1;
-  }
-  15.18% {
-    opacity: 1;
-  }
-  15.2% {
-    opacity: 0.7;
-  }
-  16% {
-    opacity: 0.7;
-  }
-  16.02% {
-    opacity: 1;
-  }
-  15.48% {
-    opacity: 1;
-  }
-  15.5% {
-    opacity: 0.5;
-  }
-  16.2% {
-    opacity: 0.5;
-  }
-  16.22% {
-    opacity: 1;
-  }
-  16.98% {
-    opacity: 1;
-  }
-  17% {
-    opacity: 1;
-  }
-  17.8% {
-    opacity: 1;
-  }
-  17.82% {
-    opacity: 1;
-  }
-  20.48% {
-    opacity: 1;
-  }
-  20.5% {
-    opacity: 0.9;
-  }
-  21.3% {
-    opacity: 0.9;
-  }
-  21.32% {
-    opacity: 1;
-  }
-  20.98% {
-    opacity: 1;
-  }
-  21% {
-    opacity: 1;
-  }
-  22% {
-    opacity: 1;
-  }
-  22.02% {
-    opacity: 1;
-  }
-  39.98% {
-    opacity: 1;
-  }
-  40% {
-    opacity: 1;
-  }
-  41% {
-    opacity: 1;
-  }
-  41.02% {
-    opacity: 1;
-  }
-  40.48% {
-    opacity: 1;
-  }
-  40.5% {
-    opacity: 0.6;
-  }
-  41.4% {
-    opacity: 0.6;
-  }
-  41.42% {
-    opacity: 1;
-  }
-  41.98% {
-    opacity: 1;
-  }
-  42% {
-    opacity: 1;
-  }
-  42.8% {
-    opacity: 1;
-  }
-  42.82% {
-    opacity: 1;
-  }
-  59.98% {
-    opacity: 1;
-  }
-  60% {
-    opacity: 1;
-  }
-  61% {
-    opacity: 1;
-  }
-  61.02% {
-    opacity: 1;
-  }
-  60.18% {
-    opacity: 1;
-  }
-  60.2% {
-    opacity: 0.2;
-  }
-  61% {
-    opacity: 0.2;
-  }
-  61.02% {
-    opacity: 1;
-  }
-  60.78% {
-    opacity: 1;
-  }
-  60.8% {
-    opacity: 0.4;
-  }
-  61.6% {
-    opacity: 0.4;
-  }
-  61.62% {
-    opacity: 1;
-  }
-  61.38% {
-    opacity: 1;
-  }
-  61.4% {
-    opacity: 0;
-  }
-  62.2% {
-    opacity: 0;
-  }
-  62.22% {
-    opacity: 1;
-  }
-  61.78% {
-    opacity: 1;
-  }
-  61.8% {
-    opacity: 1;
-  }
-  62.8% {
-    opacity: 1;
-  }
-  62.82% {
-    opacity: 1;
-  }
-  75.98% {
-    opacity: 1;
-  }
-  76% {
-    opacity: 1;
-  }
-  77% {
-    opacity: 1;
-  }
-  77.02% {
-    opacity: 1;
-  }
-  77.98% {
-    opacity: 1;
-  }
-  78% {
-    opacity: 0.7;
-  }
-  78.8% {
-    opacity: 0.7;
-  }
-  78.82% {
-    opacity: 1;
-  }
-  78.98% {
-    opacity: 1;
-  }
-  79% {
-    opacity: 1;
-  }
-  80% {
-    opacity: 1;
-  }
-  80.02% {
-    opacity: 1;
-  }
-  99.98% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 1;
-  }
-  101% {
-    opacity: 1;
-  }
-  101.02% {
-    opacity: 1;
-  }
-}
 
 
     </style>
@@ -390,17 +110,14 @@
     <div id="loading-screen">
         <i class="fa fa-spinner fa-spin"></i>
     </div>
-    <button id="prev-model"><i class="fas fa-arrow-left"></i> Previous </button>
-<button id="next-model">Next  <i class="fas fa-arrow-right"></i></button>
+
 <div id="current-model-text">
-    <i class="fa-solid fa-earth-africa"></i>  <span id="currentModelText"> Loading...</span>
+    <i class="fa-solid fa-earth-africa"></i>  <span id="currentModelText"> The Plannetary System</span>
 
   </div>
 
-  <div id="clockContainer"> <strong> 
-    <h1 id="clock">12:00:00</h1></strong>
-</div>
-<strong>  <span id="descriptionText"> </span> </strong> 
+
+
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -411,6 +128,7 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script src="https://cdn.rawgit.com/mrdoob/three.js/r128/examples/js/controls/PointerLockControls.js"></script>
 
 <script>
 // Create a scene
@@ -419,6 +137,13 @@ const scene = new THREE.Scene();
     // Create the camera
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
 
+
+    const controls = new THREE.PointerLockControls(camera, document.body);
+
+
+    const lockControls = () => {
+        controls.lock();
+    };
 
 // Create an ambient light for overall scene illumination
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // Adjust the color and intensity as needed
@@ -448,7 +173,6 @@ scene.add(directionalLight);
 
 
 
-// Add linear fog to the scene
 const starGeometry = new THREE.BufferGeometry();
 const vertices = [];
 
@@ -473,13 +197,17 @@ scene.add(starParticles);
 
 
 
+const renderer = new THREE.WebGLRenderer({ antialias: true });
 
-// Create a renderer
-const renderer = new THREE.WebGLRenderer();
+// Set pixel ratio to window.devicePixelRatio for better quality on high-DPI displays
+renderer.setPixelRatio(window.devicePixelRatio);
+
+// Set the size of the renderer to match the window dimensions
 renderer.setSize(window.innerWidth, window.innerHeight);
+
+// Add the renderer to the HTML document
 document.body.appendChild(renderer.domElement);
 
-let gun; // Rename 'model' to 'gun'
 
 
 
@@ -490,117 +218,94 @@ let currentModel;
 let cameraPosition = new THREE.Vector3(0, 0, 10);
 let cameraSpeed = 0.1;
 
-
-
-// ... (your existing code here)
-const modelUrls = [
-    'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Mars_1_6792.glb',
-    'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/Venus(surface)_1_12103.glb',
-    'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Jupiter_1_142984.glb',
-    'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Earth_1_12756 (1).glb',
-    'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Neptune_1_49528.glb',
-    'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Triton_1_2707.glb',
-    'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Sun_1_1391000.glb',
-    'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Saturn_1_120536.glb',
-    'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Moon_1_3474.glb',
-    'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Callisto_1_4821.glb',
-    
-    
-    
-
-    
-];
-const planetInfo = {
-  'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Mars_1_6792.glb': {
-    name: 'Mars',
-    orbitRadius: 10,
-    orbitSpeed: 0.02,
-    description: 'Mars: The fourth planet from the Sun, known for its reddish appearance and extensive history of robotic exploration.',
-  },
-  'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/Venus(surface)_1_12103.glb': {
-    name: 'Venus',
-    orbitRadius: 15,
-    orbitSpeed: 0.02,
-    description: 'Venus: The second planet from the Sun, often called Earths sister planet due to its similar size and composition but extreme temperatures and a thick, toxic atmosphere',
-  },
-  'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Jupiter_1_142984.glb': {
-    name: 'Jupiter',
-    description: 'Jupiter: The largest planet in our solar system, known for its massive size and iconic swirling cloud patterns, including the Great Red Spot',
-  },
-  'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Callisto_1_4821.glb': {
-    name: 'Callisto',
-    description: 'Callisto: One of Jupiters largest moons, known for its heavily cratered surface and potential interest for future exploration',
-  },
-  'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Earth_1_12756 (1).glb': {
-    name: 'Earth',
-    description: 'Earth: The third planet from the Sun, uniquely known for supporting life and having diverse ecosystems, including oceans, continents, and a protective atmosphere',
-  },
-  'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Moon_1_3474.glb' : {
-    name : 'Moon',
-    description: 'Moon: Earths natural satellite, responsible for tides and serving as a target for human space exploration',
-  },
-  'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Neptune_1_49528.glb': {
-    name: 'Neptune',
-    description: 'Neptune: The eighth and farthest known planet from the Sun, characterized by its striking blue color and strong winds',
-  },
-  'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Triton_1_2707.glb': {
-    name: 'Triton',
-    description: 'Triton: Neptunes largest moon, known for its geysers and retrograde orbit around its parent planet',
-  }, 
-  'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Sun_1_1391000.glb': {
-    name: 'Sun',
-    description: 'Sun: The center of our solar system, a massive ball of hot, glowing gas that provides the energy necessary for life on Earth',
-  },
-  'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Saturn_1_120536.glb': {
-    name: 'Saturn',
-    description: 'Saturn: The sixth planet from the Sun, famous for its stunning ring system made up of icy particles and rocks.',
-  },
-  
-  
-};
-let currentModelIndex = 0;
-const descriptionText = document.getElementById('descriptionText');
-
-// Function to load and switch to the next model
-function loadNextModel() {
-    currentModelText.innerHTML = `<strong>Loading...</strong>`;
-    descriptionText.innerHTML = ``;
-
-    currentModelIndex = (currentModelIndex + 1) % modelUrls.length;
-    loadModel(modelUrls[currentModelIndex]);
-}
-
-// Function to load and switch to the previous model
-function loadPrevModel() {
-    currentModelText.innerHTML = `<strong>Loading...</strong>`;
-    currentModelIndex = (currentModelIndex - 1 + modelUrls.length) % modelUrls.length;
-    loadModel(modelUrls[currentModelIndex]);
-}
-
-// Load all planet models with their respective orbit radii and speeds
 const planetData = [
-    { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Sun_1_1391000.glb', radius: 0, speed: 0,  },
-    { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Moon_1_3474.glb', radius: 55, speed: 0.01, semiMajorAxis: 55, eccentricity: 0.02, inclination: 0, ascendingNode: 0, periapsisArg: 0, initialMeanAnomaly: 0 },
-    { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/Venus(surface)_1_12103.glb', radius: 75, speed: 0.008, semiMajorAxis: 75, eccentricity: 0.01, inclination: 0, ascendingNode: 0, periapsisArg: 0, initialMeanAnomaly: 0 },
-    { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Earth_1_12756 (1).glb', radius: 95, speed: 0.007, semiMajorAxis: 95, eccentricity: 0.0167, inclination: 0, ascendingNode: 0, periapsisArg: 0, initialMeanAnomaly: 0  },
-    // Add data for other planets
-];
+    { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Sun_1_1391000.glb', scale: '1', name: 'sun', radius: 0, speed: 0 },
+    { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Mercury_1_4878.glb', scale: '1', name: 'mercury', radius: 35, speed: 0.01, semiMajorAxis: 15, eccentricity: 0.2056, inclination: 7.0047, ascendingNode: 48.3317, periapsisArg: 29.1241, initialMeanAnomaly: 174.7958 },
+    { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/Venus(surface)_1_12103.glb', scale: '2', name: 'venus', radius: 65, speed: 0.008, semiMajorAxis: 25, eccentricity: 0.0067, inclination: 3.3947, ascendingNode: 76.6807, periapsisArg: 54.8840, initialMeanAnomaly: 50.4160 },
+    { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Earth_1_12756 (1).glb', scale: '1.5', name: 'earth', radius: 95, speed: 0.007, semiMajorAxis: 30, eccentricity: 0.0167, inclination: 0, ascendingNode: 348.7394, periapsisArg: 114.2078, initialMeanAnomaly: 357.5172 },
+    { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Mars_1_6792.glb', scale: '2', name: 'mars', radius: 125, speed: 0.005, semiMajorAxis: 45, eccentricity: 0.0934, inclination: 1.8497, ascendingNode: 49.5623, periapsisArg: 286.5016, initialMeanAnomaly: 19.4125 },
+    { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Jupiter_1_142984.glb', scale: '7', name: 'jupiter', radius: 195, speed: 0.001, semiMajorAxis: 120, eccentricity: 0.0490, inclination: 1.3047, ascendingNode: 100.5562, periapsisArg: 273.8777, initialMeanAnomaly: 20.0202 },
+    { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Saturn_1_120536.glb', scale: '5', name: 'saturn', radius: 295, speed: 0.001, semiMajorAxis: 180, eccentricity: 0.0565, inclination: 2.4852, ascendingNode: 113.7150, periapsisArg: 339.3924, initialMeanAnomaly: 317.0207 },
+    { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Uranus_1_51118.glb', scale: '4', name: 'uranus', radius: 375, speed: 0.001, semiMajorAxis: 270, eccentricity: 0.0464, inclination: 0.7699, ascendingNode: 73.9898, periapsisArg: 96.5414, initialMeanAnomaly: 141.0492 },
+    { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Neptune_1_49528.glb', scale: '4', name: 'neptune', radius: 425, speed: 0.001, semiMajorAxis: 360, eccentricity: 0.0100, inclination: 1.7692, ascendingNode: 131.7943, periapsisArg: 270.7756, initialMeanAnomaly: 256.2250 },
+    { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/Pluto_1_2374.glb', scale: '2', name: 'pluto', radius: 455, speed: 0.001, semiMajorAxis: 450, eccentricity: 0.2488, inclination: 17.1400, ascendingNode: 110.3035, periapsisArg: 113.8340, initialMeanAnomaly: 14.9532 },
+    { url: 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Itokawa_1_1.glb', scale: '0.08', name: 'asteroid', radius: 150, spreadAngle: Math.PI / 40, numberOfAsteroids: 22 },
+
+];function createAsteroidBelt(asteroidInfo) {
+    const { radius, numberOfAsteroids } = asteroidInfo;
+    const asteroidsGroup = new THREE.Group();
+
+    for (let i = 0; i < numberOfAsteroids; i++) {
+
+        // Load the GLTF model using the gltfLoader
+        gltfLoader.load('https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/Itokawa_1_1.glb', (gltf) => {
+            const asteroid = gltf.scene;
+
+            asteroid.scale.set(0.02, 0.02, 0.02);
+
+            // Add randomness to the angle and rotation
+            const angle = (i / numberOfAsteroids) * Math.PI * 2 + Math.random() * Math.PI / 5; // Equally distribute with more randomness
+            const rotationY = Math.random() * Math.PI * 2; // Random rotation around the Y-axis
+            const x = radius * Math.cos(angle);
+            const z = radius * Math.sin(angle);
+            const y = 0; // Keep the asteroids at the ring's plane
+
+            asteroid.position.set(x, y, z);
+            asteroid.rotation.y = rotationY; // Apply the random rotation
+            asteroidsGroup.add(asteroid);
+        });
+    }
+
+    return asteroidsGroup;
+}
+
+
+const asteroidInfo = planetData.find((planet) => planet.name === 'asteroid');
+if (asteroidInfo) {
+  
+    const asteroidBelt = createAsteroidBelt(asteroidInfo);
+    scene.add(asteroidBelt);
+     // Create an animation function to make the planets rotate
+     const animateAsteroid= () => {
+        asteroidBelt.rotation.y += 0.0002; // Rotate all asteroid
+        
+
+
+        requestAnimationFrame(animateAsteroid);
+
+    };
+
+    // Start the planets' rotation animation
+    animateAsteroid();
+}
+
 
 for (const planetInfo of planetData) {
-    loadPlanetModel(planetInfo.url, planetInfo.radius, planetInfo.speed);
-}// Create a group to hold all the planets
+    loadPlanetModel(planetInfo.url, planetInfo.radius, planetInfo.speed, planetInfo.name, planetInfo.scale);
+    addRing(planetInfo.radius, 0.2, 32, 0xffffff); // Adjust the parameters as needed
+}
+
+// Create a group to hold all the planets
 const planetsGroup = new THREE.Group();
 let loadedModelsCount = 0;
 const totalModelsCount = planetData.length;
 
 // Function to load a planet model by URL and add it to the group
-function loadPlanetModel(modelUrl, orbitRadius, orbitSpeed) {
+function loadPlanetModel(modelUrl, orbitRadius, orbitSpeed, planetName, planetScale) {
     console.log("Loading: " + modelUrl); // Log the model being loaded
     gltfLoader.load(
         modelUrl,
         (gltf) => {
             const planet = gltf.scene;
-            planet.scale.set(0.01, 0.01, 0.01);
+            if (planetName === 'sun') {
+    planet.scale.set(0.03, 0.03, 0.03);
+} else {
+    // Use a default scale of 1 if not specified in planetInfo
+    const baseScale = 0.01;
+    const scaleFactor = planetScale;
+    const finalScale = baseScale * scaleFactor;
+    planet.scale.set(finalScale, finalScale, finalScale);
+}
 
             // Position the planet on its orbit around the Sun
             const angle = Math.random() * Math.PI * 2; // Random angle for initial position
@@ -621,6 +326,12 @@ function loadPlanetModel(modelUrl, orbitRadius, orbitSpeed) {
                 document.getElementById('loading-screen').style.display = 'none';
                 // Start the animation when all models are loaded
                 startAnimation();
+                document.addEventListener("click", lockControls);
+// Set the camera's position
+camera.position.set(-100, 50, 0);
+
+// Set the camera's target (what it's looking at)
+camera.lookAt(-1000, 0, 0);
             }
         },
         undefined,
@@ -628,6 +339,15 @@ function loadPlanetModel(modelUrl, orbitRadius, orbitSpeed) {
             console.error('Error loading GLB model:', error);
         }
     );
+}
+
+function addRing(radius, tubeRadius, tubeSegments, color) {
+    const ringGeometry = new THREE.TorusGeometry(radius, tubeRadius, tubeSegments, 100);
+    const ringMaterial = new THREE.MeshBasicMaterial({ color: color });
+    const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+    ring.rotation.x = Math.PI / 2; // Rotate the ring to be horizontal
+    scene.add(ring);
+    
 }
 
 
@@ -680,7 +400,8 @@ function startAnimation() {
 
     // Create an animation function to make the planets rotate
     const animatePlanets = () => {
-        planetsGroup.rotation.y += 0.0001; // Rotate all planets
+        planetsGroup.rotation.y += 0.0003; // Rotate all planets
+        
         requestAnimationFrame(animatePlanets);
 
         // Your movement code here (e.g., handleKeyboardInput)
@@ -691,47 +412,40 @@ handleKeyboardInput();
     // Start the planets' rotation animation
     animatePlanets();
 }
-// Create OrbitControls
-const controls = new THREE.OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true; // Enable smooth camera movement
-controls.dampingFactor = 0.05; // Adjust the damping factor for smoother movement
-controls.rotateSpeed = 0.2; // Adjust the rotation speed
 
 // Function to handle keyboard input for camera movement
 function handleKeyboardInput() {
     const speed = cameraSpeed;
 
-    const cameraDirection = new THREE.Vector3();
-    camera.getWorldDirection(cameraDirection); // Get the camera's forward direction
+    // Check if pointer lock is active
+    if (controls.isLocked) {
+        const cameraDirection = new THREE.Vector3();
+        camera.getWorldDirection(cameraDirection); // Get the camera's forward direction
 
-    const cameraRight = new THREE.Vector3();
-    cameraRight.crossVectors(cameraDirection, new THREE.Vector3(0, 1, 0)); // Calculate the camera's right vector
+        const cameraRight = new THREE.Vector3();
+        cameraRight.crossVectors(cameraDirection, new THREE.Vector3(0, 1, 0)); // Calculate the camera's right vector
 
-    if (keyboardState["KeyW"]) {
-        cameraPosition.addScaledVector(cameraDirection, speed); // Move forward
+        if (keyboardState["KeyW"]) {
+            controls.moveForward(speed); // Move forward
+        }
+        if (keyboardState["KeyS"]) {
+            controls.moveForward(-speed); // Move backward
+        }
+        if (keyboardState["KeyA"]) {
+            controls.moveRight(-speed); // Move left
+        }
+        if (keyboardState["KeyD"]) {
+            controls.moveRight(speed); // Move right
+        }
+        if (keyboardState["KeyE"]) {
+            controls.getObject().position.y += speed; // Move up
+        }
+        if (keyboardState["KeyQ"]) {
+            controls.getObject().position.y -= speed; // Move down
+        }
     }
-    if (keyboardState["KeyS"]) {
-        cameraPosition.addScaledVector(cameraDirection, -speed); // Move backward
-    }
-    if (keyboardState["KeyA"]) {
-        cameraPosition.addScaledVector(cameraRight, -speed); // Move left
-    }
-    if (keyboardState["KeyD"]) {
-        cameraPosition.addScaledVector(cameraRight, speed); // Move right
-    }
-    if (keyboardState["KeyE"]) {
-        cameraPosition.y += speed; // Move up
-    }
-    if (keyboardState["KeyQ"]) {
-        cameraPosition.y -= speed; // Move down
-    }
-
-    camera.position.copy(cameraPosition);
-    camera.lookAt(0, 0, 0);
-
-    // Update OrbitControls target to the current camera position
-    controls.target.copy(camera.position);
 }
+
 
 
 // Add event listeners for keyboard input
@@ -750,15 +464,7 @@ window.addEventListener("keyup", (event) => {
 
 
 
-// Handle button clicks
-const prevModelButton = document.getElementById('prev-model');
-const nextModelButton = document.getElementById('next-model');
 
-prevModelButton.addEventListener('click', loadPrevModel);
-nextModelButton.addEventListener('click', loadNextModel);
-
-// Initial model load (you can change the index to load a different model initially)
-//loadModel(modelUrls[currentModelIndex]);
 
 
 
@@ -775,26 +481,6 @@ window.addEventListener('resize', () => {
 });
 
 
-
-const clock = document.getElementById('clock');
-
-//clock function
-function clockTime() {
-  //get current time
-  let date = new Date();
-  let hours = date.getHours();
-  let minutes = date.getMinutes();
-  let seconds = date.getSeconds();
-  //add 0 to minutes and seconds if less than 10
-  minutes = minutes < 10 ? `0${minutes}` : minutes;
-  seconds = seconds < 10 ? `0${seconds}` : seconds;
-  //set time
-  clock.textContent = `${hours}:${minutes}:${seconds}`;
-  //call clockTime every second
-  setTimeout(clockTime, 1000);
-}
-//call clockTime
-clockTime();
 
 
     </script>
