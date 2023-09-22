@@ -1,0 +1,38 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="https://theactualzenaldv2.github.io/Game-Development-2023/assignments/templates/barebones.css">
+<br> <br>
+<div class="container">
+    <h1 class="section-title"> Create a custom zombie: </h1>
+    <input class="form-control" placeholder="name" id="name1" oninput="updateHTML()" type="text">
+    <input oninput="updateHTML()" id="height" class="form-control" placeholder="height" type="number"> 
+    <input oninput="updateHTML()"  id="ability" class="form-control" placeholder="ability" type="text">
+   
+
+</div>
+<br> <br>
+<div class="container" id="myDiv01"> <h1 class="section-title"> Your Zombie:</h1></div>
+
+    <script>
+
+
+function updateHTML(){
+    name = document.getElementById('name1').value;
+        height = document.getElementById('height').value;
+         ability = document.getElementById('ability').value,
+         myObject = {
+    name: "",
+    height: "",
+    ability: "", 
+}
+
+    myObject.name = name;
+    myObject.height = height;
+    myObject.ability = ability;
+    document.getElementById('myDiv01').innerHTML = `Your Custom Zombie! <br><strong> Name:${myObject.name} <br> Height: ${myObject.height} <br> Ability: ${myObject.ability} </strong>` 
+
+}
+
+
+</script>
