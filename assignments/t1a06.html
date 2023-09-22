@@ -7,7 +7,10 @@
     <h1 class="section-title"> Create a custom zombie: </h1>
     <input class="form-control" placeholder="name" id="name1" oninput="updateHTML()" type="text">
     <input oninput="updateHTML()" id="height" class="form-control" placeholder="height" type="number"> 
-    <input oninput="updateHTML()"  id="ability" class="form-control" placeholder="ability" type="text">
+    <input oninput="updateHTML()"  id="ability" class="form-control" placeholder="ability" type="text"> <br> 
+    Is your zombie good?
+    <button class="btn btn-primary" onclick="check()">Check</button>
+    <div id="myDiv02" style="font-weight: bolder;"></div>
    
 
 </div>
@@ -15,17 +18,17 @@
 <div class="container" id="myDiv01"> <h1 class="section-title"> Your Zombie:</h1></div>
 
     <script>
-
+     myObject = {
+    name: "",
+    height: "",
+    ability: "", 
+}
 
 function updateHTML(){
     name = document.getElementById('name1').value;
         height = document.getElementById('height').value;
          ability = document.getElementById('ability').value,
-         myObject = {
-    name: "",
-    height: "",
-    ability: "", 
-}
+    
 
     myObject.name = name;
     myObject.height = height;
@@ -33,6 +36,25 @@ function updateHTML(){
     document.getElementById('myDiv01').innerHTML = `Your Custom Zombie! <br><strong> Name:${myObject.name} <br> Height: ${myObject.height} <br> Ability: ${myObject.ability} </strong>` 
 
 }
+
+function check(){
+const name = myObject.name;
+const height = myObject.height;
+const ability = myObject.ability;
+const results = document.getElementById('myDiv02')
+results.innerHTML = ""
+if(name !== "Jon"){
+results.innerHTML += 'Jon is a zombie. Please change your name 🤬 <br>'
+} 
+if(height < 4){
+    results.innerHTML += 'Your zombie is short asf LMAO 😠 <br>'
+}
+if(ability === ""){
+    results.innerHTML += 'Your zombie is dumb and does not have an ability. just like daniel!🖕'
+}
+}
+
+alert("hey ellis")
 
 
 </script>
