@@ -1,29 +1,92 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-
+<script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
+<script src="https://kit.fontawesome.com/5e0a1eec4b.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://theactualzenaldv2.github.io/Game-Development-2023/assignments/templates/barebones.css">
 <br> <br>
-<div class="container">
-    <h1 class="section-title"> Create a custom zombie: </h1>
-    <input class="form-control" placeholder="name" id="name1" oninput="updateHTML()" type="text">
-    <input oninput="updateHTML()" id="height" class="form-control" placeholder="height" type="number"> 
-    <input oninput="updateHTML()"  id="ability" class="form-control" placeholder="ability" type="text"> <br> 
-    Is your zombie good?
-    <button class="btn btn-primary" onclick="check()">Check</button>
-    <div id="myDiv02" style="font-weight: bolder;"></div>
-   
 
+<div class="container" id="main">
+    <div class="row">
+        <div class="col-md-6">
+            <h1 class="section-title"> Zombie Database:  </h1>
+            <input class="form-control" placeholder="name" id="name1" oninput="updateHTML()" type="text">
+            <input oninput="updateHTML()" id="height" class="form-control" placeholder="height" type="number"> 
+            <input oninput="updateHTML()"  id="ability" class="form-control" placeholder="ability" type="text"> <br> 
+            <button class="btn btn-primary" onclick="addToDb()"> No Results? Add To Database</button> <br> <br>
+        </div>
+        <div class="col-md-6" id="main2">
+            <h1 class="section-title">Results:</h2>
+            <div id="myDiv03"></div>
+            <div id="myDiv02" style="font-weight: bolder;">
+                <!-- Display results as Bootstrap cards -->
+            </div>
+        </div>
+    </div>
+</div> <br>
+
+
+<!-- Success message modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Success!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Zombie added successfully!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
 </div>
-<br> <br>
-<div class="container" id="myDiv01"> <h1 class="section-title"> Your Zombie:</h1></div>
+
+<!-- Error and Success message modal -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="messageModalLabel">Error:</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="messageModalBody">
+                <!-- Message content will be displayed here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
     <script>
+
+        // Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyC5ukKjhUz9Qk9IZtlzfvxD0E1bKiU0kvs",
+  authDomain: "testing-58ad3.firebaseapp.com",
+  databaseURL: "https://testing-58ad3-default-rtdb.firebaseio.com",
+  projectId: "testing-58ad3",
+  storageBucket: "testing-58ad3.appspot.com",
+  messagingSenderId: "66543955126",
+  appId: "1:66543955126:web:9038ed416e4e7eff16ca17",
+  measurementId: "G-4B04LJE2VM"
+};
+
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
      myObject = {
     name: "",
     height: "",
     ability: "", 
 }
-
+check();
 function updateHTML(){
     name = document.getElementById('name1').value;
         height = document.getElementById('height').value;
@@ -33,28 +96,190 @@ function updateHTML(){
     myObject.name = name;
     myObject.height = height;
     myObject.ability = ability;
-    document.getElementById('myDiv01').innerHTML = `Your Custom Zombie! <br><strong> Name:${myObject.name} <br> Height: ${myObject.height} <br> Ability: ${myObject.ability} </strong>` 
+    check();
 
 }
+function check() {
+    const userResults = [
+        myObject.name.toLowerCase(),
+        myObject.ability.toLowerCase(),
+        myObject.height.toLowerCase()
+    ];
+    const results = document.getElementById('myDiv02');
+    results.innerHTML = '<i class="fas fa-spinner fa-spin" style="font-size: 4rem; color: #ccc; font-weight: bold; text-align: center"></i>';
 
-function check(){
-const name = myObject.name;
-const height = myObject.height;
-const ability = myObject.ability;
-const results = document.getElementById('myDiv02')
-results.innerHTML = ""
-if(name !== "Jon"){
-results.innerHTML += 'Jon is a zombie. Please change your name 🤬 <br>'
-} 
-if(height < 4){
-    results.innerHTML += 'Your zombie is short asf LMAO 😠 <br>'
-}
-if(ability === ""){
-    results.innerHTML += 'Your zombie is dumb and does not have an ability. just like daniel!🖕'
-}
+    // Listen for changes in the drawing data from other players
+    db.ref("zombies").once("value", (snapshot) => {
+        results.innerHTML = '';
+
+        const dbData = snapshot.val();
+        const matchingZombies = [];
+
+        // Iterate through the data to find matching zombies
+        for (const key in dbData) {
+            const zombie = dbData[key];
+            const name = zombie.name.toLowerCase();
+            const height = zombie.height.toLowerCase();
+            const ability = zombie.ability.toLowerCase();
+
+            if (userResults[0] === name && userResults[1] === ability && userResults[2] === height) {
+                matchingZombies.push({ key, zombie }); // Store matching zombies along with their keys
+            }
+        }
+
+        // Sort the matching zombies so that they appear at the top
+        matchingZombies.sort((a, b) => {
+            // You can customize the sorting logic here if needed
+            return 0; // Default behavior (no specific sorting)
+        });
+
+        // Iterate again to create and display Bootstrap cards
+        matchingZombies.forEach(({ key, zombie }) => {
+            const name = zombie.name.toLowerCase();
+            const height = zombie.height.toLowerCase();
+            const ability = zombie.ability.toLowerCase();
+            const cardDiv = document.createElement('div');
+            cardDiv.classList.add('card');
+            cardDiv.classList.add('match'); // Add the "match" class to all matching zombies
+
+            cardDiv.innerHTML = `
+                <div class="card-body">
+                    <h2> Zombie Stats: </h2>
+                    <p class="card-text">Name:${name}</p>
+                    <p class="card-text">Height: ${height}</p>
+                    <p class="card-text">Ability: ${ability}</p>
+                </div>
+            `;
+            results.appendChild(cardDiv);
+        });
+
+        // Iterate through non-matching zombies and add them to the list
+        for (const key in dbData) {
+            if (!matchingZombies.find(match => match.key === key)) {
+                const zombie = dbData[key];
+                const name = zombie.name;
+                const height = zombie.height;
+                const ability = zombie.ability;
+
+                const cardDiv = document.createElement('div');
+                cardDiv.classList.add('card');
+
+                cardDiv.innerHTML = `
+                    <div class="card-body">
+                        <h2> Zombie Stats: </h2>
+                        <p class="card-text">Name:${name}</p>
+                        <p class="card-text">Height: ${height}</p>
+                        <p class="card-text">Ability: ${ability}</p>
+                    </div>
+                `;
+                results.appendChild(cardDiv);
+            }
+        }
+    });
 }
 
-alert("hey ellis")
+function addToDb() {
+    const name = document.getElementById('name1').value;
+    const height = document.getElementById('height').value;
+    const ability = document.getElementById('ability').value;
+    
+    if (name === "" || height === "" || ability === "") {
+        showMessage("You Must Fill In All Properties");
+        return;
+    }
+    
+    // Query the database to check if a zombie with the same attributes exists
+    db.ref("zombies")
+        .orderByChild("name")
+        .equalTo(name)
+        .once("value")
+        .then((snapshot) => {
+            const matchingZombies = snapshot.val();
+            
+            if (matchingZombies) {
+                // A zombie with the same name exists, now check height and ability
+                const matchingZombie = Object.values(matchingZombies).find(zombie =>
+                    zombie.height === height && zombie.ability === ability
+                );
+                
+                if (matchingZombie) {
+                    // A zombie with the same attributes already exists
+                    showMessage("A zombie with the same attributes already exists.");
+                    check();
+                } else {
+                    // Create a new zombie
+                    db.ref("zombies").push({
+                        name,
+                        height,
+                        ability
+                    });
+                    console.log('added successfully')
+                    showSuccessMessage("Zombie added successfully!");
+                    check();
+                }
+            } else {
+                // No zombie with the same name found, so add a new one
+                db.ref("zombies").push({
+                    name,
+                    height,
+                    ability
+                });
+                console.log('added successfully')
+                showSuccessMessage("Zombie added successfully!");
+                check();
+            }
+        })
+        .catch((error) => {
+            console.error("Error checking for duplicate zombies:", error);
+            showMessage("An error occurred while checking for duplicate zombies.");
+
+        });
+}
+
+
+     
+    function showSuccessMessage(message) {
+        const messageModalLabel = document.getElementById('messageModalLabel');
+        const messageModalBody = document.getElementById('messageModalBody');
+        
+        messageModalLabel.innerText = "Success!";
+        messageModalBody.innerText = message;
+        
+        const messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+        messageModal.show();
+    }
+
+    function showMessage(message) {
+        const messageModalLabel = document.getElementById('messageModalLabel');
+        const messageModalBody = document.getElementById('messageModalBody');
+        
+        messageModalLabel.innerText = "Error!";
+        messageModalLabel.style.color = "red";
+
+        messageModalBody.innerText = message;
+        messageModalBody.style.color = "red";
+
+        
+        const messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+        messageModal.show();
+    }
+
+alert("hello ellis pls good mark of 100/9 ")
 
 
 </script>
+<style>
+    #main2 {
+        overflow-y: auto;
+        max-height: 250px;
+        scroll-behavior: smooth;
+
+    }
+    .match {
+        background-color: green;
+    }
+    .card-body {
+        width: 100%;
+        height: 100%;
+    }
+</style>
