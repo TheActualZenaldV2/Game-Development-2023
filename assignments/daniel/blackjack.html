@@ -1,0 +1,406 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-auth.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/5e0a1eec4b.js" crossorigin="anonymous"></script>
+
+    <title>Blackjack By Daniel</title>
+    <style>
+      /* Add your CSS styles here */
+      .card {
+        width: 50px;
+        height: 75px;
+        margin-right: 10px;
+      }
+      body {
+        background-color: #2c3e50;
+        color: #fff;
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.5;
+        margin: 0;
+        padding: 0;
+      }
+
+      h1 {
+        font-size: 48px;
+        margin: 0;
+        padding: 20px;
+        text-align: center;
+      }
+
+      #game {
+        background-color: #34495e;
+        border-radius: 10px;
+        margin: 0 auto;
+        max-width: 800px;
+        padding: 20px;
+      }
+
+      #dealer-hand,
+      #player-hand {
+        margin-bottom: 20px;
+      }
+
+      h2 {
+        font-size: 24px;
+        margin: 0;
+        padding: 10px 0;
+      }
+
+      #dealer-cards,
+      #player-cards {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .card {
+        width: 100px;
+        height: 150px;
+        margin: 10px;
+      }
+
+      #dealer-score,
+      #player-score {
+        font-size: 24px;
+        margin: 0;
+        padding: 10px 0;
+        text-align: center;
+      }
+
+      #buttons {
+        display: flex;
+        justify-content: center;
+      }
+
+      button {
+        background-color: #1abc9c;
+        border: none;
+        border-radius: 5px;
+        color: #fff;
+        cursor: pointer;
+        font-size: 24px;
+        margin: 10px;
+        padding: 10px 20px;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #16a085;
+      }
+
+      button:disabled {
+        background-color: #7f8c8d;
+        cursor: default;
+      }
+
+      #message {
+        font-size: 24px;
+        margin: 0;
+        padding: 10px 0;
+        text-align: center;
+      }
+      button:disabled{
+        cursor: not-allowed;
+    }
+    </style>
+  </head>
+  <body>
+    <h1>Blackjack By Daniel</h1>
+    <div id="mainMenu">
+        <h1> Choose a Role: 
+            <button onclick="choosePlayer('player1', 'btn1')" id="btn1" id="player1"> Player 1</button>
+            <button onclick="choosePlayer('player2', 'btn2')" id="btn2" id="player2"> Player 2</button>
+            <button onclick="choosePlayer('player3', 'btn3')" id="btn3" id="player3"> Player 3</button>
+            <button onclick="choosePlayer('player4', 'btn4')" id="btn4" id="player4"> Player 4</button>
+</h1>
+
+    </div>
+
+
+    <div id="game" style="display: none;">
+      <div id="dealer-hand">
+        <h2>Dealer's Hand</h2>
+        <div id="dealer-cards"></div>
+        <p id="dealer-score"></p>
+      </div>
+      <div id="player-hand">
+        <h2>Player's Hand</h2>
+        <div id="player-cards"></div>
+        <p id="player-score"></p>
+      </div>
+      <div id="buttons">
+        <button id="hit-button">Hit</button>
+        <button id="stand-button">Stand</button>
+        <button id="deal-button">Deal</button>
+      </div>
+    </div>
+
+
+    <div id="message"></div>
+
+
+    <script>
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD_E1ZYutRnr4T344n28nrFJk6Gvj1tBRg",
+  authDomain: "snake-multiplayer-4bfce.firebaseapp.com",
+  databaseURL: "https://snake-multiplayer-4bfce-default-rtdb.firebaseio.com",
+  projectId: "snake-multiplayer-4bfce",
+  storageBucket: "snake-multiplayer-4bfce.appspot.com",
+  messagingSenderId: "298818701359",
+  appId: "1:298818701359:web:145577ce140cdce5655eda",
+  measurementId: "G-674JXLEH1X"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+//declare database variable
+var database = firebase.database();
+let player;
+let playerNumber;
+const playersRef = database.ref('players');
+
+
+function choosePlayer(playerNumber, element) {
+    const playerRef = playersRef.child(playerNumber);
+
+    playerRef.once('value')
+        .then((snapshot) => {
+            if (!snapshot.exists()) {
+                // Player with this key doesn't exist, so add it
+                playerRef.set({
+                    player: playerNumber,
+                    element: element,
+                });
+                console.log("sent!");
+                playerNumber = playerNumber;
+                document.getElementById('btn1').disabled = true;
+                document.getElementById('btn2').disabled = true;
+                document.getElementById('btn3').disabled = true;
+                document.getElementById('btn4').disabled = true;
+                document.getElementById(element).disabled = false;
+
+
+
+                // Set up onDisconnect to remove the player when they disconnect
+                playerRef.onDisconnect().remove()
+                    .then(() => {
+                        console.log("Player removed on disconnect: " + playerNumber);
+                    })
+                    .catch((error) => {
+                        console.error("Error setting up onDisconnect:", error);
+                    });
+            } else {
+                console.log("Player already exists with key: " + playerNumber);
+            }
+        })
+        .catch((error) => {
+            console.error("Error checking player:", error);
+        });
+}
+function disableButtons() {
+    console.log("disable")
+    const playersRef = database.ref('players');
+
+    playersRef.once('value')
+        .then((snapshot) => {
+            const players = snapshot.val();
+            if (players) {
+                Object.keys(players).forEach((playerKey) => {
+                    const element = players[playerKey].element; // Retrieve element from player data
+                    const buttonId = element;
+                    console.log(element)
+                    const button = document.getElementById(buttonId);
+                document.getElementById('btn1').disabled = false;
+                document.getElementById('btn2').disabled = false;
+                document.getElementById('btn3').disabled = false;
+                document.getElementById('btn4').disabled = false;
+                    
+                    if (button) {
+                        button.disabled = true;
+                    }
+                });
+            }
+        })
+        .catch((error) => {
+            console.error("Error retrieving players:", error);
+        });
+}
+setInterval(() => {
+        disableButtons();
+
+}, 100);
+
+
+
+      // Define the deck of cards
+      let deck = [];
+      const suits = ["Hearts", "Spades", "Clubs", "Diamonds"];
+      const values = ["Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"];
+
+      // Create the deck of cards
+      function createDeck() {
+        for (let suit in suits) {
+          for (let value in values) {
+            deck.push(values[value] + " of " + suits[suit]);
+          }
+        }
+        return deck;
+      }
+
+      // Shuffle the deck of cards
+      function shuffleDeck() {
+        for (let i = 0; i < deck.length; i++) {
+          let randomIndex = Math.floor(Math.random() * deck.length);
+          let temp = deck[i];
+          deck[i] = deck[randomIndex];
+          deck[randomIndex] = temp;
+        }
+      }
+
+      // Deal the cards to the player and dealer
+      let playerCards = [];
+      let dealerCards = [];
+
+      function dealCards() {
+        playerCards.push(deck.shift());
+        dealerCards.push(deck.shift());
+        playerCards.push(deck.shift());
+        dealerCards.push(deck.shift());
+      }
+
+      // Calculate the score of a hand
+      function calculateScore(hand) {
+        let score = 0;
+        let hasAce = false;
+        for (let i = 0; i < hand.length; i++) {
+          let cardValue = hand[i].split(" ")[0];
+          if (cardValue === "Ace") {
+            hasAce = true;
+            score += 11;
+          } else if (cardValue === "King" || cardValue === "Queen" || cardValue === "Jack") {
+            score += 10;
+          } else {
+            score += parseInt(cardValue);
+          }
+        }
+        if (hasAce && score > 21) {
+          score -= 10;
+        }
+        return score;
+      }
+
+      // Check if the player or dealer has blackjack
+      function checkBlackjack() {
+        if (calculateScore(playerCards) === 21) {
+          return "Player has Blackjack!";
+        } else if (calculateScore(dealerCards) === 21) {
+          return "Dealer has Blackjack!";
+        }
+        return false;
+      }
+
+      // Check if the player or dealer has busted
+      function checkBust(hand) {
+        if (calculateScore(hand) > 21) {
+          return true;
+        }
+        return false;
+      }
+
+      // Update the score display
+      function updateScore() {
+        document.getElementById("player-score").innerHTML = "Player's Score: " + calculateScore(playerCards);
+        document.getElementById("dealer-score").innerHTML = "Dealer's Score: " + calculateScore(dealerCards);
+      }
+
+      // Update the card display
+      function updateCards() {
+        let dealerCardsHtml = "";
+        for (let i = 0; i < dealerCards.length; i++) {
+          dealerCardsHtml += "<img class='card' src='cards/" + dealerCards[i].split(" ").join("") + ".png' />";
+        }
+        document.getElementById("dealer-cards").innerHTML = dealerCardsHtml;
+        let playerCardsHtml = "";
+        for (let i = 0; i < playerCards.length; i++) {
+          playerCardsHtml += "<img class='card' src='cards/" + playerCards[i].split(" ").join("") + ".png' />";
+        }
+        document.getElementById("player-cards").innerHTML = playerCardsHtml;
+      }
+
+      // Play the game
+      function playGame() {
+        createDeck();
+        shuffleDeck();
+        dealCards();
+        updateCards();
+        updateScore();
+        let message = checkBlackjack();
+        if (message) {
+          return message;
+        }
+        let gameOver = false;
+        document.getElementById("hit-button").addEventListener("click", function() {
+          playerCards.push(deck.shift());
+          updateCards();
+          updateScore();
+          if (checkBust(playerCards)) {
+            gameOver = true;
+            message = "Player has busted!";
+            document.getElementById("hit-button").disabled = true;
+            document.getElementById("stand-button").disabled = true;
+          }
+        });
+        document.getElementById("stand-button").addEventListener("click", function() {
+          while (calculateScore(dealerCards) < 17) {
+            dealerCards.push(deck.shift());
+            updateCards();
+            updateScore();
+          }
+          if (checkBust(dealerCards)) {
+            gameOver = true;
+            message = "Dealer has busted! Player wins!";
+          } else if (calculateScore(dealerCards) > calculateScore(playerCards)) {
+            gameOver = true;
+            message = "Dealer wins!";
+          } else if (calculateScore(dealerCards) < calculateScore(playerCards)) {
+            gameOver = true;
+            message = "Player wins!";
+          } else {
+            gameOver = true;
+            message = "It's a tie!";
+          }
+          document.getElementById("hit-button").disabled = true;
+          document.getElementById("stand-button").disabled = true;
+        });
+        document.getElementById("deal-button").addEventListener("click", function() {
+          deck = [];
+          playerCards = [];
+          dealerCards = [];
+          createDeck();
+          shuffleDeck();
+          dealCards();
+          updateCards();
+          updateScore();
+          document.getElementById("hit-button").disabled = false;
+          document.getElementById("stand-button").disabled = false;
+          gameOver = false;
+          message = "";
+        });
+        document.getElementById("message").innerHTML = "";
+        return message;
+      }
+
+      // Call the playGame function to start the game
+      console.log(playGame());
+    </script>
+  </body>
+</html>
