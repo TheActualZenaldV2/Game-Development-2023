@@ -3,6 +3,7 @@
 
 
 
+
 <html>
     <body onload=""> </body>
    
@@ -2237,7 +2238,7 @@ function displayTime() {
   var seconds = gameTimeInSeconds % 60;
   const timeLeftFormatted = `${minutes}:${seconds.toString().padStart(2, '0')}`;
   document.getElementById('gameTime').innerHTML = timeLeftFormatted;
-  if (timeLeftFormatted === "3:40") {
+  if (timeLeftFormatted === "0:00") {
     document.getElementById('endGameLeaderboardContainer').style.position = 'fixed';
     document.getElementById('endGameLeaderboardContainer').style.zIndex = '99999999999';
     document.getElementById('endGameLeaderboardContainer').style.display = 'block';
