@@ -1,3 +1,4 @@
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-app.js"></script>
@@ -99,6 +100,7 @@ function updateHTML(){
     check();
 
 }
+
 function check() {
     const userResults = [
         myObject.name.toLowerCase(),
@@ -135,9 +137,9 @@ function check() {
 
         // Iterate again to create and display Bootstrap cards
         matchingZombies.forEach(({ key, zombie }) => {
-            const name = zombie.name.toLowerCase();
-            const height = zombie.height.toLowerCase();
-            const ability = zombie.ability.toLowerCase();
+            const name = zombie.name;   
+            const height = zombie.height;
+            const ability = zombie.ability;
             const cardDiv = document.createElement('div');
             cardDiv.classList.add('card');
             cardDiv.classList.add('match'); // Add the "match" class to all matching zombies
@@ -145,7 +147,7 @@ function check() {
             cardDiv.innerHTML = `
                 <div class="card-body">
                     <h2> Zombie Stats: </h2>
-                    <p class="card-text">Name:${name}</p>
+                    <p class="card-text">Name: ${name}</p>
                     <p class="card-text">Height: ${height}</p>
                     <p class="card-text">Ability: ${ability}</p>
                 </div>
@@ -157,9 +159,12 @@ function check() {
         for (const key in dbData) {
             if (!matchingZombies.find(match => match.key === key)) {
                 const zombie = dbData[key];
-                const name = zombie.name;
-                const height = zombie.height;
-                const ability = zombie.ability;
+                var name = zombie.name;
+               var  height = zombie.height;
+                var ability = zombie.ability;
+                name = name.toLowerCase();
+                height = height.toLowerCase();
+                ability = ability.toLowerCase();
 
                 const cardDiv = document.createElement('div');
                 cardDiv.classList.add('card');
@@ -167,7 +172,7 @@ function check() {
                 cardDiv.innerHTML = `
                     <div class="card-body">
                         <h2> Zombie Stats: </h2>
-                        <p class="card-text">Name:${name}</p>
+                        <p class="card-text">Name: ${name}</p>
                         <p class="card-text">Height: ${height}</p>
                         <p class="card-text">Ability: ${ability}</p>
                     </div>
