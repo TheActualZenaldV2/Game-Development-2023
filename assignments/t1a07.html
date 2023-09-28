@@ -1,0 +1,68 @@
+<style>
+    #myDiv01 {
+
+    background-color: #3498db; /* Blue background color */
+    color: white;
+    text-align: center;
+    font-size: 18px;
+    padding: 50px;
+    position: absolute;
+    transition: margin 0.5s ease-in-out;
+  }
+  body {
+    overflow: hidden;
+  }
+</style>
+<button onclick="showNewPos()">New Position</button> <br> <br> 
+<button onclick="showNewPosEvent1()" id="clickMove">Click To New Position (Uses HTML classes with external API too pls give like 1000/9)</button>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+<link rel="stylesheet" href="https://theactualzenaldv2.github.io/Game-Development-2023/assignments/templates/barebones.css">
+
+<div id="myDiv01"> TEst</div>
+
+<script>
+  class moveDiv {
+    constructor(x, y){
+      this.x = x;
+      this.y = y;
+    }
+    moveDiv(){
+      const element = document.getElementById('myDiv01');
+      if(element){
+        element.style.marginTop = this.y + 'px';
+      element.style.marginLeft = this.x + 'px';
+      }
+    }
+  }
+
+  function showNewPos(){
+    const padding = 100;
+    const x = Math.random()* window.innerWidth - padding;
+    const y = Math.random()* window.innerHeight - padding;
+    newPosition = new moveDiv(x, y)
+    newPosition.moveDiv();
+  }
+let clicks = 0;
+  function showNewPosEvent1(){
+    document.addEventListener('click', showNewPosEvent);
+    document.getElementById('clickMove').classList.add('btn', 'btn-primary')
+  }
+
+// Event listener to handle clicks on the webpage
+function showNewPosEvent(event) {
+  clicks ++;
+  if(clicks === 1) return;
+    const padding = 100;
+    const x = event.clientX - padding;
+    const y = event.clientY - padding;
+    newPosition = new moveDiv(x, y);
+    newPosition.moveDiv();
+    document.removeEventListener('click', showNewPosEvent); // Remove the event listener
+    clicks = 0;
+    document.getElementById('clickMove').classList.remove('btn', 'btn-primary');
+  }
+
+  showNewPos();
+</script>
+
