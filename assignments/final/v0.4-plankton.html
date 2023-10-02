@@ -2794,13 +2794,16 @@ if (randomChoice === 0) {
   });
 }
 let reloading = false;
-function reloadWeapon(){
-  if(ammoCount === maxAmmo) return;
-  if(reloading) return;
-  playShootingAnimation(1500 * classData.reloadSpeed); // 200 milliseconds for the animation duration
+function reloadWeapon() {
+  if (ammoCount === maxAmmo) return;
+  if (reloading) return;
+  clearTimeout(shootingAnimationTimeout); // Clear any existing shooting animation timeout
+  shootingAnimation = false;
+  playShootingAnimation(1500 * classData.reloadSpeed); // Play the shooting animation
   ammoCount = 0;
   ammoElement.innerHTML = '<i class="fa-solid fa-arrows-rotate fa-spin-pulse"></i>';
   reloading = true;
+
   setTimeout(() => {
     ammoCount = maxAmmo;
     reloading = false;
@@ -2808,6 +2811,7 @@ function reloadWeapon(){
     document.getElementById('ammoContainer').style.color = "white"
   }, 1500 * classData.reloadSpeed);
 }
+
 function checkCollisionWithBlocks(x, y) {
   // Assuming blocks is your 2D array representing the game world
   var playerSize = 50; // Adjust this according to your player's size
@@ -2992,19 +2996,14 @@ const shootingController = new ShootingController();
 
 // To destroy the shooting controller when it's no longer needed:
 // shootingController.destroy();
+
+
 // Define a variable to hold the timeout reference
 let shootingAnimationTimeout = null;
 
 // Function to play the shooting animation and update Firebase
 function playShootingAnimation(animationDuration) {
-  // Clear any existing timeout if animationDuration is greater than 200
-  if (animationDuration > 200) {
-    if (shootingAnimationTimeout) {
-      clearTimeout(shootingAnimationTimeout);
-      shootingAnimationTimeout = null;
-    }
-  }
-
+  
   shootingAnimation = true; // Trigger the shooting animation
 
   // Set the user's shooting status to true in Firebase
