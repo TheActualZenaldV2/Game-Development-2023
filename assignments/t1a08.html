@@ -32,11 +32,11 @@ box-shadow: 0px 10px 13px -7px #000000, 0px 19px 34px 18px rgba(0,0,0,0.38);
 <body>
     <div class="container">
         <div id="calculator" class="card">
-            <div class="card-header">
-                CALCULATOR THAT WORKS I THINK
+            <div class="card-header" style="color: red; font-size: 2rem; font-weight: bolder;">
+                Mr.Elis stinks
             </div>
             <div class="card-body">
-                Q: <input type="text" id="history" class="form-control mb-2" disabled>
+                Q: <textarea id="history" rows="5" cols="30" readonly></textarea>
                 A:<input type="text" id="display" class="form-control mb-2" disabled>
                 <div class="btn-group">
                     <button class="btn btn-secondary" onclick="appendToDisplay('1')">1</button>
@@ -71,21 +71,33 @@ box-shadow: 0px 10px 13px -7px #000000, 0px 19px 34px 18px rgba(0,0,0,0.38);
         const historyElement = document.getElementById('history')
         function appendToDisplay(number){
             displayElement.value += number;
-        }
-        function calculateResult(){
+        } function calculateResult() {
             try {
-                const result = eval(document.getElementById('display').value);
-            historyElement.value = displayElement.value;
-                document.getElementById('display').value = result;
-        } catch (error){
-            const result = 'error'
-            historyElement.value = displayElement.value;
-                document.getElementById('display').value = result;
+                const expression = document.getElementById('display').value;
+                const result = eval(expression);
+                const historyElement = document.getElementById('history');
+
+                // Append the question and answer to the history element
+                historyElement.value += `${expression} = ${result}\n`;
+
+                // Clear the input field
+                document.getElementById('display').value = '';
+                historyElement.scrollTop = historyElement.scrollHeight;
+            } catch (error) {
+                const result = 'error';
+                const historyElement = document.getElementById('history');
+
+                // Append the question and error message to the history element
+                historyElement.value += `error \n`
+
+                // Clear the input field
+                document.getElementById('display').value = '';
+                historyElement.scrollTop = historyElement.scrollHeight;
+            }
         }
-    }
+
         function clearDisplay(){
             displayElement.value = ""
-            historyElement.value = "cleared"
         }
     </script>
 </body>
