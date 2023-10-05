@@ -57,7 +57,7 @@
 let shuffledAnswers = [];
 let score = 0;
 async function init() {
-    const myData = await fetch('https://opentdb.com/api.php?amount=1&category=9&type=multiple');
+    const myData = await fetch('https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple');
     const myTemp = await myData.json();
     correctAnswer = myTemp.results[0].correct_answer;
 
