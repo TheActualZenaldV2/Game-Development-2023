@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>3D First Person Shooter</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+      canvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      #health {
+        z-index: 9099999;
+        position: fixed;
+        top: 50px;
+        left: 50px;
+        color: white;
+        font-weight: bolder;
+      }
+      #healthNumber {
+        font-size: 25px
+      }
+    </style>
+  </head>
+  <body>
+     <div id="health"> Health: <span id="healthNumber">100</span></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.rawgit.com/mrdoob/three.js/r128/examples/js/controls/PointerLockControls.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-auth.js"></script>
+    <script>
+
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDZAxDZuJyLxxyQ9ZmYmhjj0Gvg-IuGMYU",
+  authDomain: "d-test-9077c.firebaseapp.com",
+  databaseURL: "https://d-test-9077c-default-rtdb.firebaseio.com",
+  projectId: "d-test-9077c",
+  storageBucket: "d-test-9077c.appspot.com",
+  messagingSenderId: "502203730679",
+  appId: "1:502203730679:web:9f4d073ca7e586a787e1f2"
+};
+
+
+firebase.initializeApp(firebaseConfig);
+      // Set up the scene, camera, and renderer
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+      const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+
+  
+
+      // Create the floor object
+      const floorGeometry = new THREE.PlaneGeometry(50, 50);
+      const floorMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
+      const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+      floor.rotation.x = -Math.PI / 2;
+      scene.add(floor);
+
+      // Set up the controls
+      const controls = new THREE.PointerLockControls(camera, document.body);
+      document.addEventListener("click", () => {
+        controls.lock();
+      });
+      scene.add(controls.getObject());
+
+      // Set up the lighting
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+      scene.add(ambientLight);
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+      directionalLight.position.set(1, 1, 0);
+      scene.add(directionalLight);
+
+      // Set up the raycaster for collision detection
+      const raycaster = new THREE.Raycaster();
+      const direction = new THREE.Vector3();
+      const keyboard = {};
+      let jumpVelocity = 0;
+    const jumpSpeed = 0.2;
+    const jumpHeight = 0.9;
+    var database = firebase.database();
+    var playersRef = database.ref("players");
+    var bulletsRef = database.ref("bullets")
+    
+// Create a separate array for other players' bullets
+const otherPlayerBullets = [];
+     // Bullets data structure
+ var bullets = [];
+      function handleKeyDown(event) {
+  const key = event.key.toLowerCase();
+  keyboard[key] = true;
+
+  if (key === " ") {
+            if (!isJumping) {
+                isJumping = true;
+                jumpVelocity = jumpSpeed;
+            }
+}
+      }
+
+function handleKeyUp(event) {
+  const key = event.key.toLowerCase();
+  keyboard[key] = false;
+}
+
+document.addEventListener("keydown", handleKeyDown);
+document.addEventListener("keyup", handleKeyUp);
+function animate() {
+  requestAnimationFrame(animate);
+  // Check for collisions with the floor
+  raycaster.set(
+    controls.getObject().position,
+    new THREE.Vector3(0, -1, 0)
+  );
+  const intersects = raycaster.intersectObject(floor);
+  if (intersects.length > 0) {
+    const distance = intersects[0].distance;
+    if (distance < 1) {
+      controls.getObject().position.y += 1 - distance;
+    }
+  }
+  updateBullets();
+  updateOtherPlayerBullets();
+
+  // Render the scene
+  renderer.render(scene, camera);
+}
+animate();
+setInterval(() => {
+    movePlayer();
+}, 10);
+
+
+let jumpVelocity1 = 0.006;
+    let isJumping = false;
+function movePlayer() {
+  const speed = 0.025;
+  const jumpSpeed = 0.04; // Adjust this for the jump height
+  const gravity = 0.04;  // Adjust this for gravity strength
+  const maxY = 5; // Adjust this for maximum jump height
+  const jumpCooldown = 50; // Adjust this for the jump cooldown duration in milliseconds
+  
+  const forward = new THREE.Vector3(
+    controls.getObject().matrix.elements[8],
+    0,
+    controls.getObject().matrix.elements[10]
+  );
+  const backward = forward.clone().negate();
+  const left = new THREE.Vector3(
+    controls.getObject().matrix.elements[0],
+    0,
+    controls.getObject().matrix.elements[2]
+  );
+  const right = left.clone().negate();
+  const velocity = new THREE.Vector3();
+
+  // Move the user
+  if (keyboard["w"]) {
+    velocity.add(backward);
+  }
+  if (keyboard["s"]) {
+    velocity.add(forward);
+  }
+  if (keyboard["a"]) {
+    velocity.add(right);
+  }
+  if (keyboard["d"]) {
+    velocity.add(left);
+  }
+  velocity.normalize();
+  velocity.multiplyScalar(speed);
+
+
+    // Jumping logic
+    if (isJumping) {
+            jumpVelocity -= jumpVelocity1;
+            controls.getObject()
+                .position.y += jumpVelocity / 2;
+
+            if (controls.getObject()
+                .position.y < jumpHeight) {
+                controls.getObject()
+                    .position.y = 1;
+                isJumping = false;
+                jumpVelocity = 0;
+            }
+        }
+  // Add velocity to the position
+  controls.getObject().position.add(velocity);
+
+  // Round the position values to 2 decimal places
+  controls.getObject().position.x = parseFloat(controls.getObject().position.x.toFixed(2));
+  controls.getObject().position.y = parseFloat(controls.getObject().position.y.toFixed(2));
+  controls.getObject().position.z = parseFloat(controls.getObject().position.z.toFixed(2));
+  if(!userId) return;
+  const x = controls.getObject().position.x;
+  const y = controls.getObject().position.y;
+  const z = controls.getObject().position.z;
+  // Get the player's current position
+  var playerRef = playersRef.child(userId);
+  playerRef.once("value", function (snapshot) {
+    var player = snapshot.val();
+
+    // Update the player's position in the database (This happens every 30ms)
+    playerRef.update({
+    x,
+    y,
+    z,
+   });
+  });
+
+
+}
+
+function addPlayer(){
+  // Generate a unique ID for the new player
+  var newPlayerRef = playersRef.push();
+  userId = newPlayerRef.key;
+  const x = controls.getObject().position.x;
+  const y = controls.getObject().position.y;
+  const z = controls.getObject().position.z;
+
+  
+  // Add the new player to the database
+  newPlayerRef.set({
+  x,
+  y,
+  z,
+  });
+
+  const playerRef = firebase.database().ref(`players/${userId}`);
+  playerRef.onDisconnect().remove();
+  bulletsRef.remove();
+
+}
+addPlayer();
+// Create a group for other players
+const otherPlayersGroup = new THREE.Group();
+      scene.add(otherPlayersGroup);
+ // Function to draw other players from the database
+ function drawOtherPlayers(playerData) {
+        // Clear the existing other players
+        otherPlayersGroup.children.length = 0;
+
+        // Iterate through playerData to draw each player
+        for (const playerId in playerData) {
+          if (playerId !== userId) {
+            const playerPosition = playerData[playerId];
+            const otherPlayerGeometry = new THREE.BoxGeometry(1, 1, 1);
+            const otherPlayerMaterial = new THREE.MeshBasicMaterial({
+              color: 0xff0000,
+            });
+            const otherPlayer = new THREE.Mesh(
+              otherPlayerGeometry,
+              otherPlayerMaterial
+            );
+            otherPlayer.position.set(
+              playerPosition.x,
+              playerPosition.y,
+              playerPosition.z
+            );
+            otherPlayersGroup.add(otherPlayer);
+          }
+        }
+      }
+// Listen for changes in other players' positions
+      playersRef.on("value", (snapshot) => {
+        const playerData = snapshot.val();
+        drawOtherPlayers(playerData);
+      });
+
+// Function to handle shooting
+const bulletSpeed = 0.2; // Adjust bullet speed
+
+// Function to handle shooting
+function shoot() {
+  const bulletGeometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
+  const bulletMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+  const bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
+
+  // Set the bullet's position based on the player's position and direction
+  const playerPosition = controls.getObject().position.clone();
+  const direction = new THREE.Vector3();
+  controls.getDirection(direction);
+  const bulletLifetime = 3000; // Adjust bullet lifetime in milliseconds
+  const bulletSpeed = 0.2; // Adjust bullet speed
+
+  bullet.position.copy(playerPosition);
+  bullet.userData.direction = direction.clone().multiplyScalar(bulletSpeed);
+  bullet.userData.startTime = Date.now();
+  bullet.userData.speed = bulletSpeed; // Store bullet speed
+
+  // Add the bullet to the scene and bullets array
+  scene.add(bullet);
+  bullets.push(bullet);
+
+  // Send bullet origin, direction, speed, and timestamp to Firebase
+  const bulletData = {
+    origin: {
+      x: playerPosition.x,
+      y: playerPosition.y,
+      z: playerPosition.z,
+    },
+    direction: {
+      x: direction.x,
+      y: direction.y,
+      z: direction.z,
+    },
+    speed: bulletSpeed, // Include bullet speed
+    timestamp: Date.now(),
+    id: userId,
+  };
+
+  // Push bullet data to Firebase
+  bulletsRef.push(bulletData);
+}
+var health = 100;
+
+// Event listener for mouse button down (hold to shoot)
+document.addEventListener("mousedown", () => {
+  shoot(); // Call the shoot function when the mouse button is pressed
+});
+// Function to check collision between two objects (player and bullet)
+function checkCollision(playerPosition, bullet, key) {
+  if(key === userId) return;
+  const playerBoundingBox = new THREE.Box3().setFromCenterAndSize(playerPosition, new THREE.Vector3(1, 1, 1)); // Adjust size as needed
+  const bulletBoundingBox = new THREE.Box3().setFromObject(bullet);
+
+  return playerBoundingBox.intersectsBox(bulletBoundingBox);
+}
+
+// Update other players' bullets' positions and remove expired bullets
+function updateOtherPlayerBullets() {
+  const currentTime = Date.now();
+  const bulletLifetime = 3000; // Adjust bullet lifetime in milliseconds
+  // Get the player's position (camera position)
+  const playerPosition = controls.getObject().position;
+  for (let i = otherPlayerBullets.length - 1; i >= 0; i--) {
+    const bullet = otherPlayerBullets[i];
+
+    // Set the bullet's speed based on the stored speed in userData
+    const bulletSpeed = bullet.userData.speed;
+
+    // Update bullet position
+    bullet.position.add(bullet.userData.direction.clone().multiplyScalar(bulletSpeed));
+
+    // Remove bullets that have exceeded their lifetime
+    if (currentTime - bullet.userData.startTime > bulletLifetime) {
+      otherPlayerBullets.splice(i, 1);
+      scene.remove(bullet);
+    }
+    // Check collision with the player
+    if (checkCollision(playerPosition, bullet, bullet.userData.key)) {
+      // Handle collision with the player (e.g., reduce health, remove the bullet)
+      // For example, you can call a function like handlePlayerCollision(bullet);
+      console.log("collision")
+      health -=15;
+      document.getElementById('healthNumber').innerHTML = health;
+      if(health <0 || health === 0){
+        alert('You died')
+        location.reload();
+      }
+      // Remove the bullet
+      otherPlayerBullets.splice(i, 1);
+      scene.remove(bullet);
+    }
+  }
+}
+
+
+// Listen for child_added events for bullets from other players
+bulletsRef.on("child_added", (snapshot) => {
+  const bulletData = snapshot.val();
+  const bulletGeometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
+  const bulletMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Change color to differentiate
+  const bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
+
+  // Set the bullet's position based on the received data
+  bullet.position.set(bulletData.origin.x, bulletData.origin.y, bulletData.origin.z);
+  bullet.userData.direction = new THREE.Vector3(bulletData.direction.x, bulletData.direction.y, bulletData.direction.z);
+  bullet.userData.startTime = Date.now();
+  bullet.userData.speed = bulletData.speed; // Store bullet speed
+  bullet.userData.key = bulletData.id;
+
+
+  // Add the bullet to the scene and otherPlayerBullets array
+  scene.add(bullet);
+  otherPlayerBullets.push(bullet);
+});
+
+
+
+
+
+// Update bullets' positions and remove expired bullets
+function updateBullets() {
+  const currentTime = Date.now();
+  const bulletLifetime = 3000; // Adjust bullet lifetime in milliseconds
+
+  for (let i = bullets.length - 1; i >= 0; i--) {
+    const bullet = bullets[i];
+
+    // Update bullet position
+    bullet.position.add(bullet.userData.direction);
+
+    // Remove bullets that have exceeded their lifetime
+    if (currentTime - bullet.userData.startTime > bulletLifetime) {
+      bullets.splice(i, 1);
+      scene.remove(bullet);
+    }
+  }
+}
+
+
+      
+
+    //on window resize
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+
+
+    </script>
+  </body>
+</html>
