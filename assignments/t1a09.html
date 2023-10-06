@@ -33,12 +33,12 @@
                 <hr>
                 <div class="form-group">
                     <label for="answerSelect">Choose an Answer:</label>
-                    <select id="answerSelect" class="form-control">
+                    <select id="answerSelect" class="form-control" onchange="checkAnswer()">
                         <option value="" disabled selected><i class="fa-solid fa-circle-notch fa-spin"></i></option>
                     </select>
                 </div>
                 <br>
-                <button class="btn btn-primary" onclick="checkAnswer()">Submit</button> <br>
+                <button class="btn btn-primary" onclick="continue1()">Continue (Your Welcome Mr.Ellis)</button> <br>
                 <div id="results"></div>
                 <hr> 
                 <div id="score" class="card-title"> Score: <span id="scoreNumber">0</span></div>
@@ -120,10 +120,14 @@ function checkAnswer() {
             </div>
         `;
     }
-    init();
     setTimeout(() => {
         resultsDiv.innerHTML = ""
     }, 1000);
+}
+
+function continue1(){
+    init();
+
 }
 init();
 
