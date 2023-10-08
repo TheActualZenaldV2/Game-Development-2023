@@ -35,6 +35,17 @@
       #deathCount {
         font-size: 25px
       }
+      #ammo {
+        z-index: 9099999;
+        position: fixed;
+        bottom: 80px;
+        left: 50px;
+        color: white;
+        font-weight: bolder;
+      }
+      #ammoCount {
+        font-size: 25px
+      }
       #hitDisplay {
         z-index: 9099999;
         position: fixed;
@@ -110,6 +121,26 @@
         opacity: 0;
       }
     }
+    #crosshair {
+	z-index: 999999999;
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	top: calc(50% - 10px);
+	left: calc(50% - 10px);
+}
+#crosshair::before,#crosshair::after {
+	content: "";
+	position: absolute;
+	width: 10px;
+	height: 2px;
+	background-color: #ffffff;
+	top: calc(50% - 1px);
+	left: calc(50% - 5px);
+}
+#crosshair::after {
+	transform: rotate(90deg);
+}
     </style>
   </head>
   <body>
@@ -117,15 +148,12 @@
 
      <div id="health"> Health: <span id="healthNumber">100</span></div>
      <div id="death"> Deaths: <span id="deathCount">0</span></div>
+     <div id="ammo"> Ammo: <span id="ammoCount"> 0</span></div>
      
-  <!-- Hit Display (Add this element when a hit occurs) -->
   <div id="hitDisplay" style="display: none;" class="hit-animation">You Got Hit!</div>
-
-  <!-- Kill Display (Add this element when a kill occurs) -->
-  <div id="killDisplay" style="display: none;"  class="kill-animation">Kill!</div>
-
-  <!-- You Died Display (Add this element when the player dies) -->
   <div id="youDiedDisplay" style="display: none;"  class="you-died-animation">You Died</div>
+  <div id="crosshair"></div>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.rawgit.com/mrdoob/three.js/r128/examples/js/controls/PointerLockControls.js"></script>
@@ -134,6 +162,7 @@
   <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-auth.js"></script>
   <script src="https://mrdoob.github.io/stats.js/build/stats.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <script>
  // Create a stats.js monitor
  const stats = new Stats();
@@ -208,13 +237,10 @@ function init(){
 
 console.log(playerNumber)
       // Set up the scene, camera, and renderer
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(
-        75,
-        window.innerWidth / window.innerHeight,
-        0.1,
-        1000
-      );
+       // Set up the scene, camera, and renderer
+    const scene = new THREE.Scene();
+    // Create the camera
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
       const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
@@ -223,7 +249,7 @@ document.body.appendChild(renderer.domElement);
 
 
     // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffdab9, 1.0);
+    const ambientLight = new THREE.AmbientLight(0xFF6B6B, 0.6);
     ambientLight.position.set(-64, 115, 66);
     scene.add(ambientLight);
 
@@ -254,6 +280,35 @@ document.body.appendChild(renderer.domElement);
       });
       scene.add(controls.getObject());
 
+
+      const textureLoader = new THREE.TextureLoader();
+    textureLoader.load('https://i.imgur.com/7EFwzds.jpg'); //overlay experimental background img 
+    //
+    //
+    //possible skyboxes made with https://skybox.blockadelabs.com/
+    //
+    //
+    //https://i.imgur.com/H9VQm8h.jpg
+    //https://i.imgur.com/ZEtn2vn.jpg
+    //https://i.imgur.com/y4K0Idj.jpg
+    //https://i.imgur.com/Qp9m02L.jpg <=== best so far
+    //https://i.imgur.com/7EFwzds.jpg
+    const texture = textureLoader.load('https://i.imgur.com/7EFwzds.jpg');
+
+    // Create the skybox geometry
+    const skyboxGeometry = new THREE.SphereGeometry(1000, 32, 32);
+
+    // Create the skybox material with the loaded texture
+    const skyboxMaterial = new THREE.MeshStandardMaterial({
+        map: texture,
+        side: THREE.BackSide
+    });
+    // Create the skybox mesh
+    const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
+    skybox.position.set(0, 100, 0);
+
+    // Add the skybox to the scene
+    scene.add(skybox);
    
 
       // Set up the raycaster for collision detection
@@ -460,11 +515,12 @@ function addPlayer(){
 addPlayer();
 let health = 100;
 let deaths = 0;
-
+let ammo = 10;
 // Create a group for other players
 const otherPlayersGroup = new THREE.Group();
       scene.add(otherPlayersGroup);
  // Function to draw other players from the database
+ 
  function drawOtherPlayers(playerData) {
         // Clear the existing other players
         otherPlayersGroup.children.length = 0;
@@ -619,13 +675,27 @@ const bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
 const otherPlayerBullets = []
 // Event listener for mouse button down (hold to shoot)
 // Define a variable to track the time of the last shot
+// Define a variable to track the time of the last shot
 let lastShotTime = 0;
+let isReloading = false;
+
 
 // Define the minimum delay between shots (in milliseconds)
-const shotDelay = 1000; // Adjust this value to set your desired delay
+const shotDelay = 350; // Adjust this value to set your desired delay
+document.getElementById("ammoCount").innerHTML = ammo;
 
-// Event listener for mouse button down (hold to shoot)
-document.addEventListener("mousedown", () => {
+let shootingInterval; // Variable to store the interval ID
+
+// Function to handle shooting
+function handleShoot() {
+  if (ammo === 0){
+setTimeout(() => {
+  reloadWeapon();
+  return;
+}, 300);
+  } 
+  if(isReloading) return;
+  
   const currentTime = Date.now();
 
   // Calculate the time elapsed since the last shot
@@ -635,11 +705,49 @@ document.addEventListener("mousedown", () => {
   if (timeSinceLastShot >= shotDelay) {
     // Call the shoot function when the conditions for shooting are met
     shoot();
+    ammo--;
+    document.getElementById("ammoCount").innerHTML = ammo;
 
     // Update the last shot time
     lastShotTime = currentTime;
   }
+}
+
+// Event listener for mouse button down (hold to shoot)
+document.addEventListener("mousedown", () => {
+  // Start shooting at the specified interval
+  shootingInterval = setInterval(handleShoot, shotDelay);
+
+  // Initial shot
+  handleShoot();
 });
+
+// Event listener for mouse button release (stop shooting)
+document.addEventListener("mouseup", () => {
+  // Clear the shooting interval when the mouse button is released
+  clearInterval(shootingInterval);
+});
+
+
+// Add an event listener to the document for the "keydown" event
+document.addEventListener("keydown", function (event) {
+  //reload key
+  if (event.keyCode === 82)  {
+reloadWeapon();
+
+  }
+});
+function reloadWeapon(){
+  if(ammo === 10) return;
+  if(isReloading) return;
+  isReloading = true;
+    document.getElementById("ammoCount").innerHTML = 'Reloading';
+    setTimeout(() => {
+      ammo = 10;
+      document.getElementById("ammoCount").innerHTML = ammo;
+      isReloading = false;
+    }, 1500);
+}
 // Function to check collision between two objects (player and bullet)
 function checkCollision(playerPosition, bullet, key) {
   if(key === userId) return;
