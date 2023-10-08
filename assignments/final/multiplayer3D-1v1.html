@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>3D First Person Shooter</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+      canvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      #health {
+        z-index: 9099999;
+        position: fixed;
+        top: 50px;
+        left: 50px;
+        color: white;
+        font-weight: bolder;
+      }
+      #healthNumber {
+        font-size: 25px
+      }
+      #death {
+        z-index: 9099999;
+        position: fixed;
+        top: 80px;
+        left: 50px;
+        color: white;
+        font-weight: bolder;
+      }
+      #deathCount {
+        font-size: 25px
+      }
+      #hitDisplay {
+        z-index: 9099999;
+        position: fixed;
+        top: 50%;
+        left: 50px;
+        color: white;
+        font-weight: bolder;
+        font-size: 50px;
+      }
+      #killDisplay {
+        z-index: 9099999;
+        position: fixed;
+        top: 50%;
+        right: 50px;
+        color: white;
+        font-weight: bolder;
+        font-size: 50px;
+      }
+      #youDiedDisplay {
+  z-index: 9099999;
+  position: fixed;
+  top: 10%; /* 10% from the top */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Center horizontally */
+  color: white;
+  font-weight: bolder;
+  font-size: 50px;
+}
+
+
+      /* Animation for hit */
+    .hit-animation {
+      animation-name: hitAnimation;
+      animation-duration: 1s;
+      animation-timing-function: ease;
+    }
+    @keyframes hitAnimation {
+      0%, 100% {
+        color: white;
+      }
+      50% {
+        color: red; /* Change to the desired hit color */
+      }
+    }
+    /* Animation for kill */
+    .kill-animation {
+      animation-name: killAnimation;
+      animation-duration: 1s;
+      animation-timing-function: ease;
+    }
+    @keyframes killAnimation {
+      0%, 100% {
+        color: white;
+      }
+      50% {
+        color: green; /* Change to the desired kill color */
+      }
+    }
+    /* Animation for "You died" */
+    .you-died-animation {
+      animation-name: youDiedAnimation;
+      animation-duration: 2s;
+      animation-timing-function: ease;
+    }
+    @keyframes youDiedAnimation {
+      0% {
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
+    </style>
+  </head>
+  <body>
+    <div id="statsContainer"></div>
+
+     <div id="health"> Health: <span id="healthNumber">100</span></div>
+     <div id="death"> Deaths: <span id="deathCount">0</span></div>
+     
+  <!-- Hit Display (Add this element when a hit occurs) -->
+  <div id="hitDisplay" style="display: none;" class="hit-animation">You Got Hit!</div>
+
+  <!-- Kill Display (Add this element when a kill occurs) -->
+  <div id="killDisplay" style="display: none;"  class="kill-animation">Kill!</div>
+
+  <!-- You Died Display (Add this element when the player dies) -->
+  <div id="youDiedDisplay" style="display: none;"  class="you-died-animation">You Died</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.rawgit.com/mrdoob/three.js/r128/examples/js/controls/PointerLockControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-auth.js"></script>
+  <script src="https://mrdoob.github.io/stats.js/build/stats.min.js"></script>
+    <script>
+ // Create a stats.js monitor
+ const stats = new Stats();
+    stats.showPanel(0); // 0: FPS, 1: MS (millisecond), 2: MB (megabytes)
+    document.getElementById("statsContainer").appendChild(stats.dom);
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDZAxDZuJyLxxyQ9ZmYmhjj0Gvg-IuGMYU",
+  authDomain: "d-test-9077c.firebaseapp.com",
+  databaseURL: "https://d-test-9077c-default-rtdb.firebaseio.com",
+  projectId: "d-test-9077c",
+  storageBucket: "d-test-9077c.appspot.com",
+  messagingSenderId: "502203730679",
+  appId: "1:502203730679:web:9f4d073ca7e586a787e1f2"
+};
+
+var gameInt = false;
+var playerNumber;
+firebase.initializeApp(firebaseConfig);
+var database = firebase.database();
+// Reference to a "connections" node in the database
+const connectionsRef = database.ref("connections");
+
+// Function to assign player numbers and update the connected player count
+function assignPlayerNumber() {
+  connectionsRef.once("value")
+    .then(snapshot => {
+      const connectedPlayersCount = snapshot.numChildren();
+      console.log(`Connected Players: ${connectedPlayersCount}`);
+      
+      if (connectedPlayersCount > 2) {
+        alert("Game is Full");
+      } else {
+         playerNumber = connectedPlayersCount; // Assign player number based on the number of connected players
+        console.log(`You are Player ${playerNumber}`);
+        if(!gameInt){
+          init();
+          gameInt = true;
+        }
+      }
+    })
+    .catch(error => {
+      console.error("Error getting connected players count:", error);
+    });
+}
+
+// Trigger the connection logic when the page loads
+document.addEventListener("DOMContentLoaded", () => {
+  const userConnectionRef = connectionsRef.push(true); // Add the player to the "connections" node
+
+  // Remove the user's connection when they disconnect
+  userConnectionRef.onDisconnect().remove();
+
+  // Assign player number and update the connected player count
+  assignPlayerNumber();
+
+  // Listen for player disconnections and update the player count
+  connectionsRef.on("child_removed", () => {
+    // Update the connected player count when a player disconnects
+    assignPlayerNumber();
+  });
+});
+
+
+
+
+function init(){
+  const hitDisplay = document.getElementById("hitDisplay");
+  const killDisplay = document.getElementById("killDisplay");
+  const youDiedDisplay = document.getElementById("youDiedDisplay");
+
+console.log(playerNumber)
+      // Set up the scene, camera, and renderer
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+      const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+
+
+
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0xffdab9, 1.0);
+    ambientLight.position.set(-64, 115, 66);
+    scene.add(ambientLight);
+
+    const directionalLight1 = new THREE.DirectionalLight(0xffdab9, 1);
+    directionalLight1.position.set(0, 101, -736);
+    scene.add(directionalLight1);
+
+    const directionalLight2 = new THREE.DirectionalLight(0xffdab9, 0.5);
+    directionalLight2.position.set(65, -101, 736);
+    scene.add(directionalLight2);
+
+    const directionalLight3 = new THREE.DirectionalLight(0xb0b52b, 1);
+    directionalLight3.position.set(0, 115, -66);
+    scene.add(directionalLight3);
+  
+
+      // Create the floor object
+      const floorGeometry = new THREE.PlaneGeometry(50, 50);
+      const floorMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
+      const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+      floor.rotation.x = -Math.PI / 2;
+
+      // Set up the controls
+      const controls = new THREE.PointerLockControls(camera, document.body);
+
+      document.addEventListener("click", () => {
+        controls.lock();
+      });
+      scene.add(controls.getObject());
+
+   
+
+      // Set up the raycaster for collision detection
+      const raycaster = new THREE.Raycaster();
+      const direction = new THREE.Vector3();
+      const keyboard = {};
+      let jumpVelocity = 0;
+    const jumpSpeed = 0.2;
+    const jumpHeight = -0.5;
+    var playersRef = database.ref("players");
+    var bulletsRef = database.ref("bullets")
+    
+      function handleKeyDown(event) {
+  const key = event.key.toLowerCase();
+  keyboard[key] = true;
+
+  if (key === " ") {
+            if (!isJumping) {
+                isJumping = true;
+                jumpVelocity = jumpSpeed;
+            }
+}
+      }
+
+function handleKeyUp(event) {
+  const key = event.key.toLowerCase();
+  keyboard[key] = false;
+}
+
+document.addEventListener("keydown", handleKeyDown);
+document.addEventListener("keyup", handleKeyUp);
+function animate() {
+  stats.begin();
+
+  requestAnimationFrame(animate);
+  // Check for collisions with the floor
+  raycaster.set(
+    controls.getObject().position,
+    new THREE.Vector3(0, 0, 0)
+  );
+  const intersects = raycaster.intersectObject(floor);
+  if (intersects.length > 0) {
+    const distance = intersects[0].distance;
+    if (distance < 1) {
+      controls.getObject().position.y += 1 - distance;
+    }
+  }
+
+  // Render the scene
+  renderer.render(scene, camera);
+  stats.end();
+
+}
+
+let mapUrl = "https://theactualzenaldv2.github.io/Game-Development-2023/assignments/templates/1v13.gltf"
+let gltf;
+// Load the GLTF model
+const gltfLoader = new THREE.GLTFLoader();
+gltfLoader.load(
+        mapUrl,
+        function (loadedGltf) {
+            // Assign the loaded gltf to the global variable
+            gltf = loadedGltf;
+            gltf.scene.scale.set(0.13, 0.13, 0.13);
+            gltf.scene.position.set(0,-7.5,0)
+            gltf.frustumCulled = true;
+
+            // Add the model to the scene
+            scene.add(gltf.scene);
+            animate();
+           chooseSpawn();
+
+
+            console.log(controls.getObject().position)
+
+        }
+    ), // Called if there is an error loading the model
+    function (error) {
+        console.error(error);
+    };
+const floorHeight = -0; // Set the floor height threshold for collisions
+
+
+setInterval(() => {
+    movePlayer();
+  updateBullets();
+  updateOtherPlayerBullets();
+  }, 10);
+
+
+let jumpVelocity1 = 0.009;
+    let isJumping = false;
+function movePlayer() {
+  const speed = 0.055;
+  const jumpSpeed = 0.04; // Adjust this for the jump height
+  const gravity = 0.04;  // Adjust this for gravity strength
+  const maxY = 5; // Adjust this for maximum jump height
+  const jumpCooldown = 50; // Adjust this for the jump cooldown duration in milliseconds
+  
+  const forward = new THREE.Vector3(
+    controls.getObject().matrix.elements[8],
+    0,
+    controls.getObject().matrix.elements[10]
+  );
+  const backward = forward.clone().negate();
+  const left = new THREE.Vector3(
+    controls.getObject().matrix.elements[0],
+    0,
+    controls.getObject().matrix.elements[2]
+  );
+  const right = left.clone().negate();
+  const velocity = new THREE.Vector3();
+//{x: 8.22, y: -0.5, z: 0.88}   SPAWN 1
+//{x: -7.8, y: -0.5, z: 17}     SPAWN 2
+  // Move the user
+  if (keyboard["w"]) {
+    velocity.add(backward);
+  }
+  if (keyboard["s"]) {
+    velocity.add(forward);
+  }
+  if (keyboard["a"]) {
+    velocity.add(right);
+  }
+  if (keyboard["d"]) {
+    velocity.add(left);
+  }
+  velocity.normalize();
+  velocity.multiplyScalar(speed);
+
+ // Store the initial position
+ const initialPosition = controls.getObject().position.clone();
+
+// Apply velocity to the position
+controls.getObject().position.add(velocity);
+
+// Check for collisions after applying velocity
+if (detectCollisions()) {
+  // If a collision is detected, reset the player's position
+  controls.getObject().position.copy(initialPosition);
+}
+
+
+    // Jumping logic
+    if (isJumping) {
+            jumpVelocity -= jumpVelocity1;
+            controls.getObject()
+                .position.y += jumpVelocity / 2;
+            if (controls.getObject()
+                .position.y < jumpHeight) {
+                controls.getObject()
+                    .position.y = floorHeight + jumpHeight;
+                isJumping = false;
+                jumpVelocity = 0;
+            }
+        }
+
+
+  // Round the position values to 2 decimal places
+  controls.getObject().position.x = parseFloat(controls.getObject().position.x.toFixed(2));
+  controls.getObject().position.y = parseFloat(controls.getObject().position.y.toFixed(2));
+  controls.getObject().position.z = parseFloat(controls.getObject().position.z.toFixed(2));
+  if(!userId) return;
+  const x = controls.getObject().position.x;
+  const y = controls.getObject().position.y;
+  const z = controls.getObject().position.z;
+  // Get the player's current position
+  var playerRef = playersRef.child(userId);
+  playerRef.once("value", function (snapshot) {
+    var player = snapshot.val();
+
+    // Update the player's position in the database (This happens every 30ms)
+    playerRef.update({
+    x,
+    y,
+    z,
+   });
+  });
+
+
+}
+
+function addPlayer(){
+  // Generate a unique ID for the new player
+  var newPlayerRef = playersRef.push();
+  userId = newPlayerRef.key;
+  const x = controls.getObject().position.x;
+  const y = controls.getObject().position.y;
+  const z = controls.getObject().position.z;
+
+  
+  // Add the new player to the database
+  newPlayerRef.set({
+  x,
+  y,
+  z,
+  });
+
+  const playerRef = firebase.database().ref(`players/${userId}`);
+  playerRef.onDisconnect().remove();
+  bulletsRef.remove();
+
+}
+addPlayer();
+let health = 100;
+let deaths = 0;
+
+// Create a group for other players
+const otherPlayersGroup = new THREE.Group();
+      scene.add(otherPlayersGroup);
+ // Function to draw other players from the database
+ function drawOtherPlayers(playerData) {
+        // Clear the existing other players
+        otherPlayersGroup.children.length = 0;
+
+        // Iterate through playerData to draw each player
+        for (const playerId in playerData) {
+          if (playerId !== userId) {
+            const playerPosition = playerData[playerId];
+            const otherPlayerGeometry = new THREE.BoxGeometry(1, 1, 1);
+            const otherPlayerMaterial = new THREE.MeshBasicMaterial({
+              color: 0xff0000,
+            });
+            const otherPlayer = new THREE.Mesh(
+              otherPlayerGeometry,
+              otherPlayerMaterial
+            );
+            otherPlayer.position.set(
+              playerPosition.x,
+              playerPosition.y,
+              playerPosition.z
+            );
+            otherPlayersGroup.add(otherPlayer);
+          }
+        }
+      }
+// Listen for changes in other players' positions
+      playersRef.on("value", (snapshot) => {
+        const playerData = snapshot.val();
+        drawOtherPlayers(playerData);
+      });
+
+
+const bullets = []
+function detectBulletCollisions() {
+        // Check if the gltf variable is defined
+        if (gltf) {
+            // Loop through the children of the GLTF model to check for collisions
+            for (let child of gltf.scene.children) {
+                // Compute the bounding box for the child object
+                const box = new THREE.Box3()
+                    .setFromObject(child);
+
+                for (let bullet of bullets) {
+                    // Origin point of bullet
+                    const originPoint = bullet.position.clone();
+                    if (box.containsPoint(originPoint)) {
+                        // Remove the bullet from the scene
+                        scene.remove(bullet);
+                        // Set the collision flag to true
+                        return true;
+                    }
+                }
+            }
+        }
+        else {
+            console.log('GLTF model not loaded yet');
+        }
+        // No collision detected, return false
+        return false;
+    }
+
+function detectCollisions() {
+        let collisionDetected = false;
+        // Check if the gltf variable is defined
+        if (gltf) {
+            // Loop through the children of the GLTF model to check for collisions
+            for (let child of gltf.scene.children) {
+                // Check if the child object is below the floor height threshold
+                if (child.position.y < floorHeight) {
+                    continue; // Skip this object
+                }
+
+                // Check if the material is collidable
+                if (child.material && child.material.collidable === false) {
+                    continue; // Skip this object
+                }
+
+                // Create a new bounding box for the child object
+                const box = new THREE.Box3()
+                    .setFromObject(child);
+                // Add padding to the box
+                box.expandByScalar(0.1);
+
+                // Check collision with player
+                if (box.containsPoint(camera.position)) {
+                    console.log("Collision detected");
+                    collisionDetected = true;
+                }
+            }
+        }
+        else {
+            console.log('GLTF model not loaded yet');
+        }
+
+        return collisionDetected;
+    }
+const globalBulletSpeed = 0.8;
+// Function to handle shooting
+const bulletSpeed = globalBulletSpeed; // Adjust bullet speed
+// Function to handle shooting
+function shoot() {
+  const bulletGeometry = new THREE.SphereGeometry(0.05, 16, 16); // Adjust the radius and segments as needed
+const bulletMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 }); // Change color to differentiate
+const bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
+
+  // Set the bullet's position based on the player's position and direction
+  const playerPosition = controls.getObject().position.clone();
+  const direction = new THREE.Vector3();
+  controls.getDirection(direction);
+  const bulletLifetime = 3000; // Adjust bullet lifetime in milliseconds
+  const bulletSpeed = globalBulletSpeed; // Adjust bullet speed
+
+  bullet.position.copy(playerPosition);
+  bullet.userData.direction = direction.clone().multiplyScalar(bulletSpeed);
+  bullet.userData.startTime = Date.now();
+  bullet.userData.speed = bulletSpeed; // Store bullet speed
+  bullet.userData.owner = userId;
+
+
+  // Add the bullet to the scene and bullets array
+  scene.add(bullet);
+
+  // Send bullet origin, direction, speed, and timestamp to Firebase
+  const bulletData = {
+    origin: {
+      x: playerPosition.x,
+      y: playerPosition.y,
+      z: playerPosition.z,
+    },
+    direction: {
+      x: direction.x,
+      y: direction.y,
+      z: direction.z,
+    },
+    speed: bulletSpeed, // Include bullet speed
+    timestamp: Date.now(),
+    id: userId,
+    owner: userId,
+  };
+
+  // Push bullet data to Firebase and get the key assigned by Firebase
+  const newBulletRef = bulletsRef.push(bulletData);
+  const bulletKey = newBulletRef.key;
+
+  // Store the bullet key in the bullet's userData
+  bullet.userData.key = bulletKey;
+
+  // Push the bullet to your bullets array
+  bullets.push(bullet);
+}
+
+const otherPlayerBullets = []
+// Event listener for mouse button down (hold to shoot)
+// Define a variable to track the time of the last shot
+let lastShotTime = 0;
+
+// Define the minimum delay between shots (in milliseconds)
+const shotDelay = 1000; // Adjust this value to set your desired delay
+
+// Event listener for mouse button down (hold to shoot)
+document.addEventListener("mousedown", () => {
+  const currentTime = Date.now();
+
+  // Calculate the time elapsed since the last shot
+  const timeSinceLastShot = currentTime - lastShotTime;
+
+  // Check if enough time has elapsed since the last shot
+  if (timeSinceLastShot >= shotDelay) {
+    // Call the shoot function when the conditions for shooting are met
+    shoot();
+
+    // Update the last shot time
+    lastShotTime = currentTime;
+  }
+});
+// Function to check collision between two objects (player and bullet)
+function checkCollision(playerPosition, bullet, key) {
+  if(key === userId) return;
+  const playerBoundingBox = new THREE.Box3().setFromCenterAndSize(playerPosition, new THREE.Vector3(1, 1, 1)); // Adjust size as needed
+  const bulletBoundingBox = new THREE.Box3().setFromObject(bullet);
+
+  return playerBoundingBox.intersectsBox(bulletBoundingBox);
+}
+
+// Update other players' bullets' positions and remove expired bullets
+function updateOtherPlayerBullets() {
+  const currentTime = Date.now();
+  const bulletLifetime = 3000; // Adjust bullet lifetime in milliseconds
+  // Get the player's position (camera position)
+  const playerPosition = controls.getObject().position;
+  for (let i = otherPlayerBullets.length - 1; i >= 0; i--) {
+    const bullet = otherPlayerBullets[i];
+
+    // Set the bullet's speed based on the stored speed in userData
+    const bulletSpeed = bullet.userData.speed;
+
+    // Update bullet position
+    bullet.position.add(bullet.userData.direction.clone().multiplyScalar(bulletSpeed));
+
+    // Remove bullets that have exceeded their lifetime
+    if (currentTime - bullet.userData.startTime > bulletLifetime) {
+      otherPlayerBullets.splice(i, 1);
+      scene.remove(bullet);
+    }
+    // Check collision with the player
+if (checkCollision(playerPosition, bullet, bullet.userData.owner)) {
+  // Handle collision with the player (e.g., reduce health, remove the bullet)
+  // For example, you can call a function like handlePlayerCollision(bullet);
+  console.log("collision")
+  health -=15;
+  if(bullet.userData.owner !== userId){
+  hitDisplay.style.display = 'block';
+  setTimeout(() => {
+    hitDisplay.style.display = 'none';
+
+  }, 2000);
+  }
+  
+  document.getElementById('healthNumber').innerHTML = health;
+  if (health <= 0) {
+    chooseSpawn();
+    deaths++;
+    document.getElementById('deathCount').innerHTML = deaths;
+    console.log("died");
+    youDiedDisplay.style.display = "block";
+    setTimeout(() => {
+      youDiedDisplay.style.display = 'none'
+    }, 2000);
+  }
+  // Remove the bullet
+  otherPlayerBullets.splice(i, 1);
+  scene.remove(bullet);
+}
+
+  }
+}
+
+
+function chooseSpawn(){
+       //{x: 8.22, y: -0.5, z: 0.88}   SPAWN 1
+//{x: -7.8, y: -0.5, z: 17}     SPAWN 2
+if(playerNumber === 1){
+  controls.getObject().position.x =  8.22;
+        controls.getObject().position.y =  -0.5
+        controls.getObject().position.z =  0.88;
+        health = 100; // Reset health to 100
+        document.getElementById('healthNumber').innerHTML = health;
+
+} else if (playerNumber === 2){
+  controls.getObject().position.x = -7.8;
+        controls.getObject().position.y = -0.5;
+        controls.getObject().position.z = 17;
+        health = 100; // Reset health to 100
+        document.getElementById('healthNumber').innerHTML = health;
+}
+}
+// Add a listener to handle bullet removal when a child is removed from the database
+bulletsRef.on("child_removed", function(snapshot) {
+  handleBulletRemoval(snapshot);
+});
+
+// Function to handle bullet removal
+function handleBulletRemoval(snapshot) {
+  const bulletId = snapshot.key;
+  console.log("removed bullet: " + bulletId);
+
+  // Find the bullet in the local bullets array based on its key
+  const index = bullets.findIndex(bullet => bullet.userData.key === bulletId);
+
+  if (index !== -1) {
+    // Remove the bullet from the local bullets array and scene
+    const removedBullet = bullets.splice(index, 1)[0];
+    scene.remove(removedBullet);
+  }
+
+  // Find the bullet in the otherPlayerBullets array based on its key
+  const otherPlayerBulletIndex = otherPlayerBullets.findIndex(bullet => bullet.userData.key === bulletId);
+
+  if (otherPlayerBulletIndex !== -1) {
+    // Remove the bullet from the otherPlayerBullets array and scene
+    const removedOtherPlayerBullet = otherPlayerBullets.splice(otherPlayerBulletIndex, 1)[0];
+    scene.remove(removedOtherPlayerBullet);
+  }
+}
+
+
+
+
+// Listen for child_added events for bullets from other players
+bulletsRef.on("child_added", (snapshot) => {
+  const bulletData = snapshot.val();
+const bulletGeometry = new THREE.SphereGeometry(0.05, 16, 16); // Adjust the radius and segments as needed
+const bulletMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Change color to differentiate
+const bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
+
+
+  // Set the bullet's position based on the received data
+  bullet.position.set(bulletData.origin.x, bulletData.origin.y, bulletData.origin.z);
+  bullet.userData.direction = new THREE.Vector3(bulletData.direction.x, bulletData.direction.y, bulletData.direction.z);
+  bullet.userData.startTime = Date.now();
+  bullet.userData.speed = bulletData.speed; // Store bullet speed
+  bullet.userData.key = snapshot.key;
+  bullet.userData.owner = bulletData.owner;
+
+
+
+  // Add the bullet to the scene and otherPlayerBullets array
+  scene.add(bullet);
+  otherPlayerBullets.push(bullet);
+});
+
+
+
+// Update bullets' positions and remove expired bullets
+function updateBullets() {
+  const currentTime = Date.now();
+  const bulletLifetime = 3000; // Adjust bullet lifetime in milliseconds
+
+  for (let i = bullets.length - 1; i >= 0; i--) {
+    const bullet = bullets[i];
+
+    // Update bullet position
+    bullet.position.add(bullet.userData.direction);
+
+    // Remove bullets that have exceeded their lifetime
+    if (currentTime - bullet.userData.startTime > bulletLifetime) {
+      // Check if the bullet still exists in the bullets array
+      if (bullets.includes(bullet)) {
+        bullets.splice(i, 1);
+        scene.remove(bullet);
+      }
+    }
+
+    if (detectBulletCollisions()) {
+      console.log("hit wall");
+      bulletsRef.child(bullet.userData.key).remove();
+      
+      // Check if the bullet still exists in the bullets array
+      if (bullets.includes(bullet)) {
+        bullets.splice(i, 1);
+        scene.remove(bullet);
+      }
+    }
+  }
+}
+
+
+
+
+
+ 
+
+
+    //on window resize
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  }
+
+
+    </script>
+  </body>
+</html>
