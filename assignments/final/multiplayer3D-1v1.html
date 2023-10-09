@@ -253,6 +253,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 function init(){
+  let previousYaw = 0;
+
+// Define the initial yaw angle
+let yaw = 0;
+
+// Function to handle mouse movement for yaw (horizontal rotation)
+function onMouseMove(event) {
+  // Access the camera's rotation angles
+  const cameraRotation = controls.getObject().rotation;
+
+  // Use the camera's rotation angles
+  const yaw = cameraRotation.y; // Yaw (horizontal rotation)
+
+  // Round the yaw angle to the desired number of decimal places
+  previousYaw = Math.round(yaw * 100) / 100; // Rounds to 2 decimal places
+
+
+}
+
+
+
+// Enable pointer lock and add mousemove event listener
+document.addEventListener("pointerlockchange", () => {
+  if (document.pointerLockElement === document.body) {
+    document.addEventListener("mousemove", onMouseMove);
+  } else {
+    document.removeEventListener("mousemove", onMouseMove);
+  }
+});
+
+
+
   const hitDisplay = document.getElementById("hitDisplay");
   const killDisplay = document.getElementById("killDisplay");
   const youDiedDisplay = document.getElementById("youDiedDisplay");
@@ -583,6 +615,7 @@ if (detectCollisions()) {
     x,
     y,
     z,
+    angle: previousYaw,
    });
   });
 
@@ -603,6 +636,7 @@ function addPlayer(){
   x,
   y,
   z,
+  angle: previousYaw,
   });
 
   const playerRef = firebase.database().ref(`players/${userId}`);
@@ -614,40 +648,71 @@ addPlayer();
 let health = 100;
 let deaths = 0;
 let ammo = 10;
+
+
 // Create a group for other players
 const otherPlayersGroup = new THREE.Group();
       scene.add(otherPlayersGroup);
  // Function to draw other players from the database
  
- function drawOtherPlayers(playerData) {
-        // Clear the existing other players
-        otherPlayersGroup.children.length = 0;
+// Define a global variable to store loaded FBX models
+const loadedModels = {};
 
-        // Iterate through playerData to draw each player
-        for (const playerId in playerData) {
-          if (playerId !== userId) {
-            const playerPosition = playerData[playerId];
-            const otherPlayerGeometry = new THREE.BoxGeometry(1, 1, 1);
-            const otherPlayerMaterial = new THREE.MeshBasicMaterial({
-              color: 0xff0000,
-            });
-            const otherPlayer = new THREE.Mesh(
-              otherPlayerGeometry,
-              otherPlayerMaterial
-            );
-            otherPlayer.position.set(
-              playerPosition.x,
-              playerPosition.y,
-              playerPosition.z
-            );
-            otherPlayersGroup.add(otherPlayer);
-          }
-        }
+
+// Load the FBX model for the player (adjust the path)
+loader1.load('https://theactualzenaldv2.github.io/Game-Development-2023/assignments/assets/mutant.fbx', (fbx) => {
+  // Store the loaded model in the global variable
+  loadedModels.player = fbx;
+  loadedModels.player.scale.set(0.01, 0.01, 0.01);
+
+
+});
+function drawOtherPlayers(playerData) {
+  // Remove all existing other players from the scene
+  while (otherPlayersGroup.children.length) {
+    const playerToRemove = otherPlayersGroup.children[0];
+    otherPlayersGroup.remove(playerToRemove);
+  }
+
+  // Iterate through playerData to draw and rotate each player
+  for (const playerId in playerData) {
+    if (playerId !== userId) {
+      const playerPosition = playerData[playerId];
+      
+      // Access the angle property for each player
+      const angle = playerPosition.angle;
+
+      // Check if the FBX model is loaded
+      if (loadedModels.player) {
+        // Clone the loaded FBX model for each player
+        const otherPlayer = loadedModels.player.clone();
+        otherPlayer.position.set(
+          playerPosition.x,
+          playerPosition.y - 0.5,
+          playerPosition.z
+        );
+
+        // Rotate the other player's model by the angle
+        otherPlayer.rotation.y = -angle;
+
+        // Add the other player to the group
+        otherPlayersGroup.add(otherPlayer);
+      } else {
+        // Handle the case where the FBX model is not yet loaded
+        console.warn('Player FBX model is not loaded.');
+        // You can provide fallback logic or retry loading here
       }
+    }
+  }
+}
+
+
+
 // Listen for changes in other players' positions
       playersRef.on("value", (snapshot) => {
         const playerData = snapshot.val();
         drawOtherPlayers(playerData);
+
       });
 
 
@@ -904,7 +969,7 @@ function reloadWeapon() {
 // Function to check collision between two objects (player and bullet)
 function checkCollision(playerPosition, bullet, key) {
   if(key === userId) return;
-  const playerBoundingBox = new THREE.Box3().setFromCenterAndSize(playerPosition, new THREE.Vector3(1, 1, 1)); // Adjust size as needed
+  const playerBoundingBox = new THREE.Box3().setFromCenterAndSize(playerPosition, new THREE.Vector3(1.2, 2.5, 1.2)); // Adjust size as needed
   const bulletBoundingBox = new THREE.Box3().setFromObject(bullet);
 
   return playerBoundingBox.intersectsBox(bulletBoundingBox);
