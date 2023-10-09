@@ -718,12 +718,14 @@ const otherPlayersGroup = new THREE.Group();
     }
   }
 }
+
 let playersInfo = [];
 const youKilledDisplay = document.getElementById("youKilledDisplay");
 const youHitDisplay = document.getElementById("youHitDisplay");
 
 // Store the previous health values for each player
 const previousHealthValues = {};
+
 
 // Listen for changes in other players' positions
 playersRef.on("value", (snapshot) => {
@@ -737,13 +739,26 @@ playersRef.on("value", (snapshot) => {
   // Log the health value of each player and check for hits
   playersInfo.forEach((player) => {
     console.log(`Enemy has ${player.health} health.`);
+    if(player.health === undefined) return;
     
     // Check if the player has a previous health value
     if (previousHealthValues[player.playerId] !== undefined) {
-      // Compare the current health with the previous health
-      if (player.health < previousHealthValues[player.playerId]) {
-        console.log('You hit an enemy');
+      // Calculate the difference between current and previous health
+      const healthDifference = previousHealthValues[player.playerId] - player.health;
+
+      if (healthDifference >= 30) {
+        console.log('Crit hit!'); // Log crit hit
+        youHitDisplay.textContent = 'Crit Hit!'; // Update display for crit hit
+      } else if (healthDifference > 0) {
+        console.log('Regular hit!'); // Log regular hit
+        youHitDisplay.textContent = 'Hit!'; // Update display for regular hit
+      }
+
+      // Show the hit display only if there has been a change in health
+      if (healthDifference !== 0) {
         youHitDisplay.style.display = 'block';
+
+        // Hide the hit display after a delay
         setTimeout(() => {
           youHitDisplay.style.display = 'none';
         }, 2000);
@@ -766,6 +781,7 @@ playersRef.on("value", (snapshot) => {
 
   drawOtherPlayers(playersInfo);
 });
+
 
 
 
