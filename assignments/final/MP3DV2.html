@@ -996,6 +996,12 @@ reloadWeapon();
 
   }
 });
+
+function instantReload(){
+  ammo = 10;
+  document.getElementById('ammoCount').innerHTML = ammo;
+
+}
 function reloadWeapon() {
   if (ammo === 10) return;
   if (isReloading) return;
@@ -1194,13 +1200,15 @@ if(playerNumber === 1){
         controls.getObject().position.z =  0.88;
          health = 100; // Reset health to 100
         document.getElementById('healthNumber').innerHTML = health;
+        instantReload();
 
 } else if (playerNumber === 2){
   controls.getObject().position.x = -7.8;
         controls.getObject().position.y = -0.5;
         controls.getObject().position.z = 17;
           health = 100; // Reset health to 100
-       
+          instantReload();
+
           document.getElementById('healthNumber').innerHTML = health;
 }
 
@@ -1237,6 +1245,7 @@ if(playerNumber === 1){
         controls.getObject().position.z =  0.88;
          health = 100; // Reset health to 100
         document.getElementById('healthNumber').innerHTML = health;
+        instantReload();
 
 } else if (playerNumber === 2){
   controls.getObject().position.x = -7.8;
@@ -1245,6 +1254,7 @@ if(playerNumber === 1){
           health = 100; // Reset health to 100
        
           document.getElementById('healthNumber').innerHTML = health;
+          instantReload();
 }
   }, 1500);
        
