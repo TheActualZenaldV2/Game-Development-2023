@@ -1290,14 +1290,14 @@ function handleBulletRemoval(snapshot) {
 
 
 
-
 // Listen for child_added events for bullets from other players
 bulletsRef.on("child_added", (snapshot) => {
   const bulletData = snapshot.val();
-const bulletGeometry = new THREE.SphereGeometry(0.05, 16, 16); // Adjust the radius and segments as needed
-const bulletMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Change color to differentiate
-const bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
-
+  const bulletGeometry = new THREE.SphereGeometry(0.05, 16, 16);
+  const bulletMaterial = bulletData.owner !== userId
+    ? new THREE.MeshBasicMaterial({ color: 0xff0000 }) // Red
+    : new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Green
+  const bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
 
   // Set the bullet's position based on the received data
   bullet.position.set(bulletData.origin.x, bulletData.origin.y, bulletData.origin.z);
@@ -1307,12 +1307,11 @@ const bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
   bullet.userData.key = snapshot.key;
   bullet.userData.owner = bulletData.owner;
 
-
-
   // Add the bullet to the scene and otherPlayerBullets array
   scene.add(bullet);
   otherPlayerBullets.push(bullet);
 });
+
 
 
 
