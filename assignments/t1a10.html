@@ -34,7 +34,16 @@
             z-index: 2;
             position: fixed;
             left: 50%;
-            bottom: 2%;
+            bottom: 3%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        #latLong {
+            font-size: 20px;
+            z-index: 2;
+            position: fixed;
+            left: 50%;
+            bottom: 1%;
             transform: translate(-50%, -50%);
             text-align: center;
         }
@@ -44,15 +53,19 @@
     <h1 id="title" style="text-align: center;">Location Map</h1>
         <div id="map"></div>
         <h1 id="ip"> IP Adress: <span id="ipAdress" style="font-weight: bolder;"></span></h1>
+        <h1 id="latLong">Current Location: <span id="latLongNumber" style="font-weight: bolder;"></span></h1>
+
 
 
     <script>
         // Initialize the map
         var map = L.map('map').setView([0, 0], 13);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
+        // Replace the tile layer URL with OpenStreetMap's URL
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
 
         var geocoder = L.Control.geocoder({
             collapsed: false,
@@ -61,8 +74,12 @@
         }).addTo(map);
 
         function onLocationFound(e) {
+            
+            // Get the latitude and longitude
+            var lat = e.latlng.lat;
+            var lng = e.latlng.lng;
+            document.getElementById('latLongNumber').innerHTML = `Latitude: ${lat}, Longitude: ${lng}`
             var radius = e.accuracy / 2;
-
             L.marker(e.latlng).addTo(map)
                 .bindPopup("You are within " + radius.toFixed(0) + " meters from this point").openPopup();
 
