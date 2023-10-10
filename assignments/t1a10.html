@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location Map</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js" crossorigin=""></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css"> 
+       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script>
+       <script src="
+       https://cdn.jsdelivr.net/npm/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.min.js
+       "></script>
+       <link href="
+       https://cdn.jsdelivr.net/npm/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.min.css
+       " rel="stylesheet">  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+
+    <style>
+        
+       body, html, #map {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            z-index: 0;
+        }
+        #title {
+            z-index: 1;
+            position: fixed;
+            left: 50%;
+            transform: translate(-50%);
+            text-align: center;
+        }
+        #ip {
+            z-index: 2;
+            position: fixed;
+            left: 50%;
+            bottom: 2%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="title" style="text-align: center;">Location Map</h1>
+        <div id="map"></div>
+        <h1 id="ip"> IP Adress: <span id="ipAdress" style="font-weight: bolder;"></span></h1>
+
+
+    <script>
+        // Initialize the map
+        var map = L.map('map').setView([0, 0], 13);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        var geocoder = L.Control.geocoder({
+            collapsed: false,
+            placeholder: 'Search for a location...',
+            defaultMarkGeocode: false
+        }).addTo(map);
+
+        function onLocationFound(e) {
+            var radius = e.accuracy / 2;
+
+            L.marker(e.latlng).addTo(map)
+                .bindPopup("You are within " + radius.toFixed(0) + " meters from this point").openPopup();
+
+            L.circle(e.latlng, radius).addTo(map);
+        }
+
+        // Function to handle location error
+        function onLocationError(e) {
+            alert(e.message);
+        }
+
+        // Add an event listener to the geocoder control
+        geocoder.on('markgeocode', function (e) {
+            map.setView(e.geocode.center);
+        });
+
+        // Ask for permission to access the user's location and handle the result
+        map.on('locationfound', onLocationFound);
+        map.on('locationerror', onLocationError);
+
+        map.locate({ setView: true, maxZoom: 16 });
+getIpAddress();
+        function getIpAddress() {
+   
+    $.getJSON("https://api.ipify.org?format=json", function(data) {
+        var ipAddress = data.ip;
+        if (ipAddress !== null) {
+            console.log(ipAddress);
+            document.getElementById("ipAdress").innerHTML = ipAddress
+        }
+    });
+
+
+}
+
+
+    </script>
+</body>
+</html>
