@@ -1,0 +1,39 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<div class="container mt-5">
+    <div class="form-group">
+        <label for="name">Name:</label>
+        <input id="name" type="text" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="age">Age:</label>
+        <input id="age" type="number" class="form-control">
+    </div>
+    <button class="btn btn-primary" onclick="calculate()">Click me</button>
+    <div id="myDiv01" class="mt-3"></div>
+</div>
+
+<script>
+
+    function calculate(){
+        const name = document.getElementById('name').value;
+    const age = document.getElementById('age').value;
+    const output = document.getElementById('myDiv01')
+        let ageText;
+       
+        if (age < 5) {
+            ageText = 'Baby';
+        } else if (age >=5 && age <= 12) {
+            ageText = 'Young Kid';
+        } else if (age >= 13 && age <= 19) {
+            ageText = 'Stupid Teenager';
+        } else if (age > 19) {
+            ageText = 'Senior Citizen (Get into a nursing home already)';
+        } else {
+            ageText = 'Error';
+        }
+            
+        output.innerHTML = `Hello ${name}, you are a ${ageText}.`
+
+    }
+</script>
