@@ -1,0 +1,1556 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>3D First Person Shooter</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+      canvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+        z-index: -1;
+      }
+    
+      #ammo {
+        z-index: 99;
+        position: fixed;
+        bottom: 80px;
+        left: 50px;
+        color: white;
+        font-weight: bolder;
+      }
+      #ammoCount {
+        font-size: 25px
+      }
+      #hitDisplay, #youHitDisplay, #killDisplay, #youDiedDisplay, #youKilledDisplay, #newRound {
+  z-index: 9099999;
+  position: fixed;
+  color: white;
+  font-weight: bolder;
+  font-size: 50px;
+}
+
+#hitDisplay {
+  top: 100px;
+  left: 100px;
+}
+
+#youHitDisplay {
+  top: 150px;
+  left: 200px;
+}
+
+#killDisplay {
+  top: 200px;
+  left: 300px;
+}
+
+#youDiedDisplay {
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center both vertically and horizontally */
+}
+
+#youKilledDisplay {
+  top: 70%; /* Adjust as needed */
+  left: 40%; /* Adjust as needed */
+}
+
+#newRound {
+  top: 80%; /* Adjust as needed */
+  left: 60%; /* Adjust as needed */
+}
+
+
+      /* Animation for hit */
+    .hit-animation {
+      animation-name: hitAnimation;
+      animation-duration: 1s;
+      animation-timing-function: ease;
+    }
+    @keyframes hitAnimation {
+      0%, 100% {
+        color: white;
+      }
+      50% {
+        color: red; /* Change to the desired hit color */
+      }
+    }
+    /* Animation for kill */
+    .kill-animation {
+      animation-name: killAnimation;
+      animation-duration: 1s;
+      animation-timing-function: ease;
+    }
+    @keyframes killAnimation {
+      0%, 100% {
+        color: white;
+      }
+      50% {
+        color: green; /* Change to the desired kill color */
+      }
+    }
+    /* Animation for "You died" */
+    .you-died-animation {
+      animation-name: youDiedAnimation;
+      animation-duration: 2s;
+      animation-timing-function: ease;
+    }
+    @keyframes youDiedAnimation {
+      0% {
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
+
+    /* Animation for "You Killed" */
+.you-killed-animation {
+  animation-name: youKilledAnimation;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+}
+@keyframes youKilledAnimation {
+  0%, 100% {
+    color: white;
+  }
+  50% {
+    color: green; /* Change to the desired color */
+  }
+}
+
+/* Animation for "You Hit" */
+.you-hit-animation {
+  animation-name: youHitAnimation;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+}
+@keyframes youHitAnimation {
+  0%, 100% {
+    color: white;
+  }
+  50% {
+    color: red; /* Change to the desired color */
+  }
+}
+
+    #crosshair {
+	z-index: 1;
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	top: calc(50% - 10px);
+	left: calc(50% - 10px);
+}
+#crosshair::before,#crosshair::after {
+	content: "";
+	position: absolute;
+	width: 10px;
+	height: 2px;
+	background-color: #ffffff;
+	top: calc(50% - 1px);
+	left: calc(50% - 5px);
+}
+#crosshair::after {
+	transform: rotate(90deg);
+}
+
+#loading-text {
+	color: white;
+	display: block;
+	font-size: large;
+	font-weight: bold;
+	/*position middle of screen*/
+	position: absolute;
+	top: 45%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 20px;
+	z-index: 10000;
+}
+
+#gameOverlay {
+  position: absolute;
+  z-index: 999;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: black;
+  transition: 0.5s opacity;
+}
+
+
+.cool-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #33333345;
+    color: white;
+    padding: 10px;
+    z-index: 99;
+    text-align: center;
+    display: none;
+}
+
+.cool-bar i {
+    margin-right: 8px;
+}
+
+.progress-bar {
+    background-color: #555;
+    height: 10px;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.progress {
+    width: 0;
+    height: 100%;
+    background-color: red;
+    border-radius: 5px;
+}
+#pingContainer {
+    position: fixed;
+    top: 50px;
+    left: 5px; /* Adjust the right distance from the edge of the viewport */
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+    padding: 10px;
+    max-width: 200px;
+    border-radius: 5px;
+    color: white;
+  }
+  #pingContainer #pingTime {
+    font-weight: bold;
+  }
+  
+#enemyContainer {
+    position: fixed;
+    top: 50px;
+    right: 5px; /* Adjust the right distance from the edge of the viewport */
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+    padding: 10px;
+    max-width: 200px;
+    border-radius: 5px;
+    color: white;
+  }
+
+    </style>
+  </head>
+  <body>
+    <span id="loading-text"><i class="fa-solid fa-gear fa-spin"></i> Please Wait....</span>
+<div id="gameContainer" style="display: none;">
+    <div id="statsContainer"></div>
+<div id="pingContainer">
+     <div id="health"> Health: <span id="healthNumber">100</span></div>
+     <div id="death"> Deaths: <span id="deathCount">0</span></div>
+     <div id="ammo"> Ammo: <span id="ammoCount"> 0</span></div>
+     <p style="color: white;"><i class="fa-solid fa-signal fa-bounce"></i> Ping: <span id="pingTime">-</span> ms</p> 
+     </div>
+
+     <div id="enemyContainer">
+      <div id="enemyHealth"> Enemy Health: <span id="enemyHealthNumber">100</span></div>
+      </div>
+     
+  <div id="hitDisplay" style="display: none;" class="hit-animation">You Got Hit!</div>
+  <div id="youDiedDisplay" style="display: none;"  class="you-died-animation">You Died</div>
+  <div id="youKilledDisplay" style="display: none;"  class="you-killed-animation">Kill!</div>
+  <div id="youHitDisplay" style="display: none;"  class="you-hit-animation">Hit! </div>
+  <div id="gameOverlay" style="opacity: 0;">
+  <div id="newRound"> New Round Starting...</div>
+</div>
+
+
+  <div id="crosshair"></div>
+
+  <div class="cool-bar" id="dash-progress-bar">
+    <i class="fas fa-running"></i> Dashing
+    <div class="progress-bar">
+        <div class="progress"></div>
+    </div>
+</div>
+</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.rawgit.com/mrdoob/three.js/r128/examples/js/controls/PointerLockControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/FBXLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fflate@0.8.0/umd/index.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-auth.js"></script>
+  <script src="https://mrdoob.github.io/stats.js/build/stats.min.js"></script>
+
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script>
+ // Create a stats.js monitor
+ const stats = new Stats();
+    stats.showPanel(0); // 0: FPS, 1: MS (millisecond), 2: MB (megabytes)
+    document.getElementById("statsContainer").appendChild(stats.dom);
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDZAxDZuJyLxxyQ9ZmYmhjj0Gvg-IuGMYU",
+  authDomain: "d-test-9077c.firebaseapp.com",
+  databaseURL: "https://d-test-9077c-default-rtdb.firebaseio.com",
+  projectId: "d-test-9077c",
+  storageBucket: "d-test-9077c.appspot.com",
+  messagingSenderId: "502203730679",
+  appId: "1:502203730679:web:9f4d073ca7e586a787e1f2"
+};
+let gameInt = false;
+let playerNumber;
+firebase.initializeApp(firebaseConfig);
+let database = firebase.database();
+const connectionsRef = database.ref("connections");
+let userConnectionRef;
+
+function assignPlayerNumber() {
+  connectionsRef.once("value")
+    .then(snapshot => {
+      const connectedPlayersCount = snapshot.numChildren();
+      console.log(`Connected Players: ${connectedPlayersCount}`);
+
+      if (connectedPlayersCount >= 2) {
+        alert("Game is Full");
+      } else {
+        // Initialize an array to keep track of used player numbers
+        const usedPlayerNumbers = [];
+        snapshot.forEach(childSnapshot => {
+          const playerNum = childSnapshot.val();
+          usedPlayerNumbers.push(playerNum);
+        });
+
+        // Assign the first available player number (1 or 2)
+        playerNumber = 1;
+        if (usedPlayerNumbers.includes(1)) {
+          playerNumber = 2;
+        }
+
+        if (!userConnectionRef) {
+          userConnectionRef = connectionsRef.push(playerNumber);
+          console.log(`You are Player ${playerNumber}`);
+          userConnectionRef.onDisconnect().remove();
+
+          if (!gameInt) {
+            init();
+            gameInt = true;
+          }
+        }
+      }
+    })
+    .catch(error => {
+      console.error("Error getting connected players count:", error);
+    });
+}
+
+function handlePlayerDisconnect() {
+  if (playerNumber) {
+    userConnectionRef.onDisconnect().remove();
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  assignPlayerNumber();
+  handlePlayerDisconnect();
+});
+
+
+
+
+
+function init(){
+  const hitDisplay = document.getElementById("hitDisplay");
+  const killDisplay = document.getElementById("killDisplay");
+  const youDiedDisplay = document.getElementById("youDiedDisplay");
+
+console.log(playerNumber)
+      // Set up the scene, camera, and renderer
+       // Set up the scene, camera, and renderer
+    const scene = new THREE.Scene();
+    // Create the camera
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+      const renderer = new THREE.WebGLRenderer({  });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+const loadingManager = new THREE.LoadingManager();
+loadingManager.onLoad = function () {
+  console.log('gameLoad')
+}
+
+let mapLoad = false;
+const loadingText = document.getElementById('loading-text');
+let highestProgress = 0; // To track the highest progress value
+
+loadingManager.onProgress = function (url, itemsLoaded, itemsTotal) {
+    const progress = Math.round((itemsLoaded / itemsTotal) * 100);
+    
+    // Update the highestProgress only if the current progress is higher
+    highestProgress = Math.max(progress, highestProgress);
+    
+    loadingText.innerHTML = `Loading...  ${highestProgress}% <i class="fa-solid fa-gear fa-spin"></i>`;
+
+    if (mapLoad && highestProgress === 100) {
+        loadingText.innerHTML = "Loading Complete";
+        setTimeout(() => {
+            loadingText.style.display = 'none';
+            document.getElementById("gameContainer").style.display = 'block'
+        }, 500);
+    }
+};
+
+loadingManager.onError = function (url) {
+    console.error(`Failed to load ${url}`);
+    alert("Failed to load " + url);
+};
+
+
+// Lighting
+const ambientLight = new THREE.AmbientLight(0xFFFFFF, 3);
+    ambientLight.position.set(-64, 115, 66);
+    scene.add(ambientLight);
+
+
+      // Create the floor object
+      const floorGeometry = new THREE.PlaneGeometry(50, 50);
+      const floorMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
+      const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+      floor.rotation.x = -Math.PI / 2;
+
+      // Set up the controls
+      const controls = new THREE.PointerLockControls(camera, document.body);
+
+      document.addEventListener("click", () => {
+        controls.lock();
+      });
+      scene.add(controls.getObject());
+let gun;
+
+
+    // Assuming you already have a scene, camera, and renderer defined
+    const loader1 = new THREE.FBXLoader(loadingManager);
+
+
+
+
+    loader1.load('https://theactualzenaldv2.github.io/gamedev/public2/extra/SciFiRifle.fbx', function (object) {
+        gun = object;
+        gun.scale.set(0.003, 0.003, 0.003); // Set the scale of the gun model
+        gun.position.set(1.5, -1, -2); // Set the position of the gun model
+        gun.rotation.x = Math.PI; // Rotate the gun model around the x axis
+        gun.rotation.z = Math.PI; // Rotate the gun model around the y axis
+        // Load the gun texture
+        const textureLoader = new THREE.TextureLoader();
+        const gunTexture = textureLoader.load('https://i.imgur.com/bqPrFZn.jpg');
+        gunTexture.repeat.set(0.0032, 0.0032); // Set the repeat property of the texture
+
+        // Create a material with a fixed color
+        const gunMaterial = new THREE.MeshStandardMaterial({
+            color: 0xc982e8,
+            map: gunTexture,
+            transparent: true,
+
+        });
+
+        // Apply the material to the gun mesh
+        gun.material = gunMaterial;
+
+        // Set the material of the gun model
+        gun.traverse(function (node) {
+            if (node.isMesh) {
+                node.material = gunMaterial;
+                node.material.needsUpdate = true; // Set the needsUpdate property to true to update the material
+            }
+        });
+
+        // Set the render order and disable depth testing
+        gun.renderOrder = 999999999;
+        gun.traverse(function (node) {
+            if (node.isMesh) {
+                node.material.depthTest = false;
+            }
+        });
+        camera.add(gun); // Add the gun model as a child of the camera
+
+
+
+    });
+
+
+      const textureLoader = new THREE.TextureLoader(loadingManager);
+    textureLoader.load('https://i.imgur.com/7EFwzds.jpg'); //overlay experimental background img 
+    //
+    //
+    //possible skyboxes made with https://skybox.blockadelabs.com/
+    //
+    //
+    //https://i.imgur.com/H9VQm8h.jpg
+    //https://i.imgur.com/ZEtn2vn.jpg
+    //https://i.imgur.com/y4K0Idj.jpg
+    //https://i.imgur.com/Qp9m02L.jpg <=== best so far
+    //https://i.imgur.com/7EFwzds.jpg
+    const texture = textureLoader.load('https://i.imgur.com/7gsPP4X.jpg');
+
+    // Create the skybox geometry
+    const skyboxGeometry = new THREE.SphereGeometry(1000, 32, 32);
+
+    // Create the skybox material with the loaded texture
+    const skyboxMaterial = new THREE.MeshStandardMaterial({
+        map: texture,
+        side: THREE.BackSide
+    });
+    // Create the skybox mesh
+    const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
+    skybox.position.set(0, 100, 0);
+
+    // Add the skybox to the scene
+    scene.add(skybox);
+   
+
+    
+    let dashSpeed = 12.5;
+    let lastShiftTime = 0;
+    let shiftAvailable = true;
+    var timeSinceLastShift;
+
+      // Set up the raycaster for collision detection
+      const raycaster = new THREE.Raycaster();
+      const direction = new THREE.Vector3();
+      const keyboard = {};
+  
+    var playersRef = database.ref("players");
+    var bulletsRef = database.ref("bullets")
+    
+      function handleKeyDown(event) {
+  const key = event.key.toLowerCase();
+  keyboard[key] = true;
+
+  if (key === " ") {
+            if (!isJumping) {
+                isJumping = true;
+                jumpVelocity = jumpSpeed;
+            }
+}
+      }
+
+function handleKeyUp(event) {
+  const key = event.key.toLowerCase();
+  keyboard[key] = false;
+}
+let maxSpeed = 5;
+var speed = 5;
+document.addEventListener("keydown", handleKeyDown);
+document.addEventListener("keyup", handleKeyUp);
+const dashProgressBar = document.getElementById("dash-progress-bar");
+
+let isDashing = false;
+let startTime = 0;
+
+function startDash() {
+  isDashing = true;
+  startTime = performance.now();
+  dashProgressBar.style.display = "block";
+}
+
+function stopDash() {
+  isDashing = false;
+  dashProgressBar.style.display = "none";
+}
+function animate() {
+  stats.begin();
+  requestAnimationFrame(animate);
+
+  const currentTime = performance.now();
+  timeSinceLastShift = currentTime - lastShiftTime;
+
+  if (keyboard["shift"] && shiftAvailable && timeSinceLastShift > 5000) {
+    speed = dashSpeed;
+
+    if (!isDashing) {
+      startDash();
+    }
+
+    const progress = (currentTime - startTime) / 1500;
+    document.querySelector(".progress").style.width = `${Math.min(progress * 100, 100)}%`;
+
+    if (progress >= 1) {
+      stopDash();
+      shiftAvailable = false;
+      lastShiftTime = currentTime;
+
+      setTimeout(() => {
+        shiftAvailable = true;
+      }, 1500);
+    }
+  } else {
+    stopDash();
+    speed = maxSpeed;
+  }
+  // Check for collisions with the floor
+  raycaster.set(
+    controls.getObject().position,
+    new THREE.Vector3(0, 0, 0)
+  );
+  const intersects = raycaster.intersectObject(floor);
+  if (intersects.length > 0) {
+    const distance = intersects[0].distance;
+    if (distance < 1) {
+      controls.getObject().position.y += 1 - distance;
+    }
+  }
+
+  // Render the scene
+  renderer.render(scene, camera);
+  stats.end();
+
+}
+
+let mapUrl = "https://theactualzenaldv2.github.io/Game-Development-2023/assignments/assets/Winter1v1%20(1).gltf"
+let gltf;
+
+// Load the GLTF model
+const gltfLoader = new THREE.GLTFLoader(loadingManager);
+gltfLoader.load(
+        mapUrl,
+        function (loadedGltf) {
+            // Assign the loaded gltf to the global variable
+            gltf = loadedGltf;
+            gltf.scene.scale.set(0.13, 0.13, 0.13);
+            gltf.scene.position.set(0,-7.5,0)
+            gltf.frustumCulled = true;
+            mapLoad = true;
+
+            // Add the model to the scene
+            scene.add(gltf.scene);
+            animate();
+           chooseInitialSpawn();
+
+
+            console.log(controls.getObject().position)
+
+        }
+    ), // Called if there is an error loading the model
+    function (error) {
+        console.error(error);
+    };
+const floorHeight = -0; // Set the floor height threshold for collisions
+
+
+setInterval(() => {
+  updateBullets();
+  updateOtherPlayerBullets();
+  }, 10);
+
+  let jumpVelocity = 0;
+  let jumpVelocity1 = 0.8;
+let isJumping = false;
+let lastTime = 0;
+const jumpSpeed = 0.2;
+    const jumpHeight = -0.5;
+    
+function movePlayer(time) {
+  if (!lastTime) {
+    lastTime = time;
+    requestAnimationFrame(movePlayer);
+    return;
+  }
+
+  const deltaTime = (time - lastTime) / 1000; // Convert to seconds
+
+  const gravity = 5.81; // Adjust the gravity strength
+  const jumpCooldown = 350; // Adjust this for the jump cooldown duration in milliseconds
+
+  const forward = new THREE.Vector3(
+    controls.getObject().matrix.elements[8],
+    0,
+    controls.getObject().matrix.elements[10]
+  );
+  const backward = forward.clone().negate();
+  const left = new THREE.Vector3(
+    controls.getObject().matrix.elements[0],
+    0,
+    controls.getObject().matrix.elements[2]
+  );
+  const right = left.clone().negate();
+  const velocity = new THREE.Vector3();
+
+  // Move the user
+  if (keyboard["w"]) {
+    velocity.add(backward);
+  }
+  if (keyboard["s"]) {
+    velocity.add(forward);
+  }
+  if (keyboard["a"]) {
+    velocity.add(right);
+  }
+  if (keyboard["d"]) {
+    velocity.add(left);
+  }
+  velocity.normalize();
+  velocity.multiplyScalar(speed * deltaTime);
+
+  // Store the initial position
+  const initialPosition = controls.getObject().position.clone();
+
+  // Apply velocity to the position
+  controls.getObject().position.add(velocity);
+// Check for collisions after applying velocity
+if (detectCollisions()) {
+  const newPosition = initialPosition.clone();
+
+  // Check for collisions in each direction and adjust the position accordingly
+  const collisionDirections = [];
+  if (keyboard["w"]) {
+    collisionDirections.push(forward);
+    keyboard["w"] = false;
+  }
+  if (keyboard["s"]) {
+    collisionDirections.push(backward);
+    keyboard["s"] = false;
+  }
+  if (keyboard["a"]) {
+    collisionDirections.push(left);
+    keyboard["a"] = false;
+  }
+  if (keyboard["d"]) {
+    collisionDirections.push(right);
+    keyboard["d"] = false;
+  }
+
+  for (const direction of collisionDirections) {
+    interpolatePosition(newPosition, direction, deltaTime);
+  }
+
+  // Update the player's position to the new calculated position
+  controls.getObject().position.copy(newPosition);
+}
+
+function interpolatePosition(position, direction, deltaTime) {
+  const collisionDuration = 1; // Adjust this value to control the duration of interpolation
+  const adjustAmount = 50; // Adjust this value based on how much you want to move away from the collision
+  const paddingFactor = 0.2; // Your collision padding factor
+  const adjustedCollisionDistance = adjustAmount * (1 - paddingFactor) * deltaTime / collisionDuration;
+
+  const newPosition = position.clone();
+  let timeElapsed = 0;
+
+  while (timeElapsed < collisionDuration) {
+    newPosition.add(direction.clone().multiplyScalar(adjustedCollisionDistance));
+    if (!detectCollisions(newPosition)) {
+      position.copy(newPosition);
+      return;
+    }
+    timeElapsed += deltaTime;
+  }
+}
+
+
+       // Jumping logic
+       if (isJumping) {
+            jumpVelocity -= jumpVelocity1 * deltaTime;
+            controls.getObject()
+                .position.y += jumpVelocity / 2;
+            if (controls.getObject()
+                .position.y < jumpHeight) {
+                controls.getObject()
+                    .position.y = floorHeight + jumpHeight;
+                isJumping = false;
+                jumpVelocity = 0;
+            }
+        }
+  // Round the position values to 2 decimal places
+  controls.getObject().position.x = parseFloat(controls.getObject().position.x.toFixed(6));
+  controls.getObject().position.y = parseFloat(controls.getObject().position.y.toFixed(6));
+  controls.getObject().position.z = parseFloat(controls.getObject().position.z.toFixed(6));
+
+  if (!userId) return;
+
+  // Update the player's position in the database (This happens every 30ms)
+  const x = controls.getObject().position.x;
+  const y = controls.getObject().position.y;
+  const z = controls.getObject().position.z;
+  const playerRef = playersRef.child(userId);
+  playerRef.update({ x, y, z, health });
+
+  lastTime = time;
+  requestAnimationFrame(movePlayer);
+}
+
+// Start the animation loop
+requestAnimationFrame(movePlayer);
+
+
+
+function addPlayer(){
+  // Generate a unique ID for the new player
+  var newPlayerRef = playersRef.push();
+  userId = newPlayerRef.key;
+  const x = controls.getObject().position.x;
+  const y = controls.getObject().position.y;
+  const z = controls.getObject().position.z;
+
+  
+  // Add the new player to the database
+  newPlayerRef.set({
+  x,
+  y,
+  z,
+  });
+
+  const playerRef = firebase.database().ref(`players/${userId}`);
+  playerRef.onDisconnect().remove();
+  bulletsRef.remove();
+  pingDatabase(userId);
+
+}
+addPlayer();
+
+
+ // Function to ping the database and update ping response time
+ function pingDatabase(userId) {
+  const pingTimeElement = document.getElementById('pingTime');
+
+  if (userId) {
+                            setInterval(() => {
+                                // Send a ping under the current user's username to the Firebase database to measure response time
+                                const pingStart = performance.now();
+                                firebase.database()
+                                    .ref(`players/${userId}/ping`)
+                                    .set(Date.now())
+                                    .then(function () {
+                                        // Read the ping value from the Firebase database and calculate the response time
+                                        firebase.database()
+                                            .ref(`players/${userId}/ping`)
+                                            .once("value")
+                                            .then(function (snapshot) {
+                                                const pingEnd = performance.now();
+                                                const pingTime = pingEnd - pingStart;
+                                                const pingValue = snapshot.val();
+                                                const pingResponseTime = Date.now() - pingValue;
+                                                pingTimeElement.innerHTML = pingResponseTime;
+
+                                            });
+                                    });
+                            }, 500);
+
+
+                        }
+    }
+
+
+let health = 100;
+let deaths = 0;
+let ammo = 30;
+const maxAmmo = 30;
+// Create a group for other players
+const otherPlayersGroup = new THREE.Group();
+      scene.add(otherPlayersGroup);
+ // Function to draw other players from the database
+ 
+ function drawOtherPlayers(playerData) {
+  // Clear the existing other players
+  otherPlayersGroup.children.length = 0;
+
+  // Iterate through playerData to draw each player
+  for (const playerId in playerData) {
+    if (playerId !== userId) {
+      const playerPosition = playerData[playerId];
+
+      // Create the player's body
+      const bodyGeometry = new THREE.SphereGeometry(0.5, 32, 32); // Adjust the radius and segments as needed
+      const bodyMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+      const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+      body.position.set(playerPosition.x, playerPosition.y, playerPosition.z);
+
+      // Create the player's head
+      const headGeometry = new THREE.SphereGeometry(0.3, 32, 32); // Adjust the radius and segments as needed
+      const headMaterial = new THREE.MeshBasicMaterial({ color: 0x8b0000 }); // Dark red color
+      const head = new THREE.Mesh(headGeometry, headMaterial);
+      head.position.set(playerPosition.x, playerPosition.y + 0.5, playerPosition.z); // Adjust the Y position
+
+      // Create a group to hold both body and head
+      const playerGroup = new THREE.Group();
+      playerGroup.add(body);
+      playerGroup.add(head);
+
+      otherPlayersGroup.add(playerGroup);
+    }
+  }
+}
+
+let playersInfo = [];
+const youKilledDisplay = document.getElementById("youKilledDisplay");
+const youHitDisplay = document.getElementById("youHitDisplay");
+
+// Store the previous health values for each player
+const previousHealthValues = {};
+
+
+// Listen for changes in other players' positions
+playersRef.on("value", (snapshot) => {
+  const playerData = snapshot.val();
+
+  // Filter out the players with the same playerId
+  playersInfo = Object.keys(playerData)
+    .filter((key) => key !== userId)
+    .map((key) => playerData[key]);
+
+  // Log the health value of each player and check for hits
+  playersInfo.forEach((player) => {
+    if(player.health === undefined) return;
+    document.getElementById("enemyHealthNumber").innerHTML = player.health;
+    console.log(`Enemy has ${player.health} health.`);
+
+    // Check if the player has a previous health value
+    if (previousHealthValues[player.playerId] !== undefined) {
+      // Calculate the difference between current and previous health
+      const healthDifference = previousHealthValues[player.playerId] - player.health;
+
+      if (healthDifference >= 30) {
+        console.log('Crit hit!'); // Log crit hit
+        youHitDisplay.textContent = 'Crit Hit!'; // Update display for crit hit
+        document.getElementById("enemyHealthNumber").innerHTML = player.health;
+      } else if (healthDifference > 0 && player.health !== 100) {
+        console.log('Regular hit!'); // Log regular hit
+        youHitDisplay.textContent = 'Hit!'; // Update display for regular hit
+        document.getElementById("enemyHealthNumber").innerHTML = player.health;
+      }
+
+      // Show the hit display only if there has been a change in health
+      if (healthDifference !== 0) {
+        youHitDisplay.style.display = 'block';
+
+        // Hide the hit display after a delay
+        setTimeout(() => {
+          youHitDisplay.style.display = 'none';
+        }, 2000);
+      }
+    }
+
+    // Check if the player's health has reached 0
+    if (player.health <= 0) {
+      console.log('You killed an enemy');
+      resetPosition();
+      youKilledDisplay.style.display = 'block';
+      setTimeout(() => {
+        youKilledDisplay.style.display = 'none';
+      }, 2000);
+    }
+
+    // Update the previous health value for this player
+    previousHealthValues[player.playerId] = player.health;
+  });
+
+  drawOtherPlayers(playersInfo);
+});
+
+
+
+
+
+
+const bullets = []
+function detectBulletCollisions() {
+        // Check if the gltf variable is defined
+        if (gltf) {
+            // Loop through the children of the GLTF model to check for collisions
+            for (let child of gltf.scene.children) {
+                // Compute the bounding box for the child object
+                const box = new THREE.Box3()
+                    .setFromObject(child);
+
+                for (let bullet of bullets) {
+                    // Origin point of bullet
+                    const originPoint = bullet.position.clone();
+                    if (box.containsPoint(originPoint)) {
+                        // Remove the bullet from the scene
+                        scene.remove(bullet);
+                        // Set the collision flag to true
+                        return true;
+                    }
+                }
+            }
+        }
+        else {
+            console.log('GLTF model not loaded yet');
+        }
+        // No collision detected, return false
+        return false;
+    }
+
+function detectCollisions() {
+        let collisionDetected = false;
+        // Check if the gltf variable is defined
+        if (gltf) {
+            // Loop through the children of the GLTF model to check for collisions
+            for (let child of gltf.scene.children) {
+                // Check if the child object is below the floor height threshold
+                if (child.position.y < floorHeight) {
+                    continue; // Skip this object
+                }
+
+                // Check if the material is collidable
+                if (child.material && child.material.collidable === false) {
+                    continue; // Skip this object
+                }
+
+                // Create a new bounding box for the child object
+                const box = new THREE.Box3()
+                    .setFromObject(child);
+                // Add padding to the box
+                box.expandByScalar(0.2);
+
+                // Check collision with player
+                if (box.containsPoint(camera.position)) {
+                    console.log("Collision detected");
+                    collisionDetected = true;
+                }
+            }
+        }
+        else {
+            console.log('GLTF model not loaded yet');
+        }
+
+        return collisionDetected;
+    }
+const globalBulletSpeed = 0.8;
+// Function to handle shooting
+const bulletSpeed = globalBulletSpeed; // Adjust bullet speed
+// Function to handle shooting
+
+
+function startRecoil() {
+        if (isReloading) return;
+        
+        // Set the recoil animation
+        let start = null;
+        const duration = 100; // Duration of the animation in milliseconds
+        const distance = 0.55; // Distance to move the gun in the z-axis
+        const animate = (timestamp) => {
+            if (!start) start = timestamp;
+            const elapsed = timestamp - start;
+            const progress = Math.min(elapsed / duration, 1);
+            gun.position.z = -distance * Math.sin(progress * Math.PI) - 2;
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            }
+        };
+        requestAnimationFrame(animate);
+    }
+
+
+function shoot() {
+  startRecoil(); // Start the recoil animation
+
+  const bulletGeometry = new THREE.SphereGeometry(0.05, 16, 16); // Adjust the radius and segments as needed
+const bulletMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 }); // Change color to differentiate
+const bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
+
+  // Set the bullet's position based on the player's position and direction
+  const playerPosition = controls.getObject().position.clone();
+  const direction = new THREE.Vector3();
+  controls.getDirection(direction);
+  const bulletLifetime = 3000; // Adjust bullet lifetime in milliseconds
+  const bulletSpeed = globalBulletSpeed; // Adjust bullet speed
+
+  bullet.position.copy(playerPosition);
+  bullet.userData.direction = direction.clone().multiplyScalar(bulletSpeed);
+  bullet.userData.startTime = Date.now();
+  bullet.userData.speed = bulletSpeed; // Store bullet speed
+  bullet.userData.owner = userId;
+
+
+  // Add the bullet to the scene and bullets array
+  scene.add(bullet);
+
+  // Send bullet origin, direction, speed, and timestamp to Firebase
+  const bulletData = {
+    origin: {
+      x: playerPosition.x,
+      y: playerPosition.y,
+      z: playerPosition.z,
+    },
+    direction: {
+      x: direction.x,
+      y: direction.y,
+      z: direction.z,
+    },
+    speed: bulletSpeed, // Include bullet speed
+    timestamp: Date.now(),
+    id: userId,
+    owner: userId,
+  };
+
+  // Push bullet data to Firebase and get the key assigned by Firebase
+  const newBulletRef = bulletsRef.push(bulletData);
+  const bulletKey = newBulletRef.key;
+
+  // Store the bullet key in the bullet's userData
+  bullet.userData.key = bulletKey;
+
+  // Push the bullet to your bullets array
+  bullets.push(bullet);
+}
+
+const otherPlayerBullets = []
+// Event listener for mouse button down (hold to shoot)
+// Define a variable to track the time of the last shot
+// Define a variable to track the time of the last shot
+let lastShotTime = 0;
+let isReloading = false;
+
+
+// Define the minimum delay between shots (in milliseconds)
+const shotDelay = 75; // Adjust this value to set your desired delay
+document.getElementById("ammoCount").innerHTML = ammo;
+
+let shootingInterval; // Variable to store the interval ID
+
+// Function to handle shooting
+function handleShoot() {
+  if (ammo === 0){
+setTimeout(() => {
+  reloadWeapon();
+}, 300);
+return;
+
+  } 
+  if(isReloading) return;
+  
+  const currentTime = Date.now();
+
+  // Calculate the time elapsed since the last shot
+  const timeSinceLastShot = currentTime - lastShotTime;
+
+  // Check if enough time has elapsed since the last shot
+  if (timeSinceLastShot >= shotDelay) {
+    // Call the shoot function when the conditions for shooting are met
+    shoot();
+    ammo--;
+    document.getElementById("ammoCount").innerHTML = ammo;
+
+    // Update the last shot time
+    lastShotTime = currentTime;
+  }
+}
+
+// Event listener for mouse button down (hold to shoot)
+document.addEventListener("mousedown", () => {
+  // Start shooting at the specified interval
+  shootingInterval = setInterval(handleShoot, shotDelay);
+
+  // Initial shot
+  handleShoot();
+});
+
+// Event listener for mouse button release (stop shooting)
+document.addEventListener("mouseup", () => {
+  // Clear the shooting interval when the mouse button is released
+  clearInterval(shootingInterval);
+});
+
+
+// Add an event listener to the document for the "keydown" event
+document.addEventListener("keydown", function (event) {
+  //reload key
+  if (event.keyCode === 82)  {
+reloadWeapon();
+
+  }
+});
+
+function instantReload(){
+  ammo = maxAmmo;
+  document.getElementById('ammoCount').innerHTML = ammo;
+
+}
+function reloadWeapon() {
+  if (ammo === maxAmmo) return;
+  if (isReloading) return;
+  isReloading = true;
+  document.getElementById("ammoCount").innerHTML = 'Reloading';
+
+  // Reload animation
+  const reloadInterval = setInterval(() => {
+    if (gun.position.z < 2.5) {
+      gun.position.z += 0.1;
+    }
+  }, 10);
+
+  setTimeout(() => {
+    clearInterval(reloadInterval);
+
+  // Move the gun back to its original position
+  const moveBackInterval = setInterval(() => {
+                if (gun.position.z > -2) {
+                    gun.position.z -= 0.1;
+                }
+                else {
+                    // Set reloading flag to false when the gun is back in its original position
+                    isReloading = false;
+                    clearInterval(moveBackInterval);
+                    ammo = maxAmmo;
+                    document.getElementById('ammoCount').innerHTML = ammo;
+
+                   
+                }
+            }, 10);
+    }, 1500);
+
+    // Check if the gun is reloading every 100ms and stop the moveBackInterval if it's not
+    const checkReloadingInterval = setInterval(() => {
+      if (!isReloading) {
+        clearInterval(checkReloadingInterval);
+      }
+    }, 100);
+}
+
+// Function to check collision between two objects (player and bullet)
+function checkCollision(playerPosition, bullet, key) {
+  if(key === userId) return;
+  const playerBoundingBox = new THREE.Box3().setFromCenterAndSize(playerPosition, new THREE.Vector3(1, 2, 1)); // Adjust size as needed
+  const bulletBoundingBox = new THREE.Box3().setFromObject(bullet);
+  return playerBoundingBox.intersectsBox(bulletBoundingBox);
+}
+
+
+const headHeightThreshold = 0; // Adjust this value based on your player model
+
+
+// Update other players' bullets' positions and remove expired bullets
+function updateOtherPlayerBullets() {
+  const currentTime = Date.now();
+  const bulletLifetime = 3000; // Adjust bullet lifetime in milliseconds
+  // Get the player's position (camera position)
+  const playerPosition = controls.getObject().position;
+  for (let i = otherPlayerBullets.length - 1; i >= 0; i--) {
+    const bullet = otherPlayerBullets[i];
+
+    // Set the bullet's speed based on the stored speed in userData
+    const bulletSpeed = bullet.userData.speed;
+
+    // Update bullet position
+    bullet.position.add(bullet.userData.direction.clone().multiplyScalar(bulletSpeed));
+
+    // Remove bullets that have exceeded their lifetime
+    if (currentTime - bullet.userData.startTime > bulletLifetime) {
+      otherPlayerBullets.splice(i, 1);
+      scene.remove(bullet);
+    }
+
+// Define variables to store the timeout IDs
+let hitDisplayTimeoutId = null;
+let youDiedDisplayTimeoutId = null;
+
+// Check collision with the player
+if (checkCollision(playerPosition, bullet, bullet.userData.owner)) {
+  if (bullet.position.y > headHeightThreshold) {
+    console.log("Critical hit");
+    health -= 30;
+    if (bullet.userData.owner !== userId) {
+      hitDisplay.style.display = 'block';
+      hitDisplay.innerHTML = 'You got CRITICALLY hit!';
+
+      // Clear the previous hitDisplay timeout (if it exists)
+      if (hitDisplayTimeoutId) {
+        clearTimeout(hitDisplayTimeoutId);
+      }
+
+      // Set a new hitDisplay timeout and store its ID
+      hitDisplayTimeoutId = setTimeout(() => {
+        hitDisplay.style.display = 'none';
+        hitDisplay.innerHTML = 'You got hit!';
+        hitDisplayTimeoutId = null; // Reset the ID
+      }, 2000);
+    }
+  } else {
+    // Regular hit (not critical)
+    console.log("Collision with player");
+    health -= 15;
+    if (bullet.userData.owner !== userId) {
+      hitDisplay.style.display = 'block';
+
+      // Clear the previous hitDisplay timeout (if it exists)
+      if (hitDisplayTimeoutId) {
+        clearTimeout(hitDisplayTimeoutId);
+      }
+
+      // Set a new hitDisplay timeout and store its ID
+      hitDisplayTimeoutId = setTimeout(() => {
+        hitDisplay.style.display = 'none';
+        hitDisplayTimeoutId = null; // Reset the ID
+      }, 2000);
+    }
+  }
+  
+  document.getElementById('healthNumber').innerHTML = health;
+  if (health <= 0) {
+    chooseSpawn();
+    deaths++;
+    document.getElementById('deathCount').innerHTML = deaths;
+    console.log("Died");
+    youDiedDisplay.style.display = "block";
+
+    // Clear the previous youDiedDisplay timeout (if it exists)
+    if (youDiedDisplayTimeoutId) {
+      clearTimeout(youDiedDisplayTimeoutId);
+    }
+
+    // Set a new youDiedDisplay timeout and store its ID
+    youDiedDisplayTimeoutId = setTimeout(() => {
+      youDiedDisplay.style.display = 'none';
+      youDiedDisplayTimeoutId = null; // Reset the ID
+    }, 2000);
+  }
+  
+  // Remove the bullet
+  otherPlayerBullets.splice(i, 1);
+  scene.remove(bullet);
+}
+
+
+  }
+}
+
+function updateHealth(){
+  document.getElementById("healthNumber").innerHTML = health;
+}
+
+
+function resetAllKeysToFalse() {
+  for (const key in keyboard) {
+    if (keyboard.hasOwnProperty(key)) {
+      keyboard[key] = false;
+    }
+  }
+}
+
+function chooseInitialSpawn(){
+
+
+
+
+// To remove event listeners, you can use the same function references:
+// Assuming you want to remove the listeners later, you would do something like this:
+
+
+//{x: 8.22, y: -0.5, z: 0.88}   SPAWN 1
+//{x: -7.8, y: -0.5, z: 17}     SPAWN 2
+if(playerNumber === 1){
+  controls.getObject().position.x =  8.22;
+        controls.getObject().position.y =  -0.5
+        controls.getObject().position.z =  0.88;
+
+
+} else if (playerNumber === 2){
+  controls.getObject().position.x = -7.8;
+        controls.getObject().position.y = -0.5;
+        controls.getObject().position.z = 17;
+
+}
+       
+}
+
+function resetPosition(){
+  document.removeEventListener("keydown", handleKeyDown);
+document.removeEventListener("keyup", handleKeyUp);
+resetAllKeysToFalse();
+document.getElementById("gameOverlay").style.opacity = "1";
+setTimeout(() => {
+   // Add event listeners
+document.addEventListener("keydown", handleKeyDown);
+document.addEventListener("keyup", handleKeyUp);
+document.getElementById("gameOverlay").style.opacity = "0";
+
+
+//{x: 8.22, y: -0.5, z: 0.88}   SPAWN 1
+//{x: -7.8, y: -0.5, z: 17}     SPAWN 2
+if(playerNumber === 1){
+  controls.getObject().position.x =  8.22;
+        controls.getObject().position.y =  -0.5
+        controls.getObject().position.z =  0.88;
+         health = 100; // Reset health to 100
+        document.getElementById('healthNumber').innerHTML = health;
+        instantReload();
+
+} else if (playerNumber === 2){
+  controls.getObject().position.x = -7.8;
+        controls.getObject().position.y = -0.5;
+        controls.getObject().position.z = 17;
+          health = 100; // Reset health to 100
+          instantReload();
+
+          document.getElementById('healthNumber').innerHTML = health;
+}
+
+
+}, 1500);
+}
+
+
+function chooseSpawn(){
+  document.getElementById("gameOverlay").style.opacity = "1";
+  document.removeEventListener("keydown", handleKeyDown);
+  resetAllKeysToFalse();
+
+document.removeEventListener("keyup", handleKeyUp);
+health = 0; // Reset health to 100
+document.getElementById('healthNumber').innerHTML = health;
+
+controls.getObject().position.x =  100;
+        controls.getObject().position.y =  -0.5
+        controls.getObject().position.z =  0.88;
+
+  setTimeout(() => {
+    // Add event listeners
+document.addEventListener("keydown", handleKeyDown);
+document.addEventListener("keyup", handleKeyUp);
+document.getElementById("gameOverlay").style.opacity = "0";
+
+
+// To remove event listeners, you can use the same function references:
+// Assuming you want to remove the listeners later, you would do something like this:
+
+
+//{x: 8.22, y: -0.5, z: 0.88}   SPAWN 1
+//{x: -7.8, y: -0.5, z: 17}     SPAWN 2
+if(playerNumber === 1){
+  controls.getObject().position.x =  8.22;
+        controls.getObject().position.y =  -0.5
+        controls.getObject().position.z =  0.88;
+         health = 100; // Reset health to 100
+        document.getElementById('healthNumber').innerHTML = health;
+        instantReload();
+
+} else if (playerNumber === 2){
+  controls.getObject().position.x = -7.8;
+        controls.getObject().position.y = -0.5;
+        controls.getObject().position.z = 17;
+          health = 100; // Reset health to 100
+       
+          document.getElementById('healthNumber').innerHTML = health;
+          instantReload();
+}
+  }, 1500);
+       
+}
+// Add a listener to handle bullet removal when a child is removed from the database
+bulletsRef.on("child_removed", function(snapshot) {
+  handleBulletRemoval(snapshot);
+});
+
+// Function to handle bullet removal
+function handleBulletRemoval(snapshot) {
+  const bulletId = snapshot.key;
+  console.log("removed bullet: " + bulletId);
+
+  // Find the bullet in the local bullets array based on its key
+  const index = bullets.findIndex(bullet => bullet.userData.key === bulletId);
+
+  if (index !== -1) {
+    // Remove the bullet from the local bullets array and scene
+    const removedBullet = bullets.splice(index, 1)[0];
+    scene.remove(removedBullet);
+  }
+
+  // Find the bullet in the otherPlayerBullets array based on its key
+  const otherPlayerBulletIndex = otherPlayerBullets.findIndex(bullet => bullet.userData.key === bulletId);
+
+  if (otherPlayerBulletIndex !== -1) {
+    // Remove the bullet from the otherPlayerBullets array and scene
+    const removedOtherPlayerBullet = otherPlayerBullets.splice(otherPlayerBulletIndex, 1)[0];
+    scene.remove(removedOtherPlayerBullet);
+  }
+}
+
+
+
+// Listen for child_added events for bullets from other players
+bulletsRef.on("child_added", (snapshot) => {
+  const bulletData = snapshot.val();
+  const bulletGeometry = new THREE.SphereGeometry(0.05, 16, 16);
+  const bulletMaterial = bulletData.owner !== userId
+    ? new THREE.MeshBasicMaterial({ color: 0xff0000 }) // Red
+    : new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Green
+  const bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
+
+  // Set the bullet's position based on the received data
+  bullet.position.set(bulletData.origin.x, bulletData.origin.y, bulletData.origin.z);
+  bullet.userData.direction = new THREE.Vector3(bulletData.direction.x, bulletData.direction.y, bulletData.direction.z);
+  bullet.userData.startTime = Date.now();
+  bullet.userData.speed = bulletData.speed; // Store bullet speed
+  bullet.userData.key = snapshot.key;
+  bullet.userData.owner = bulletData.owner;
+
+  // Add the bullet to the scene and otherPlayerBullets array
+  scene.add(bullet);
+  otherPlayerBullets.push(bullet);
+});
+
+
+
+
+// Update bullets' positions and remove expired bullets
+function updateBullets() {
+  const currentTime = Date.now();
+  const bulletLifetime = 3000; // Adjust bullet lifetime in milliseconds
+
+  for (let i = bullets.length - 1; i >= 0; i--) {
+    const bullet = bullets[i];
+
+    // Update bullet position
+    bullet.position.add(bullet.userData.direction);
+
+    // Remove bullets that have exceeded their lifetime
+    if (currentTime - bullet.userData.startTime > bulletLifetime) {
+      // Check if the bullet still exists in the bullets array
+      if (bullets.includes(bullet)) {
+        bullets.splice(i, 1);
+        scene.remove(bullet);
+      }
+    }
+
+    if (detectBulletCollisions()) {
+      console.log("hit wall");
+      bulletsRef.child(bullet.userData.key).remove();
+      
+      // Check if the bullet still exists in the bullets array
+      if (bullets.includes(bullet)) {
+        bullets.splice(i, 1);
+        scene.remove(bullet);
+      }
+    }
+  }
+}
+
+
+
+
+
+ 
+
+
+    //on window resize
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  }
+
+
+    </script>
+  </body>
+</html>
