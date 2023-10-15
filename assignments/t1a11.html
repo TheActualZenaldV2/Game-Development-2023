@@ -1,5 +1,6 @@
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,9 +21,53 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/GLTFLoader.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/fflate@0.8.0/umd/index.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
-   
-        
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.135.0/build/three.module.js",
+                "three/addons/objects/Lensflare.js": "https://unpkg.com/three@0.135.0/examples/jsm/objects/Lensflare.js"
+            }
+        }
+    </script>
+    
+    <script type="module">
+    import * as THREE from 'three';
+        import { Lensflare, LensflareElement } from 'three/addons/objects/Lensflare.js';
+       
+
+
+// lensflares
+
+const textureFlare0 = textureLoader.load( 'https://i.imgur.com/80OABdD.png' );
+const textureFlare3 = textureLoader.load( 'https://i.imgur.com/26zm7OM.png' );
+
+addLight(0.55, 0.9, 0.5, 5000, 0, -500); // Adjust the z position to bring it closer
+addLight(0.08, 0.8, 0.5, 0, 0, -500);    // Adjust the z position to bring it closer
+addLight(0.995, 0.5, 0.9, 5000, 5000, -500); // Adjust the z position to bring it closer
+
+function addLight( h, s, l, x, y, z ) {
+
+    const light = new THREE.PointLight( 0xffffff, 0.5, 200, 0 );
+    light.color.setHSL( h, s, l );
+    light.position.set( x, y, z );
+    scene.add( light );
+
+    const lensflare = new Lensflare();
+    lensflare.addElement( new LensflareElement( textureFlare0, 700, 0, light.color ) );
+    lensflare.addElement( new LensflareElement( textureFlare3, 60, 0.6 ) );
+    lensflare.addElement( new LensflareElement( textureFlare3, 70, 0.7 ) );
+    lensflare.addElement( new LensflareElement( textureFlare3, 120, 0.9 ) );
+    lensflare.addElement( new LensflareElement( textureFlare3, 70, 1 ) );
+    light.add( lensflare );
+
+}
+
+
+
+</script>
 <script>
+
+
 // Create a scene
 const scene = new THREE.Scene();
 
@@ -36,7 +81,7 @@ directionalLight.position.set(1, 1, 1);
 scene.add(directionalLight);
 
 // Create an ambient light for overall scene illumination
-const ambientLight = new THREE.AmbientLight(0x404040, 1.5, 100); // Adjust the color as needed
+const ambientLight = new THREE.AmbientLight(0x404040, 1, 100); // Adjust the color as needed
 scene.add(ambientLight);
 
 // Create a point light for localized illumination (e.g., spotlight)
@@ -76,47 +121,91 @@ directionalLight.shadow.camera.near = 0.1; // Near plane of the shadow camera
 directionalLight.shadow.camera.far = 10; // Far plane of the shadow camera
 
 scene.add(directionalLight);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
 
-// Create a renderer
-renderer = new THREE.WebGLRenderer( { antialias: true } );
-renderer.setSize(window.innerWidth, window.innerHeight);
+// Get the device pixel ratio
+const pixelRatio = window.devicePixelRatio || 1;
+
+// Set the renderer size to the maximum available resolution
+renderer.setSize(window.innerWidth * pixelRatio, window.innerHeight * pixelRatio);
+
+// Set the CSS style of the renderer to the displayed size
+renderer.domElement.style.width = "100%";
+renderer.domElement.style.height = "100%";
+
 document.body.appendChild(renderer.domElement);
 
-const controls = new THREE.OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true; // Enable smooth camera movement
-controls.dampingFactor = 1; // Adjust the damping factor for smoother movement
-controls.rotateSpeed = 0.2; // Adjust the rotation speed
+alert("Hello ellis open console pretty please")
+
+const consoleStyle = `
+  font-weight: bold;
+  font-size: 14px;
+  color: #007acc;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+`;
+
+console.log(`%c
+                               
+██     ██ ███████ ██       ██████  ██████  ███    ███ ███████ 
+██     ██ ██      ██      ██      ██    ██ ████  ████ ██      
+██  █  ██ █████   ██      ██      ██    ██ ██ ████ ██ █████   
+██ ███ ██ ██      ██      ██      ██    ██ ██  ██  ██ ██      
+ ███ ███  ███████ ███████  ██████  ██████  ██      ██ ███████ 
+                                                              
+                                                              
+                                                              
+  Load your own 3D model using (must be .fbx):
+  loadModel('URL LINK', new THREE.Vector3(SCALE X, SCALE Y, SCALE Z))
+
+  For better viewing, start with a small scale and use the zoom controls.
+  This uses lensflare (look around, its cool)`, consoleStyle);
 
 
+const clock = new THREE.Clock();
 
+container = document.createElement( 'div' );
+document.body.appendChild( container );
 
+let url = "https://theactualzenaldv2.github.io/gamedev/public2/extra/SciFiRifle.fbx";
+const scale = new THREE.Vector3(0.003, 0.003, 0.003);
+let modelScaleX = "0.003"
+let modelScaleY = "0.003"
+let modelScaleZ = "0.003"
 
-let model; //init model variable
+let model; // Initialize the model variable
 const loader1 = new THREE.FBXLoader();
 
-loader1.load('https://theactualzenaldv2.github.io/gamedev/public2/extra/SciFiRifle.fbx', function (object) {
+function loadModel(url, scale) {
+  loader1.load(url, function (object) {
+    if (model) {
+      scene.remove(model); // Remove the previously loaded model
+    }
+
     model = object;
-    model.scale.set(0.003, 0.003, 0.003); // Set the scale of the gun model
+    model.scale.set(scale.x, scale.y, scale.z); // Apply the scale
     scene.add(model); // Add the loaded model to the scene
-    // Set the position of the camera behind the gun
-const cameraDistance = 5; // Adjust the distance as needed
-const cameraHeight = 0;   // Adjust the height as needed
 
-camera.position.set(
-    model.position.x - cameraDistance,
-    model.position.y + cameraHeight,
-    model.position.z
-);
+    // Set the position of the camera behind the loaded model
+    const cameraDistance = 5; // Adjust the distance as needed
+    const cameraHeight = 0;   // Adjust the height as needed
 
-// Point the camera at the gun
-camera.lookAt(model.position);
+    camera.position.set(
+      model.position.x - cameraDistance,
+      model.position.y + cameraHeight,
+      model.position.z
+    );
+
+    // Point the camera at the loaded model
+    camera.lookAt(model.position);
+  });
+}
+
+// Example usage from the console
+// Replace 'modelURL' and 'modelScale' with the actual values
+loadModel(url, new THREE.Vector3(modelScaleX, modelScaleY, modelScaleZ));
 
 
-
-
-
-
-});
 
 // Set up animation
 const animate = () => {
@@ -125,11 +214,10 @@ const animate = () => {
     // Rotate the model (change 'model' to 'gun')
     if (model) {
         model.rotation.y -= 0.005;
-        skybox.rotation.y -= 0.001;
 
 
     }
-
+   
     renderer.render(scene, camera);
 };
 
@@ -145,6 +233,11 @@ window.addEventListener('resize', () => {
 });
 
 animate();
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; // Enable smooth camera movement
+controls.dampingFactor = 1; // Adjust the damping factor for smoother movement
+controls.rotateSpeed = 0.2; // Adjust the rotation speed
+
 
     </script>
 </body>
