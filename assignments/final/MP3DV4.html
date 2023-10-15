@@ -310,6 +310,13 @@
     function addLight(h, s, l, x, y, z) {
       console.log(x, y, z);
       const light = new THREE.PointLight(0xffffff, 1, 2000, 0);
+      
+    // Enable shadow casting for the light
+    light.castShadow = true;
+
+// Configure shadow properties for the light
+light.shadow.mapSize.width = 2048;
+light.shadow.mapSize.height = 2048;
       light.color.setHSL(h, s, l);
       light.position.set(x, y, z);
       scene.add(light);
@@ -323,6 +330,7 @@
       light.add(lensflare);
     }
   
+
     // Lights {x: 2.668993, y: -0.5, z: 6.648875}
     addLight(0.08, 0.8, 0.5, -100, 150, 100);   // Adjust the z position to bring it closer
   </script>
@@ -422,6 +430,12 @@ console.log(playerNumber)
       const renderer = new THREE.WebGLRenderer({  });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Higher quality, softer shadows
+// or
+renderer.shadowMap.type = THREE.PCFShadowMap; // Faster but less soft shadows
+
+
 
 const loadingManager = new THREE.LoadingManager();
 loadingManager.onLoad = function () {
@@ -459,19 +473,9 @@ loadingManager.onError = function (url) {
 const ambientLight = new THREE.AmbientLight(0xFFFFFF, 1);
     ambientLight.position.set(-64, 115, 66);
     scene.add(ambientLight);
-// Create an array to store the lights in the scene
-const lightsInScene = [];
 
-// Iterate through the scene's children
-scene.traverse(function (child) {
-  if (child instanceof THREE.Light) {
-    // Add the light to the array
-    lightsInScene.push(child);
-  }
-});
 
-// Now, lightsInScene contains all the lights in your scene
-console.log('List of lights in the scene:', lightsInScene);
+
 
 
       // Create the floor object
@@ -667,33 +671,37 @@ function animate() {
   stats.end();
 
 }
-
-let mapUrl = "https://theactualzenaldv2.github.io/Game-Development-2023/assignments/assets/Winter1v1%20(1).gltf"
+let mapUrl = "https://theactualzenaldv2.github.io/Game-Development-2023/assignments/assets/Winter1v1%20(1).gltf";
 let gltf;
 
 // Load the GLTF model
 const gltfLoader = new THREE.GLTFLoader(loadingManager);
-gltfLoader.load(
-        mapUrl,
-        function (loadedGltf) {
-            // Assign the loaded gltf to the global variable
-            gltf = loadedGltf;
-            gltf.scene.scale.set(0.13, 0.13, 0.13);
-            gltf.scene.position.set(0,-7.5,0)
-            gltf.frustumCulled = true;
-            mapLoad = true;
+gltfLoader.load(mapUrl, function (loadedGltf) {
+    // Assign the loaded gltf to the global variable
+    gltf = loadedGltf;
+    gltf.scene.scale.set(0.13, 0.13, 0.13);
+    gltf.scene.position.set(0, -7.5, 0);
+    gltf.frustumCulled = true;
+    mapLoad = true;
 
-            // Add the model to the scene
-            scene.add(gltf.scene);
-            animate();
-           chooseInitialSpawn();
-
+    // Traverse through the model and enable shadow casting for each object
+    gltf.scene.traverse(function (object) {
+        if (object.isMesh) {
+            object.castShadow = true;
+            object.receiveShadow = true;
 
         }
-    ), // Called if there is an error loading the model
-    function (error) {
-        console.error(error);
-    };
+    });
+
+    // Add the model to the scene
+    scene.add(gltf.scene);
+    animate();
+    chooseInitialSpawn();
+}, // Called if there is an error loading the model
+function (error) {
+    console.error(error);
+});
+
 const floorHeight = -0; // Set the floor height threshold for collisions
 
 
