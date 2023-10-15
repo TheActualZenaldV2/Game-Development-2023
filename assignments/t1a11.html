@@ -48,6 +48,13 @@ addLight(0.995, 0.5, 0.9, 5000, 5000, -500); // Adjust the z position to bring i
 function addLight( h, s, l, x, y, z ) {
 
     const light = new THREE.PointLight( 0xffffff, 0.5, 200, 0 );
+       
+    // Enable shadow casting for the light
+    light.castShadow = true;
+
+// Configure shadow properties for the light
+light.shadow.mapSize.width = 2048;
+light.shadow.mapSize.height = 2048;
     light.color.setHSL( h, s, l );
     light.position.set( x, y, z );
     scene.add( light );
@@ -146,6 +153,7 @@ const consoleStyle = `
 `;
 
 console.log(`%c
+
                                
 ██     ██ ███████ ██       ██████  ██████  ███    ███ ███████ 
 ██     ██ ██      ██      ██      ██    ██ ████  ████ ██      
@@ -154,7 +162,14 @@ console.log(`%c
  ███ ███  ███████ ███████  ██████  ██████  ██      ██ ███████ 
                                                               
                                                               
-                                                              
+    FEATURES:
+    - LENSFLARE 
+    - 3D MODEL + ANIMATION
+    - ORBIT CONTROLS
+    - REALISTIC SHADING
+    - ANTI ALIASING
+    - CUSTOM MODEL LOADER
+                                                   
   Load your own 3D model using (must be .fbx):
   loadModel('URL LINK', new THREE.Vector3(SCALE X, SCALE Y, SCALE Z))
 
@@ -181,7 +196,14 @@ function loadModel(url, scale) {
     if (model) {
       scene.remove(model); // Remove the previously loaded model
     }
+    // Traverse through the model and enable shadow casting for each object
+    scene.traverse(function (object) {
+        if (object.isMesh) {
+            object.castShadow = true;
+            object.receiveShadow = true;
 
+        }
+    });
     model = object;
     model.scale.set(scale.x, scale.y, scale.z); // Apply the scale
     scene.add(model); // Add the loaded model to the scene
