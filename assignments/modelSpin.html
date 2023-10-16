@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <body>
@@ -26,16 +24,10 @@ loader1.load('https://theactualzenaldv2.github.io/gamedev/public2/extra/SciFiRif
     model = object;
     model.scale.set(0.003, 0.003, 0.003); // Set the scale of the gun model
     scene.add(model); // Add the loaded model to the scene
-    // Set the position of the camera behind model
     const cameraDistance = 5; // Adjust the distance as needed
     const cameraHeight = 0; // Adjust the height as needed
-    camera.position.set(
-        model.position.x - cameraDistance,
-        model.position.y + cameraHeight,
-        model.position.z
-    ); //setting camera position
-    // Point the camera at the model
-    camera.lookAt(model.position);
+    camera.position.set(model.position.x - cameraDistance,model.position.y + cameraHeight,model.position.z); //setting camera position
+    camera.lookAt(model.position);// Point the camera at the model
     animate(); //call annimation function
 });
 // Set up animation
@@ -46,11 +38,9 @@ const animate = () => {
 };
 // Handle window resize, pretty important
 window.addEventListener('resize', () => {
-    const newWidth = window.innerWidth;
-    const newHeight = window.innerHeight;
-    camera.aspect = newWidth / newHeight;
+    camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(newWidth, newHeight);
+    renderer.setSize(window.innerWidth, window.innerHeight);
 });
     </script>
 </body>
