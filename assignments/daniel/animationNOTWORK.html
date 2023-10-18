@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Three.js GLTF Animation Example</title>
+  </head>
+  <body>
+    <div id="scene-container"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.rawgit.com/mrdoob/three.js/r128/examples/js/controls/PointerLockControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/FBXLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fflate@0.8.0/umd/index.min.js"></script>
+   <script>
+
+const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      camera.position.set(0, 1.4, 1.0);
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.getElementById('scene-container').appendChild(renderer.domElement);
+
+      
+      // Create a light source
+      const light = new THREE.DirectionalLight(0xffffff);
+      light.position.set(1, 1, 1);
+      scene.add(light);
+
+      
+// Create an ambient light for overall scene illumination
+const ambientLight = new THREE.AmbientLight(0x404040, 5, 100); // Adjust the color as needed
+scene.add(ambientLight);
+const fbxLoader = new THREE.FBXLoader();
+      let mixer;
+
+      fbxLoader.load('https://theactualzenaldv2.github.io/Game-Development-2023/assignments/assets/Dying.fbx', (fbx) => {
+        mixer = new THREE.AnimationMixer(fbx);
+        console.log(fbx.animations[0])
+        const animationAction = mixer.clipAction(fbx.animations[0]);
+        animationAction.setLoop(THREE.LoopRepeat); // Set the animation to loop
+        animationAction.play(); // Start playing the animation
+
+        scene.add(fbx);
+      });
+      const animate = () => {
+        requestAnimationFrame(animate);
+
+        if (mixer) {
+          mixer.update(0.01); // Update the animation
+        }
+
+        renderer.render(scene, camera);
+      };
+
+      animate();
+
+      const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; // Enable smooth camera movement
+controls.dampingFactor = 1; // Adjust the damping factor for smoother movement
+controls.rotateSpeed = 0.2; // Adjust the rotation speed
+
+    </script>
+  </body>
+</html>
