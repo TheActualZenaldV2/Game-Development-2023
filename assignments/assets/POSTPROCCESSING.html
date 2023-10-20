@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Three.js GLTF Model Example</title>
+</head>
+<body>
+
+    
+  <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.135.0/build/three.module.js",
+            "three/addons/objects/Lensflare.js": "https://unpkg.com/three@0.135.0/examples/jsm/objects/Lensflare.js"
+        }
+    }
+  </script>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.118/build/three.module.js';
+
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/controls/OrbitControls.js';
+import { EffectComposer } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/postprocessing/RenderPass.js';
+import { GlitchPass } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/postprocessing/GlitchPass.js';
+import { ShaderPass } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/postprocessing/ShaderPass.js';
+import { LuminosityShader } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/shaders/LuminosityShader.js';
+import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/loaders/GLTFLoader.js';
+import { UnrealBloomPass } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/postprocessing/UnrealBloomPass.js';
+
+    import { Lensflare, LensflareElement } from 'three/addons/objects/Lensflare.js';
+  
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+const light = new THREE.DirectionalLight(0xffffff, 1); // Add a light source
+light.position.set(1, 1, 1);
+scene.add(light);
+const controls = new OrbitControls(camera, renderer.domElement);
+
+const loader = new GLTFLoader();
+
+// Load a GLTF model
+loader.load('https://theactualzenaldv2.github.io/Game-Development-2023/assignments/assets/Winter1v1%20(1).gltf', (gltf) => {
+    const model = gltf.scene;
+    
+    scene.add(model);
+});
+
+camera.position.z = 5;
+
+const composer = new EffectComposer(renderer);
+
+const renderPass = new RenderPass(scene, camera);
+composer.addPass(renderPass);
+
+
+
+
+const textureLoader = new THREE.TextureLoader();
+    const textureFlare0 = textureLoader.load('https://i.imgur.com/80OABdD.png');
+    const textureFlare3 = textureLoader.load('https://i.imgur.com/26zm7OM.png');
+  
+    function addLight(h, s, l, x, y, z) {
+      console.log(x, y, z);
+      const light = new THREE.PointLight(0xffffff, 1, 2000, 0);
+      light.color.setHSL(h, s, l);
+      light.position.set(x, y, z);
+      scene.add(light);
+  
+    }
+  
+
+    // Lights {x: 2.668993, y: -0.5, z: 6.648875}
+    addLight(0.08, 0.8, 0.5, -100, 150, 100);   // Adjust the z position to bring it closer
+
+    // Create a bloom pass with parameters (play with these values to get the desired effect)
+const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
+composer.addPass(bloomPass);
+    
+function animate() {
+    requestAnimationFrame(animate);
+    composer.render();
+}
+
+animate();
+
+</script>
+
+</body>
+</html>
