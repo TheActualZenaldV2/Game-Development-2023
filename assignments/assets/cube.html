@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Three.js Example</title>
+</head>
+<body>
+    <script src="
+    https://cdn.jsdelivr.net/npm/ammo-node@1.0.0/ammo.min.js
+    "></script>
+    
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.118/build/three.module.js';
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/controls/OrbitControls.js';
+import { EffectComposer } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/postprocessing/RenderPass.js';
+import { GlitchPass } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/postprocessing/GlitchPass.js';
+import { ShaderPass } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/postprocessing/ShaderPass.js';
+import { LuminosityShader } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/shaders/LuminosityShader.js';
+import { WaterRefractionShader } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/shaders/WaterRefractionShader.js';
+import { Reflector } from 'https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/objects/Reflector.js';
+import { OutlinePass } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/postprocessing/OutlinePass.js';
+import { UnrealBloomPass } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/postprocessing/UnrealBloomPass.js';
+
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+
+const geometry = new THREE.BoxGeometry();
+const material = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
+
+const cube = new THREE.Mesh(geometry, material);
+scene.add(cube);
+
+const light = new THREE.DirectionalLight(0xffffff, 2);
+light.position.set(1, 1, 1);
+scene.add(light);
+
+
+camera.position.z = 5;
+
+const mirrorMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true });
+
+const geometry1 = new THREE.CircleGeometry(5, 64);
+const groundMirror = new Reflector(geometry1, {
+  clipBias: 0.003,
+  textureWidth: window.innerWidth * window.devicePixelRatio,
+  textureHeight: window.innerHeight * window.devicePixelRatio,
+  color: 0xb5b5b5,
+  material: mirrorMaterial,
+});
+groundMirror.position.y = -1; // Adjust this value to position the mirror correctly
+groundMirror.rotateX(-Math.PI / 2);
+scene.add(groundMirror);
+
+const outlinePass = new OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), scene, camera);
+outlinePass.visibleEdgeColor.set(0x00ff00); // Set the outline color
+outlinePass.hiddenEdgeColor.set(0x0000ff); // Set the hidden outline color
+
+const composer = new EffectComposer(renderer);
+const renderPass = new RenderPass(scene, camera);
+composer.addPass(renderPass);
+composer.addPass(outlinePass);
+const glitchPass = new GlitchPass();
+composer.addPass(glitchPass);
+
+const luminosityPass = new ShaderPass(LuminosityShader);
+composer.addPass(luminosityPass);
+const textureLoader = new THREE.TextureLoader();
+
+ // Create a bloom pass with parameters (play with these values to get the desired effect)
+ const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1, 0.1, 0.5);
+composer.addPass(bloomPass);
+
+
+// Create a shader material for the skybox gradient
+const skyboxMaterial = new THREE.ShaderMaterial({
+  uniforms: {
+    topColor: { value: new THREE.Color(0xe342db) }, // White at the top
+    bottomColor: { value: new THREE.Color(0x1a191a) }, // Black at the bottom
+  },
+  vertexShader: `
+    varying vec3 vWorldPosition;
+
+    void main() {
+      vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+      vWorldPosition = worldPosition.xyz;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `,
+  fragmentShader: `
+    uniform vec3 topColor;
+    uniform vec3 bottomColor;
+    varying vec3 vWorldPosition;
+
+    void main() {
+      float h = normalize(vWorldPosition).y;
+      gl_FragColor = vec4(mix(bottomColor, topColor, max(0.0, h)), 1.0);
+    }
+  `,
+  side: THREE.BackSide,
+});
+
+// Create the skybox geometry
+const skyboxGeometry = new THREE.SphereGeometry(1000, 32, 32);
+
+// Create the skybox mesh
+const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
+
+// Add the skybox to the scene
+scene.add(skybox);
+
+let cubes = []
+
+
+function animate() {
+    requestAnimationFrame(animate);
+ cube.rotation.x += 0.01;
+    cube.rotation.y += 0.01;
+   
+   
+    composer.render();
+}
+
+animate();
+
+
+
+</script>
+<script>
+    
+</script>
+
+</body>
+</html>
