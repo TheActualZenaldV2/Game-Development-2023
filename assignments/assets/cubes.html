@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Three.js Example</title>
+</head>
+<body>
+    <script src="
+    https://cdn.jsdelivr.net/npm/ammo-node@1.0.0/ammo.min.js
+    "></script>
+    
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.118/build/three.module.js';
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/controls/OrbitControls.js';
+import { EffectComposer } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/postprocessing/RenderPass.js';
+import { GlitchPass } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/postprocessing/GlitchPass.js';
+import { ShaderPass } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/postprocessing/ShaderPass.js';
+import { LuminosityShader } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/shaders/LuminosityShader.js';
+import { WaterRefractionShader } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/shaders/WaterRefractionShader.js';
+import { Reflector } from 'https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/objects/Reflector.js';
+import { OutlinePass } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/postprocessing/OutlinePass.js';
+import { UnrealBloomPass } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/postprocessing/UnrealBloomPass.js';
+
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+
+const geometry = new THREE.BoxGeometry();
+const material = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
+
+const cube = new THREE.Mesh(geometry, material);
+scene.add(cube);
+
+const light = new THREE.DirectionalLight(0xffffff, 2);
+light.position.set(1, 1, 1);
+scene.add(light);
+
+
+camera.position.z = 5;
+
+const mirrorMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true });
+
+const geometry1 = new THREE.CircleGeometry(50, 64);
+const groundMirror = new Reflector(geometry1, {
+  clipBias: 0.003,
+  textureWidth: window.innerWidth * window.devicePixelRatio,
+  textureHeight: window.innerHeight * window.devicePixelRatio,
+  color: 0xb5b5b5,
+  material: mirrorMaterial,
+});
+groundMirror.position.y = -1; // Adjust this value to position the mirror correctly
+groundMirror.rotateX(-Math.PI / 2);
+scene.add(groundMirror);
+
+const outlinePass = new OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), scene, camera);
+outlinePass.visibleEdgeColor.set(0x00ff00); // Set the outline color
+outlinePass.hiddenEdgeColor.set(0x0000ff); // Set the hidden outline color
+
+const composer = new EffectComposer(renderer);
+const renderPass = new RenderPass(scene, camera);
+composer.addPass(renderPass);
+composer.addPass(outlinePass);
+const glitchPass = new GlitchPass();
+composer.addPass(glitchPass);
+
+const luminosityPass = new ShaderPass(LuminosityShader);
+composer.addPass(luminosityPass);
+const textureLoader = new THREE.TextureLoader();
+
+ // Create a bloom pass with parameters (play with these values to get the desired effect)
+ const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1, 0.1, 0.5);
+composer.addPass(bloomPass);
+
+
+// Create a shader material for the skybox gradient
+const skyboxMaterial = new THREE.ShaderMaterial({
+  uniforms: {
+    topColor: { value: new THREE.Color(0xe342db) }, // White at the top
+    bottomColor: { value: new THREE.Color(0x1a191a) }, // Black at the bottom
+  },
+  vertexShader: `
+    varying vec3 vWorldPosition;
+
+    void main() {
+      vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+      vWorldPosition = worldPosition.xyz;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `,
+  fragmentShader: `
+    uniform vec3 topColor;
+    uniform vec3 bottomColor;
+    varying vec3 vWorldPosition;
+
+    void main() {
+      float h = normalize(vWorldPosition).y;
+      gl_FragColor = vec4(mix(bottomColor, topColor, max(0.0, h)), 1.0);
+    }
+  `,
+  side: THREE.BackSide,
+});
+
+// Create the skybox geometry
+const skyboxGeometry = new THREE.SphereGeometry(1000, 32, 32);
+
+// Create the skybox mesh
+const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
+
+// Add the skybox to the scene
+scene.add(skybox);
+
+let cubes = []
+
+
+function animate() {
+    requestAnimationFrame(animate);
+ cube.rotation.x += 0.01;
+    cube.rotation.y += 0.01;
+   
+   
+    composer.render();
+}
+
+animate();
+
+window.addEventListener('ammoLoaded', () => {
+    const Ammo = window.Ammo;
+
+    // Set up physics world
+    const collisionConfiguration = new Ammo.btDefaultCollisionConfiguration();
+    const dispatcher = new Ammo.btCollisionDispatcher(collisionConfiguration);
+    const overlappingPairCache = new Ammo.btDbvtBroadphase();
+    const solver = new Ammo.btSequentialImpulseConstraintSolver();
+    const physicsWorld = new Ammo.btDiscreteDynamicsWorld(
+        dispatcher,
+        overlappingPairCache,
+        solver,
+        collisionConfiguration
+    );
+
+    physicsWorld.setGravity(new Ammo.btVector3(0, -9.8, 0)); // Adjust gravity as needed
+
+    // Create a function to add a cube to the scene
+    function addCube() {
+        // Check if there are more than 20 cubes in the array
+if (cubes.length > 10) {
+    // Remove the first cube from the array
+    const removedCube = cubes.shift();
+    scene.remove(removedCube.mesh); // Remove the cube from the Three.js scene
+    physicsWorld.removeRigidBody(removedCube.body); // Remove the cube from the physics simulation
+}
+
+const x = Math.random() * 40 - 20; // Adjust the range as needed
+    const y = Math.random() * 10;
+    const z = Math.random() * 40 - 20; // Adjust the range as needed
+
+        const cubeSize = Math.random() * 10
+        const cubeGeometry = new THREE.BoxGeometry();
+const cubeMaterial = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
+
+        const cubeMesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
+        scene.add(cubeMesh); // Add the cube to the scene
+
+        const cubeShape = new Ammo.btBoxShape(
+            new Ammo.btVector3(cubeSize * 0.5, cubeSize * 0.5, cubeSize * 0.5)
+        );
+
+        const transform = new Ammo.btTransform();
+        transform.setIdentity();
+        transform.setOrigin(new Ammo.btVector3(x, y, z)); // Adjust initial position
+        const motionState = new Ammo.btDefaultMotionState(transform);
+
+        const localInertia = new Ammo.btVector3(0, 0, 0);
+        cubeShape.calculateLocalInertia(1, localInertia);
+
+        const rbInfo = new Ammo.btRigidBodyConstructionInfo(
+            1,
+            motionState,
+            cubeShape,
+            localInertia
+        );
+        const cubeBody = new Ammo.btRigidBody(rbInfo);
+
+        physicsWorld.addRigidBody(cubeBody);
+
+        cubes.push({ body: cubeBody, mesh: cubeMesh });
+    }
+
+    // Add cubes to the scene
+    addCube();
+setInterval(() => {
+    addCube();
+
+}, 500);
+    // Animate the cubes and update their positions based on physics
+    function animatePhysics() {
+        requestAnimationFrame(animatePhysics);
+
+        // Update physics simulation
+        physicsWorld.stepSimulation(1 / 255, 10);
+
+        cubes.forEach((cubeInfo) => {
+            let bouncing = false;
+                const { body, mesh } = cubeInfo;
+                const transform = new Ammo.btTransform();
+                body.getMotionState().getWorldTransform(transform);
+
+                const cubePosition = transform.getOrigin();
+
+                mesh.position.x = cubePosition.x();
+                mesh.position.y = cubePosition.y();
+                mesh.position.z = cubePosition.z();
+                mesh.rotation.x += 0.01;
+                mesh.rotation.y += 0.01;
+
+                
+                // Define the boundaries of the allowed area
+                const minY = -0.5; // Minimum Y-coordinate (adjust to the floor level)
+                const maxY = 10; // Maximum Y-coordinate
+
+                if (cubePosition.y() <= minY && !bouncing) {
+                    // Generate random impulse values for bouncing
+                    const impulseX = Math.random() * 0
+                    const impulseY = Math.random() * 5 ; // Adjust as needed
+                    const impulseZ = Math.random() * 0
+
+                    // Apply the random bounce impulse
+                    const impulse = new Ammo.btVector3(impulseX, impulseY, impulseZ);
+                    body.applyCentralImpulse(impulse);
+                    bouncing = true; // Prevent multiple bounces
+                } else if (cubePosition.y() > maxY) {
+                    // If the cube goes above the maximum Y-coordinate, bring it back with a fixed impulse
+                    const bringBackImpulse = new Ammo.btVector3(0, -1, 0); // Adjust as needed
+                    body.applyCentralImpulse(bringBackImpulse);
+                    bouncing = true; // Prevent multiple bounces
+                } else {
+                    bouncing = false; // Reset the bouncing flag
+                }
+            });
+
+    }
+
+
+
+
+    camera.position.z = 10;
+    animatePhysics();
+});
+
+// Notify when Ammo is loaded and ready for use
+window.Ammo = Ammo;
+window.dispatchEvent(new Event('ammoLoaded'));
+
+
+</script>
+<script>
+    
+</script>
+
+</body>
+</html>
