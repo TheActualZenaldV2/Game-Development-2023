@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,6 +6,14 @@
     <title>Three.js Example</title>
 </head>
 <body>
+  <style>
+    body, html {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+  </style>
     <script src="
     https://cdn.jsdelivr.net/npm/ammo-node@1.0.0/ammo.min.js
     "></script>
@@ -149,7 +158,7 @@ window.addEventListener('ammoLoaded', () => {
     // Create a function to add a cube to the scene
     function addCube() {
         // Check if there are more than 20 cubes in the array
-if (cubes.length > 10) {
+if (cubes.length > 20) {
     // Remove the first cube from the array
     const removedCube = cubes.shift();
     scene.remove(removedCube.mesh); // Remove the cube from the Three.js scene
@@ -160,7 +169,7 @@ const x = Math.random() * 40 - 20; // Adjust the range as needed
     const y = Math.random() * 10;
     const z = Math.random() * 40 - 20; // Adjust the range as needed
 
-        const cubeSize = Math.random() * 10
+        const cubeSize = Math.random() * 1
         const cubeGeometry = new THREE.BoxGeometry();
 const cubeMaterial = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
 
@@ -197,11 +206,27 @@ const cubeMaterial = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
 setInterval(() => {
     addCube();
 
-}, 500);
+}, 1000);
+
+function randomFloat(min, max) {
+  return Math.random() * (max - min) + min;
+}
+setInterval(() => {
+ // Generate a random vertical gravity value between -10 and 10
+ const randomGravityY = randomFloat(-25, -2);
+
+// Get the current gravity vector
+const currentGravity = physicsWorld.getGravity();
+
+// Update the vertical component of the gravity vector
+currentGravity.setY(randomGravityY - 2);
+
+// Set the updated gravity vector
+physicsWorld.setGravity(currentGravity);
+}, 10000);
     // Animate the cubes and update their positions based on physics
     function animatePhysics() {
         requestAnimationFrame(animatePhysics);
-
         // Update physics simulation
         physicsWorld.stepSimulation(1 / 255, 10);
 
@@ -221,14 +246,14 @@ setInterval(() => {
 
                 
                 // Define the boundaries of the allowed area
-                const minY = -0.5; // Minimum Y-coordinate (adjust to the floor level)
+                const minY = 0; // Minimum Y-coordinate (adjust to the floor level)
                 const maxY = 10; // Maximum Y-coordinate
 
                 if (cubePosition.y() <= minY && !bouncing) {
                     // Generate random impulse values for bouncing
-                    const impulseX = Math.random() * 0
+                    const impulseX = Math.random() * 2 -1
                     const impulseY = Math.random() * 5 ; // Adjust as needed
-                    const impulseZ = Math.random() * 0
+                    const impulseZ = Math.random() * 2 -1
 
                     // Apply the random bounce impulse
                     const impulse = new Ammo.btVector3(impulseX, impulseY, impulseZ);
@@ -236,7 +261,7 @@ setInterval(() => {
                     bouncing = true; // Prevent multiple bounces
                 } else if (cubePosition.y() > maxY) {
                     // If the cube goes above the maximum Y-coordinate, bring it back with a fixed impulse
-                    const bringBackImpulse = new Ammo.btVector3(0, -1, 0); // Adjust as needed
+                    const bringBackImpulse = new Ammo.btVector3(0, -0, 0); // Adjust as needed
                     body.applyCentralImpulse(bringBackImpulse);
                     bouncing = true; // Prevent multiple bounces
                 } else {
@@ -257,6 +282,15 @@ setInterval(() => {
 window.Ammo = Ammo;
 window.dispatchEvent(new Event('ammoLoaded'));
 
+
+ // Update camera aspect ratio on window resize
+ window.addEventListener('resize', () => {
+            const newWidth = window.innerWidth;
+            const newHeight = window.innerHeight;
+            camera.aspect = newWidth / newHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(newWidth, newHeight);
+        });
 
 </script>
 <script>
