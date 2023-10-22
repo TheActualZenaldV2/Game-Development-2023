@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Three.js GLTF Model Example</title>
+</head>
+<body>
+    <style>
+      body, html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+    </style>
+
+    
+  <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.135.0/build/three.module.js",
+            "three/addons/objects/Lensflare.js": "https://unpkg.com/three@0.135.0/examples/jsm/objects/Lensflare.js",
+            "three/controls/PointerLockControls": "https://unpkg.com/three@0.135.0/examples/jsm/controls/PointerLockControls.js",
+            "three/Water": "https://cdn.jsdelivr.net/npm/three@0.135.0/examples/jsm/objects/Water.js"
+        }
+    }
+  </script>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.118/build/three.module.js';
+
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/controls/OrbitControls.js';
+import { EffectComposer } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/postprocessing/RenderPass.js';
+import { GlitchPass } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/postprocessing/GlitchPass.js';
+import { ShaderPass } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/postprocessing/ShaderPass.js';
+import { LuminosityShader } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/shaders/LuminosityShader.js';
+import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/loaders/GLTFLoader.js';
+import { UnrealBloomPass } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { PointerLockControls } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/controls/PointerLockControls.js';
+import { Water } from 'three/Water';
+
+
+
+console.log(PointerLockControls)
+
+  
+    
+const scene = new THREE.Scene();
+
+// Water
+
+const waterGeometry = new THREE.PlaneGeometry(600, 700);
+
+const water = new Water(
+    waterGeometry,
+    {
+        textureWidth: 256, // Experiment with different values
+textureHeight: 256,
+
+        waterNormals: new THREE.TextureLoader().load( 'https://i.imgur.com/zcWVkCd.jpg', function ( texture ) {
+
+            texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+
+        } ),
+        sunDirection: new THREE.Vector3(),
+        sunColor: 0xffffff,
+        waterColor: 0x001e0f,
+        distortionScale: 1,
+        fog: scene.fog !== undefined
+    }
+);
+water.material.frustumCulled = false;
+
+water.rotation.x = - Math.PI / 2;
+// Set the desired position
+const desiredPosition = new THREE.Vector3(-303.8456473083693, -5.099999999999999, 730.3069300897263);
+
+// Move the water to the desired position
+water.position.copy(desiredPosition);
+
+scene.add(water); // Add the water to the scene
+
+
+
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+// Lighting
+const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.1);
+    ambientLight.position.set(-64, 115, 66);
+    scene.add(ambientLight);
+
+
+const loader = new GLTFLoader();
+
+// Load a GLTF model
+loader.load('https://theactualzenaldv2.github.io/Game-Development-2023/assignments/assets/Caverns%20.gltf', (gltf) => {
+    const model = gltf.scene;
+    
+    scene.add(model);
+});
+
+camera.position.z = 5;
+
+const composer = new EffectComposer(renderer);
+
+const renderPass = new RenderPass(scene, camera);
+composer.addPass(renderPass);
+
+
+// Pointer Lock (Mouse Control)
+const controls = new PointerLockControls(camera, renderer.domElement)
+scene.add(controls.getObject());
+
+document.addEventListener('click', () => {
+    controls.lock();
+});
+
+document.addEventListener('pointerlockchange', () => {
+    if (document.pointerLockElement === document.body) {
+        controls.enabled = true;
+    } else {
+        controls.enabled = false;
+    }
+});
+
+// WASD Movement
+var moveSpeed = 0.3;
+const moveDirection = new THREE.Vector3(0, 0, 0);
+
+const onKeyDown = (event) => {
+    switch (event.key) {
+        case 'w':
+            moveDirection.z = 1; // Forward
+            break;
+        case 's':
+            moveDirection.z = -1; // Backward
+            break;
+        case 'a':
+            moveDirection.x = -1; // Left
+            break;
+        case 'd':
+            moveDirection.x = 1; // Right
+            break;
+        case 'e':
+            moveDirection.y = 1; // Upward
+            break;
+        case 'q':
+            moveDirection.y = -1; // Downward
+            break;
+            case 'Shift':
+            moveSpeed = 0.9;
+            break;
+    }
+};
+
+const onKeyUp = (event) => {
+    switch (event.key) {
+        case 'w':
+        case 's':
+            moveDirection.z = 0;
+            break;
+        case 'a':
+        case 'd':
+            moveDirection.x = 0;
+            break;
+        case 'e':
+        case 'q':
+            moveDirection.y = 0;
+            break;
+            case 'Shift':
+            moveSpeed = 0.3
+            break;
+    }
+};
+
+document.addEventListener('keydown', onKeyDown);
+document.addEventListener('keyup', onKeyUp);
+
+
+
+
+const textureLoader = new THREE.TextureLoader();
+    const textureFlare0 = textureLoader.load('https://i.imgur.com/80OABdD.png');
+    const textureFlare3 = textureLoader.load('https://i.imgur.com/26zm7OM.png');
+  
+    function addLight(h, s, l, x, y, z) {
+      console.log(x, y, z);
+      const light = new THREE.PointLight(0xffffff, 0.75, 200, 0);
+      light.color.setHSL(h, s, l);
+      light.position.set(x, y, z);
+      scene.add(light);
+  
+    }
+  
+
+    // Lights {x: 2.668993, y: -0.5, z: 6.648875}
+    addLight(0.08, 0.8, 0.5, -100, 150, 100);   // Adjust the z position to bring it closer
+
+    
+    const texture = textureLoader.load('https://i.imgur.com/7gsPP4X.jpg');
+
+    // Create the skybox geometry
+    const skyboxGeometry = new THREE.SphereGeometry(1000, 32, 32);
+
+    // Create the skybox material with the loaded texture
+    const skyboxMaterial = new THREE.MeshStandardMaterial({
+        map: texture,
+        side: THREE.BackSide
+    });
+    // Create the skybox mesh
+    const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
+    skybox.position.set(0, 100, 0);
+
+    // Add the skybox to the scene
+    scene.add(skybox);
+   
+
+    // Create a bloom pass with parameters (play with these values to get the desired effect)
+const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.5, 0.1, 0.1);
+composer.addPass(bloomPass);
+
+
+
+				
+
+
+// Create an FPS counter element
+const fpsCounter = document.createElement('div');
+fpsCounter.style.position = 'absolute';
+fpsCounter.style.top = '10px'; // Adjust the top position as needed
+fpsCounter.style.left = '10px'; // Adjust the left position as needed
+fpsCounter.style.color = 'white';
+fpsCounter.style.fontFamily = 'Arial, sans-serif';
+fpsCounter.style.fontSize = '16px';
+
+document.body.appendChild(fpsCounter);
+
+// Variables for FPS calculation
+let frameCount = 0;
+let lastTime = 0;
+
+function animate() {
+    requestAnimationFrame(animate);
+    const time = performance.now() * 0.001;
+
+    // Update the camera position based on keyboard input
+    controls.moveRight(moveDirection.x * moveSpeed);
+    controls.moveForward(moveDirection.z * moveSpeed);
+    controls.getObject().position.y += moveDirection.y * moveSpeed; // Upward and downward movement
+
+    composer.render();
+
+    // Calculate FPS
+    frameCount++;
+    const currentTime = performance.now() * 0.001;
+    const elapsedTime = currentTime - lastTime;
+
+    if (elapsedTime >= 1) {
+        const fps = frameCount / elapsedTime;
+        fpsCounter.innerHTML = `FPS: ${Math.round(fps)}`;
+        frameCount = 0;
+        lastTime = currentTime;
+    }
+    water.material.uniforms[ 'time' ].value += 1.0 / 60.0;
+
+}
+
+animate();
+
+
+
+ // Update camera aspect ratio on window resize
+ window.addEventListener('resize', () => {
+            const newWidth = window.innerWidth;
+            const newHeight = window.innerHeight;
+            camera.aspect = newWidth / newHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(newWidth, newHeight);
+        });
+
+</script>
+
+</body>
+</html>
