@@ -1,0 +1,31 @@
+<style>
+        body, html {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+</style>
+<script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.118.0/build/three.module.js",
+            "three/addons/objects/Lensflare.js": "https://unpkg.com/three@0.118.0/examples/jsm/objects/Lensflare.js",
+            "three/examples/jsm/controls/OrbitControls.js": "https://unpkg.com/three@0.118.0/examples/jsm/controls/OrbitControls.js"
+        }
+    }
+    </script>
+<script type="module">
+    //es6 module imports, these let you use newer versions of threeJS
+    //you don't need to use 'THREE.' for GLTF and FBX loader
+    //NEVER go "variable = (whatever)" <== bad, always use "const, var, let" before the declaration, "const variable = (whatever)" <== good
+import * as THREE from 'three';
+import { Lensflare, LensflareElement } from 'three/addons/objects/Lensflare.js';
+import { FBXLoader } from 'https://unpkg.com/three@0.118.0/examples/jsm/loaders/FBXLoader.js';
+import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { Reflector } from 'https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/objects/Reflector.js';
+import { EffectComposer } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { GlitchPass } from 'https://cdn.jsdelivr.net/npm/three@0.122/examples/jsm/postprocessing/GlitchPass.js';
+</script>
