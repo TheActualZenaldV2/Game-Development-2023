@@ -61,19 +61,29 @@ loader.load('https://theactualzenaldv2.github.io/Game-Development-2023/assignmen
 
   // Add the player body to the Cannon.js world
   world.addBody(playerBody);
+// Update the position and rotation of each Three.js object to match its corresponding Cannon.js body
+fbx.traverse(function (node) {
+  if (node.isMesh) {
+    // Calculate the size of the mesh
+    const geometry = node.geometry;
+    geometry.computeBoundingBox();
+    const boundingBox = geometry.boundingBox;
+    const meshSize = new CANNON.Vec3(
+      (boundingBox.max.x - boundingBox.min.x) / 2,
+      (boundingBox.max.y - boundingBox.min.y) / 2,
+      (boundingBox.max.z - boundingBox.min.z) / 2
+    );
 
-  // Update the position and rotation of each Three.js object to match its corresponding Cannon.js body
-  fbx.traverse(function(node) {
-    if (node.isMesh) {
-      const body = new CANNON.Body({ mass: 0 }); // Mass 0 for static objects
-      const boxShape = new CANNON.Box(new CANNON.Vec3(scale.x, scale.y, scale.z));
-      body.addShape(boxShape);
-      body.position.copy(node.position);
-      body.quaternion.copy(node.quaternion);
-      world.addBody(body);
-      console.log("Collision mesh pos: " + body.position)
-    }
-  });
+    const body = new CANNON.Body({ mass: 0 });
+    const boxShape = new CANNON.Box(meshSize);
+    body.addShape(boxShape);
+    body.position.copy(node.position);
+    body.quaternion.copy(node.quaternion);
+    world.addBody(body);
+    console.log("Collision mesh pos: " + body.position);
+  }
+});
+
 setInterval(() => {
     //console.log("Player pos:" + playerBody.position)
 }, 100);
@@ -98,7 +108,9 @@ setInterval(() => {
   animate();
   playerBody.addEventListener('collide', function(event) {
   console.log('The player has collided with body #' + event.body.id);
+
 });
+
 
 });
 
@@ -143,7 +155,7 @@ document.addEventListener("keydown", handleKeyDown);
 document.addEventListener("keyup", handleKeyUp);
 function animate() {
   requestAnimationFrame(animate);
-  
+
 
 const speed = 0.1;
 
@@ -192,7 +204,7 @@ const speed = 0.1;
   }
 
   playerBody.position.copy(camera.position);
- 
+
 
 // Step the simulation forward
 world.step(1 / 60);
