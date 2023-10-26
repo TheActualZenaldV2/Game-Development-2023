@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>3D First Person Shooter</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+      canvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/FBXLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fflate@0.8.0/umd/index.min.js"></script>
+    <script src="https://cdn.rawgit.com/mrdoob/three.js/r128/examples/js/controls/PointerLockControls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js"></script>
+
+
+    <script>
+      // Set up the scene, camera, and renderer
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+      camera.position.set(0,0,0)
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+      // Create a new Cannon.js world
+const world = new CANNON.World();
+world.gravity.set(0, -9.82, 0); // Set gravity to match Earth's
+
+
+const loader = new THREE.FBXLoader();
+let fbxModel;
+let playerBody;
+let playerShape;
+
+// Create a material for the wireframe box
+const wireframeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+//problem: sets the shape to 1x1x1 instead of actual shape.
+loader.load('https://theactualzenaldv2.github.io/Game-Development-2023/assignments/assets/Dying.fbx', function(fbx) {
+  fbxModel = fbx;
+  const scale = new CANNON.Vec3(1.0, 2.0, 1.0); // Adjust the scale to fit your character
+
+  // Create a bounding box (cube) shaped collision body for the character
+  playerShape = new CANNON.Box(scale);
+  playerBody = new CANNON.Body({ mass: 5 }); // Set a non-zero mass value
+  playerBody.addShape(playerShape);
+  playerBody.position.copy(camera.position);
+
+  // Add the player body to the Cannon.js world
+  world.addBody(playerBody);
+
+  // Update the position and rotation of each Three.js object to match its corresponding Cannon.js body
+  fbx.traverse(function(node) {
+    if (node.isMesh) {
+      const body = new CANNON.Body({ mass: 0 }); // Mass 0 for static objects
+      const boxShape = new CANNON.Box(new CANNON.Vec3(scale.x, scale.y, scale.z));
+      body.addShape(boxShape);
+      body.position.copy(node.position);
+      body.quaternion.copy(node.quaternion);
+      world.addBody(body);
+      console.log("Collision mesh pos: " + body.position)
+    }
+  });
+setInterval(() => {
+    //console.log("Player pos:" + playerBody.position)
+}, 100);
+  // Add the FBX model to the scene
+  scene.add(fbxModel);
+
+  // Get the bounding box of the FBX model
+  const boundingBox = new THREE.Box3().setFromObject(fbxModel);
+
+  // Create the wireframe box based on the model's bounding box dimensions
+  const boxSize = boundingBox.getSize(new THREE.Vector3());
+  const wireframeBox = new THREE.Mesh(
+    new THREE.BoxGeometry(boxSize.x, boxSize.y, boxSize.z),
+    wireframeMaterial
+  );
+
+  // Position the wireframe box at the center of the model's bounding box
+  wireframeBox.position.copy(boundingBox.getCenter(new THREE.Vector3()));
+
+  // Add the wireframe box to the scene
+  scene.add(wireframeBox);
+  animate();
+  playerBody.addEventListener('collide', function(event) {
+  console.log('The player has collided with body #' + event.body.id);
+});
+
+});
+
+
+      // Create the floor object
+      const floorGeometry = new THREE.PlaneGeometry(10, 10);
+      const floorMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
+      const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+      floor.rotation.x = -Math.PI / 2;
+      scene.add(floor);
+
+      // Set up the controls
+      const controls = new THREE.PointerLockControls(camera, document.body);
+      document.addEventListener("click", () => {
+        controls.lock();
+      });
+      scene.add(controls.getObject());
+
+      // Set up the lighting
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+      scene.add(ambientLight);
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+      directionalLight.position.set(1, 1, 0);
+      scene.add(directionalLight);
+
+      // Set up the raycaster for collision detection
+      const raycaster = new THREE.Raycaster();
+      const direction = new THREE.Vector3();
+      const keyboard = {};
+
+      function handleKeyDown(event) {
+  const key = event.key.toLowerCase();
+  keyboard[key] = true;
+}
+
+function handleKeyUp(event) {
+  const key = event.key.toLowerCase();
+  keyboard[key] = false;
+}
+
+document.addEventListener("keydown", handleKeyDown);
+document.addEventListener("keyup", handleKeyUp);
+function animate() {
+  requestAnimationFrame(animate);
+  
+
+const speed = 0.1;
+
+  const forward = new THREE.Vector3(
+    controls.getObject().matrix.elements[8],
+    0,
+    controls.getObject().matrix.elements[10]
+  );
+  const backward = forward.clone().negate();
+  const left = new THREE.Vector3(
+    controls.getObject().matrix.elements[0],
+    0,
+    controls.getObject().matrix.elements[2]
+  );
+  const right = left.clone().negate();
+  const velocity = new THREE.Vector3();
+
+   // Move the user
+   if (keyboard["w"]) {
+    velocity.add(backward);
+  }
+  if (keyboard["s"]) {
+    velocity.add(forward);
+  }
+  if (keyboard["a"]) {
+    velocity.add(right);
+  }
+  if (keyboard["d"]) {
+    velocity.add(left);
+  }
+  velocity.normalize();
+  velocity.multiplyScalar(speed);
+  controls.getObject().position.add(velocity);
+
+  // Check for collisions with the floor
+  raycaster.set(
+    controls.getObject().position,
+    new THREE.Vector3(0, -1, 0)
+  );
+  const intersects = raycaster.intersectObject(floor);
+  if (intersects.length > 0) {
+    const distance = intersects[0].distance;
+    if (distance < 1) {
+      controls.getObject().position.y += 1 - distance;
+    }
+  }
+
+  playerBody.position.copy(camera.position);
+ 
+
+// Step the simulation forward
+world.step(1 / 60);
+
+  // Render the scene
+  renderer.render(scene, camera);
+}
+
+    </script>
+  </body>
+</html>
