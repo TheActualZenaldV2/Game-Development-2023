@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -362,8 +363,23 @@ firebase.initializeApp(firebaseConfig);
 let database = firebase.database();
 const connectionsRef = database.ref("connections");
 let userConnectionRef;
+let userId;
 
-function assignPlayerNumber() {
+
+const consoleStyle = `
+  font-weight: bold;
+  font-size: 50px;
+  color: #007acc;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);`;
+
+console.log(`%c
+hello mr ellis this wraps all the code inside a constructer class I hope you are happy now`, consoleStyle);
+
+
+class CodeWrapper {
+  constructor() {
+
+    function assignPlayerNumber() {
   connectionsRef.once("value")
     .then(snapshot => {
       const connectedPlayersCount = snapshot.numChildren();
@@ -1607,6 +1623,13 @@ function updateBullets() {
         renderer.setSize(window.innerWidth, window.innerHeight);
     });
   }
+
+  }
+
+}
+
+// Create an instance of the class
+const myInstance = new CodeWrapper();
 
 
     </script>
