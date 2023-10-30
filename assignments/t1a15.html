@@ -21,8 +21,8 @@
 
         <div class="box">
             <p>Select a swear word from the list and click the button to see the alternative:</p>
-            <select id="swearWords" class="form-control" onchange="init()">
-              <option value="swear0"></option>
+            <select id="swearWords" class="form-control" onchange="new ExtendedSwearWordAlternatives().init()">
+                <option value="swear0"></option>
                 <option value="swear1">F*ck</option>
                 <option value="swear2">Sh*t</option>
                 <option value="swear3">B*tch</option>
@@ -40,22 +40,32 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        // Define a map of swear words and their alternatives
-        const swearWordAlternatives = {
-            swear1: "Fudge! Ex: What the fudge!",
-            swear2: "Shiz! Ex: You look like shiz today!",
-            swear3: "Female Dog! Ex: I love female dogs!",
-            // Add more alternatives as needed
-        };
-function init(){
-  const selectedSwearWord = document.getElementById('swearWords').value;
-            const alternative = swearWordAlternatives[selectedSwearWord];
-            document.getElementById('alternative').textContent = alternative || "";
-}
-        // Event listener for the button click
-        document.getElementById('showAlternativeBtn').addEventListener('click', function() {
-           init()
-        });
+        class SwearWordAlternatives {
+            constructor() {
+                this.swearWordAlternatives = {
+                    swear1: "Fudge! Ex: What the fudge!",
+                    swear2: "Shiz! Ex: You look like shiz today!",
+                    swear3: "Female Dog! Ex: I love female dogs!",
+                    // Add more alternatives as needed
+                };
+            }
+
+            init() {
+                const selectedSwearWord = document.getElementById('swearWords').value;
+                const alternative = this.swearWordAlternatives[selectedSwearWord];
+                document.getElementById('alternative').textContent = alternative || "Select a nono word";
+            }
+        }
+
+        class ExtendedSwearWordAlternatives extends SwearWordAlternatives {
+            constructor() {
+                super();
+                this.showAlternativeButton = document.getElementById('showAlternativeBtn');
+                this.showAlternativeButton.addEventListener('click', () => this.init());
+            }
+        }
+
+        const app = new ExtendedSwearWordAlternatives();
     </script>
 </body>
 </html>
