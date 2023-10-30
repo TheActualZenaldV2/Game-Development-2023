@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Swear Word Alternatives</title>
+    <!-- Add Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Add some custom CSS here */
+        .box {
+            background-color: #f0f0f0;
+            padding: 20px;
+            margin: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Swear Word Alternatives</h1>
+
+        <div class="box">
+            <p>Select a swear word from the list and click the button to see the alternative:</p>
+            <select id="swearWords" class="form-control" onchange="init()">
+              <option value="swear0"></option>
+                <option value="swear1">F*ck</option>
+                <option value="swear2">Sh*t</option>
+                <option value="swear3">B*tch</option>
+            </select>
+            <button id="showAlternativeBtn" class="btn btn-primary">Show Alternative</button>
+        </div>
+
+        <div class="box">
+            <p>Alternative: <span id="alternative">Select a nono word</span></p>
+        </div>
+    </div>
+
+    <!-- Include Bootstrap and custom JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Define a map of swear words and their alternatives
+        const swearWordAlternatives = {
+            swear1: "Fudge! Ex: What the fudge!",
+            swear2: "Shiz! Ex: You look like shiz today!",
+            swear3: "Female Dog! Ex: I love female dogs!",
+            // Add more alternatives as needed
+        };
+function init(){
+  const selectedSwearWord = document.getElementById('swearWords').value;
+            const alternative = swearWordAlternatives[selectedSwearWord];
+            document.getElementById('alternative').textContent = alternative || "";
+}
+        // Event listener for the button click
+        document.getElementById('showAlternativeBtn').addEventListener('click', function() {
+           init()
+        });
+    </script>
+</body>
+</html>
