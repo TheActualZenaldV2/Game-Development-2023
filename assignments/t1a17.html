@@ -153,8 +153,9 @@ body {
     <h1 align="center">Pyodide: Python with JavaScript in the browser</h1>
 
 <p>Enter your own Python code OR change the numbers in sum([]). Click Run. Includes err handling.</p>
+<p> Example code: str("text")</p>
 
-<textarea id="pythonCode" rows="6" cols="40" class="language-python" style="text-align: left;">
+<textarea id="pythonCode" rows="6" cols="40" class="" style="text-align: left;">
 def run_python_code():
     a = sum([1, 2, 3, 4, 9])
     return a
@@ -178,7 +179,11 @@ result
     mode: "python",
     lineNumbers: true, // Optional: show line numbers
     theme: "default", // Optional: choose a theme
-  });
+  }); // Add an event listener to detect changes in the CodeMirror editor
+        editor.on("change", function(instance) {
+            // Update the original textarea with the CodeMirror editor's content
+            pythonCodeTextarea.value = instance.getValue();
+        });
   let pyodide;
   const outputDiv = document.getElementById("outputDiv");
 
@@ -192,7 +197,8 @@ result
   }
 
   function runPythonCode() {
-    const myPython = pythonCodeTextarea.value;
+    const myPython = document.getElementById("pythonCode").value;
+    console.log(myPython)
     outputDiv.innerHTML = "Running Python code...";
 
     if (pyodide) {
