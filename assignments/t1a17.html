@@ -154,7 +154,7 @@ body {
 
 <p>Enter your own Python code OR change the numbers in sum([]). Click Run. Includes err handling.</p>
 
-<textarea id="pythonCode" rows="6" cols="40" class="language-python">
+<textarea id="pythonCode" rows="6" cols="40" class="language-python" style="text-align: left;">
 def run_python_code():
     a = sum([1, 2, 3, 4, 9])
     return a
@@ -163,13 +163,16 @@ result = run_python_code()
 result
 </textarea>
 
-<button onclick="runPythonCode()" class="btn btn-primary">Run</button>
+<button onclick="runPythonCode()" class="btn btn-primary">Run Custom Code</button>
+<button onclick="runPythonCodeVariable()" class="btn btn-primary">Run Using Variables (Preset Code, Check Console)</button>
+
 
 <div id="outputDiv">Output will appear here.</div>
 </div>
 
 
 <script>
+    
   const pythonCodeTextarea = document.getElementById("pythonCode");
   const editor = CodeMirror.fromTextArea(pythonCodeTextarea, {
     mode: "python",
@@ -206,6 +209,38 @@ result
       outputDiv.innerHTML = "Pyodide is not initialized yet. Please wait.";
     }
   }
+  function runPythonCodeVariable() {
+        const num1 = parseFloat(prompt("Enter the first number:"));
+        const num2 = parseFloat(prompt("Enter the second number:"));
+        const num3 = parseFloat(prompt("Enter the third number:"));
+        const num4 = parseFloat(prompt("Enter the fourth number:"));
+        const num5 = parseFloat(prompt("Enter the fifth number:"));
 
+        if (!isNaN(num1) && !isNaN(num2) && !isNaN(num3) && !isNaN(num4) && !isNaN(num5)) {
+            const myPython = `def run_python_code():
+    a = sum([${num1}, ${num2}, ${num3}, ${num4}, ${num5}])
+    return a
+
+result = run_python_code()
+result`;
+            outputDiv.innerHTML = "Running Python code...";
+
+            if (pyodide) {
+                try {
+                    const result = pyodide.runPython(myPython);
+                    outputDiv.innerHTML = "Output:<br>" + result;
+                    console.log("Success Code Run, Result: " + result);
+
+                } catch (err) {
+                    console.error(err);
+                    outputDiv.innerHTML = "Error:<br>" + err;
+                }
+            } else {
+                outputDiv.innerHTML = "Pyodide is not initialized yet. Please wait.";
+            }
+        } else {
+            outputDiv.innerHTML = "Invalid input. Please enter valid numbers.";
+        }
+    }
   initializePyodide();
 </script>
