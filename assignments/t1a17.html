@@ -156,12 +156,25 @@ body {
 <p> Example code: str("text")</p>
 
 <textarea id="pythonCode" rows="6" cols="40" class="" style="text-align: left;">
-def run_python_code():
-    a = sum([1, 2, 3, 4, 9])
-    return a
+def run_python_code(): #function
+    a = sum([1, 2, 3, 4, 10]) #array 
+    calculation = "calculation: (+)" #variable
+    result = "even answer" if a % 2 == 0 else "odd answer" #if statement
+    loop_count = 0  
+    for i in range(10):   #loops
+        loop_count += 1  
+        text = "Loop Count: " 
+        nameText = "Object name: " 
+        dictionary = {
+  "name" : "Jonathan" #object
+}
+
+    return calculation, a, result, text, loop_count, nameText, dictionary["name"] #input output
 
 result = run_python_code()
 result
+
+
 </textarea>
 
 <button onclick="runPythonCode()" class="btn btn-primary">Run Custom Code</button>
