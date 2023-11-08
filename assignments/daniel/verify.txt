@@ -1,0 +1,6 @@
+   //verify.js
+        import {AC_LOAD } from 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/anticheat/ac.js';
+        if(!AC_LOAD) {
+            console.error("ac fail");
+            return;
+        }
