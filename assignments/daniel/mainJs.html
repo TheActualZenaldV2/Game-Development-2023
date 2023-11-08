@@ -1,0 +1,20 @@
+
+const verifyJS = document.createElement("script");
+    verifyJS.src = "https://theactualzenaldv2.github.io/Game-Development-2023/assignments/anticheat/verify.js"
+    console.log("Page loaded");
+verifyJS.onload = () => {
+ console.log("Verify file loaded");
+ 
+    init()
+ 
+};
+// Set an event listener for the script's onerror event (in case of load failure)
+verifyJS.onerror = () => {
+ console.error("Verify file failed to load");
+acFail = true;
+};
+document.head.appendChild(verifyJS);
+
+function init(){
+    console.log("main JS file function success")
+}
