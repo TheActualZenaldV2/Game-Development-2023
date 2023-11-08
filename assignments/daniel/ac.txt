@@ -1,4 +1,3 @@
-
 import {AC_LOAD } from 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/anticheat/init.js';
 console.log("script load");
 AC_LOAD = true;
@@ -51,18 +50,17 @@ testWriteRef.once("value", (snapshot) => {
 });
 });
 
+// Dynamically import the AC script as a module
+import("https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/main.js")
+  .then((module) => {
+    // You can use the module and its exports here
+    console.log("MainJS module loaded successfully");
 
-const mainJS = document.createElement("script");
-    mainJS.src = "https://theactualzenaldv2.github.io/Game-Development-2023/assignments/anticheat/main.js"
-mainJS.onload = () => {
-    console.log("Main JS Load");
- 
-};
-// Set an event listener for the script's onerror event (in case of load failure)
-mainJS.onerror = () => {
- console.error("MainJS file failed to load");
-acFail = true;
-};
-document.head.appendChild(mainJS);
+  })
+  .catch((error) => {
+    // Handle any errors that occur during loading
+    console.error("Failed to load mainJS module:", error);
+    acFail = true;
+  });
 
 export {AC_LOAD};
