@@ -1,6 +1,16 @@
-   //verify.js
-        import {AC_LOAD } from 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/anticheat/ac.js';
-        if(!AC_LOAD) {
-            console.error("ac fail");
-            return;
-        }
+import("https://theactualzenaldv2.github.io/Game-Development-2023/assignments/anticheat/verify.js")
+  .then((module) => {
+    // You can use the module and its exports here
+    console.log("Verify module loaded successfully");
+    init();
+  })
+  .catch((error) => {
+    // Handle any errors that occur during loading
+    console.error("Failed to load Verify module:", error);
+  });
+
+
+
+function init(){
+    console.log("main JS file function success")
+}
