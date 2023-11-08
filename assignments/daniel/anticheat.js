@@ -1,7 +1,4 @@
-  console.log("script load");
-  let pyodide;
-  const pythonCodeTextarea = document.getElementById("pythonCode");
-  const outputDiv = document.getElementById("outputDiv");
+console.log("script load");
 
   const firebaseConfig = {
   apiKey: "AIzaSyC5ukKjhUz9Qk9IZtlzfvxD0E1bKiU0kvs",
