@@ -1,4 +1,4 @@
-
+console.log("script load");
   let pyodide;
   const pythonCodeTextarea = document.getElementById("pythonCode");
   const outputDiv = document.getElementById("outputDiv");
@@ -23,5 +23,8 @@
       outputDiv.innerHTML = "Pyodide is not initialized yet. Please wait.";
     }
   }
-
+document.getElementById("run").addEventListener("click", function() {
+    // Call the runPythonCode function when the button is clicked
+    runPythonCode();
+  });
   initializePyodide();
