@@ -1,14 +1,25 @@
 //IMPORT AC LOAD, AC_TOKEN, INIT, INIT_TOKEN
-import {INIT, INIT_TOKEN } from 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/anticheat/init.js';
-import {AC_LOADED, AC_TOKEN } from 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/anticheat/anticheat.js';
-if(!INIT) return;
-if(!INIT_TOKEN) return;
-if(!AC_LOADED) return;
-if(!AC_TOKEN) return;
+import { INIT, INIT_TOKEN } from 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/anticheat/init.js';
+import { AC_LOADED, AC_TOKEN } from 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/anticheat/anticheat.js';
 
+if (!INIT) {
+  throw new Error("INIT is not defined");
+}
 
+if (!INIT_TOKEN) {
+  throw new Error("INIT_TOKEN is not defined");
+}
 
-console.log("All AC Check Complete. Loading Main.JS....");
+if (!AC_LOADED) {
+  throw new Error("AC_LOADED is not defined");
+}
+
+if (!AC_TOKEN) {
+  throw new Error("AC_TOKEN is not defined");
+}
+
+console.log("All AC checks complete. Loading Main.JS....");
+
 import("https://theactualzenaldv2.github.io/Game-Development-2023/assignments/anticheat/main.js")
   .then((module) => {
     // You can use the module and its exports here
@@ -18,10 +29,11 @@ import("https://theactualzenaldv2.github.io/Game-Development-2023/assignments/an
     // Handle any errors that occur during loading
     console.error("Failed to load MainJS module:", error);
   });
-const VERIFY_TOKEN = function () { const min = 100000000000000; // 10^14 
-  const max = 999999999999999; // 10^15 - 1 
-  return Math.floor(Math.random() * (max - min + 1)) + min; }
-  export {VERIFY_TOKEN}
 
+const VERIFY_TOKEN = function () {
+  const min = 100000000000000; // 10^14
+  const max = 999999999999999; // 10^15 - 1
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
 
-
+export { VERIFY_TOKEN };
