@@ -18,7 +18,7 @@ loadACFile(() => {
 function loadACFile(callback) { // Create a script element to load the AC file const script = document.createElement("script"); script.src = "https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/anticheat.js";
 
 // Dynamically import the AC script as a module
-import("https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/anticheat.js")
+import("https://theactualzenaldv2.github.io/Game-Development-2023/assignments/anticheat/ac.js")
   .then((module) => {
     // You can use the module and its exports here
     console.log("AC module loaded successfully");
