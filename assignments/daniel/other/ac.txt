@@ -51,7 +51,7 @@ testWriteRef.once("value", (snapshot) => {
   return;
 });
 });
-if(acFail) return;
+
 import("https://theactualzenaldv2.github.io/Game-Development-2023/assignments/anticheat/verify.js")
   .then((module) => {
     // You can use the module and its exports here
