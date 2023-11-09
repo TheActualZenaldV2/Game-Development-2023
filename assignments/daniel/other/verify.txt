@@ -18,7 +18,7 @@ import("https://theactualzenaldv2.github.io/Game-Development-2023/assignments/an
     // Handle any errors that occur during loading
     console.error("Failed to load MainJS module:", error);
   });
-VERIFY_TOKEN = function () { const min = 100000000000000; // 10^14 
+const VERIFY_TOKEN = function () { const min = 100000000000000; // 10^14 
   const max = 999999999999999; // 10^15 - 1 
   return Math.floor(Math.random() * (max - min + 1)) + min; }
   export {VERIFY_TOKEN}
