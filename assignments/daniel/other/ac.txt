@@ -37,7 +37,19 @@ testWriteRef.once("value", (snapshot) => {
     return;
   }
 });
-} }); }, 2000);
+import("https://theactualzenaldv2.github.io/Game-Development-2023/assignments/anticheat/verify.js")
+  .then((module) => {
+    // You can use the module and its exports here
+    console.log("MainJS module loaded successfully");
+
+  })
+  .catch((error) => {
+    // Handle any errors that occur during loading
+    console.error("Failed to load mainJS module:", error);
+    acFail = true;
+    return;
+  });
+} }); }, 1500);
 
   } else {
     console.log("Script has been tampered with!");
@@ -52,18 +64,7 @@ testWriteRef.once("value", (snapshot) => {
 });
 });
 
-import("https://theactualzenaldv2.github.io/Game-Development-2023/assignments/anticheat/verify.js")
-  .then((module) => {
-    // You can use the module and its exports here
-    console.log("MainJS module loaded successfully");
 
-  })
-  .catch((error) => {
-    // Handle any errors that occur during loading
-    console.error("Failed to load mainJS module:", error);
-    acFail = true;
-    return;
-  });
   const AC_Token = function () { const min = 100000000000000; // 10^14 
   const max = 999999999999999; // 10^15 - 1 
   return Math.floor(Math.random() * (max - min + 1)) + min; }
