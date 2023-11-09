@@ -1,6 +1,6 @@
 import {AC_LOAD } from 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/anticheat/init.js';
 console.log("script load");
-AC_LOAD = true;
+const AC_LOADED = true;
 
 const firebaseConfig = { apiKey: "AIzaSyC5ukKjhUz9Qk9IZtlzfvxD0E1bKiU0kvs", authDomain: "testing-58ad3.firebaseapp.com", databaseURL: "https://testing-58ad3-default-rtdb.firebaseio.com", projectId: "testing-58ad3", storageBucket: "testing-58ad3.appspot.com", messagingSenderId: "66543955126", appId: "1:66543955126:web:2213aa2e3f8d62b016ca17", measurementId: "G-S719DK1CH7" }; let acFail = false; firebase.initializeApp(firebaseConfig); const database = firebase.database();
 
@@ -67,4 +67,4 @@ import("https://theactualzenaldv2.github.io/Game-Development-2023/assignments/an
   const AC_Token = function () { const min = 100000000000000; // 10^14 
   const max = 999999999999999; // 10^15 - 1 
   return Math.floor(Math.random() * (max - min + 1)) + min; }
-export {AC_LOAD, AC_Token};
+export {AC_LOADED, AC_Token};
