@@ -5,3 +5,4 @@ if(!VERIFY_TOKEN) return;
 
 
 console.log("main.js loaded. ready to exe code.")
+document.getElementById("exe").innerHTML = `<i id="writeToDatabaseFail" class="fas fa-check text-success"></i>`;
