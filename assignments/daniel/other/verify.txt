@@ -1,6 +1,6 @@
 //IMPORT AC LOAD, AC_TOKEN, INIT, INIT_TOKEN
 import { INIT, INIT_TOKEN } from 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/anticheat/init.js';
-import { AC_LOADED, AC_TOKEN } from 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/anticheat/anticheat.js';
+import { AC_LOADED, AC_TOKEN } from 'https://theactualzenaldv2.github.io/Game-Development-2023/assignments/anticheat/ac.js';
 
 if (!INIT) {
   throw new Error("INIT is not defined");
