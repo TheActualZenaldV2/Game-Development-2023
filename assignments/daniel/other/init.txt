@@ -33,7 +33,7 @@ import("https://theactualzenaldv2.github.io/Game-Development-2023/assignments/an
 }
 window.addEventListener("load", onPageLoad);
 INIT = true;
-initToken = function () { const min = 100000000000000; // 10^14 
+const initToken = function () { const min = 100000000000000; // 10^14 
 const max = 999999999999999; // 10^15 - 1 
 return Math.floor(Math.random() * (max - min + 1)) + min; }
-        export {AC_LOAD, INIT};
+        export {AC_LOAD, INIT, initToken};
