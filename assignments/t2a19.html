@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Encryption Example</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+</head>
+<body>
+    <h1>Encryption Example <br> Using crypto-js <br> API Decription Keys <br> Ctrl + U for code</h1>
+    <input type="text" id="txt" oninput="update()" value="The quick brown fox jumps over the lazy dog" style="width: 100%">
+    <div>Decrypt key: <span id="key"> </span></div>
+    <div> <span id="action"> </span> Result: <span id="result"></span></div>
+    <button onclick="encrypt()">Encrypt</button>
+    <button onclick="decrypt()">Decrypt</button>
+    <script>
+             // Generate a random encryption key
+             const key = CryptoJS.lib.WordArray.random(16);
+             const resultsDiv = document.getElementById("result");
+             const action = document.getElementById("action")
+             document.getElementById("key").textContent = key;
+        console.log("key: " + key.toString()); 
+        var plaintext =  document.getElementById("txt").value;
+        var ciphertext = CryptoJS.AES.encrypt(plaintext, key.toString());
+
+        function update() {
+  plaintext = document.getElementById("txt").value;
+}
+
+function encrypt() {
+  plaintext = document.getElementById("txt").value;
+  var ciphertext = CryptoJS.AES.encrypt(plaintext, key.toString());
+
+  resultsDiv.textContent = ciphertext;
+  action.textContent = 'Encrypt';
+}
+
+function decrypt() {
+  // Decrypt the data using AES
+  const ciphertext = resultsDiv.textContent;
+  const bytes = CryptoJS.AES.decrypt(ciphertext, key.toString());
+  const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+  resultsDiv.innerHTML = decrypted;
+  action.textContent = 'Decrypt';
+}
+        
+    </script>
+</body>
+</html>
