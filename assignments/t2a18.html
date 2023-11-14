@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <title>Modern Styled Text</title>
+  <style>
+  /* Center the text vertically and horizontally */
+  body {
+
+      height: 100vh;
+      margin: 0;
+      background-color: rgb(61, 64, 64);
+    }
+    /* Style the text */
+    .modern-text {
+      font-size: 2rem;
+      color: #007bff; /* Bootstrap's primary color */
+      font-weight: bold;
+      text-align: center;
+    }
+    /* Add fade classes for the last 5 characters */
+    .fade1, .fade2, .fade3, .fade4, .fade5 {
+      opacity: 0.5;
+      
+    }
+    #title {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    }
+    #dynamicText {
+      position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    }
+  </style>
+</head>
+<body><div class="modern-text"  id="title"> "Explain Verilog as if talking to a small child:" ChatGPT: </div>
+
+
+<div class="modern-text"  id="dynamicText">
+  
+</div>
+<script>
+   // Your text to be displayed
+   const originalText = `Alright, let's imagine we're building things with colorful blocks. Verilog is like a special language we use to tell a really smart robot how to build something electronic with these blocks.
+
+In our world of electronic blocks, we have different types of blocks that do different jobs. Some blocks store information (like a box where we keep our toys), some blocks make decisions (like a little wizard who decides which toy to play with), and some blocks help us connect things together (like roads between our toy boxes).
+
+Verilog is like a magical spell we use to describe how these blocks should work together. We tell the robot what each block should do, how they should talk to each other, and when to do certain things.
+
+For example, let's say we have two toys (blocks), and we want a special block that decides which toy to play with based on a signal (like a remote control). In Verilog, we would write a spell like this:
+
+"Hey robot, when the remote control says '0,' play with the first toy. When the remote says '1,' play with the second toy."
+
+And the robot understands this spell and builds a special block that does exactly that! It's like giving instructions to our robot friend on how to create something cool with our electronic blocks.
+
+So, Verilog helps us talk to our robot friend and create amazing electronic things with our colorful blocks!                                                                                                                                              
+                                  `
+  let index = 0;
+  const maxLength = 100;
+  const fadeLength = 5;
+
+ // Function to add letters, apply fading, and remove the oldest ones
+ function updateText() {
+    const dynamicText = document.getElementById("dynamicText");
+
+    // Check if there are more letters to add
+    if (index < originalText.length) {
+      // Calculate the start index to display only the last maxLength characters
+      const startIndex = Math.max(0, index - maxLength);
+      const displayedText = originalText.substring(startIndex, index + 1);
+
+      dynamicText.innerHTML = '';
+
+      // Add fading classes to the last five characters
+      for (let i = 0; i < displayedText.length; i++) {
+        const char = displayedText[i];
+        const isLastFive = i >= displayedText.length - fadeLength;
+        const fadeClass = isLastFive ? `fade${i - (displayedText.length - fadeLength) + 1}` : '';
+        dynamicText.innerHTML += `<span class="${fadeClass}">${char}</span>`;
+      }
+
+      index++;
+      const interval = Math.random() * 200 -80
+      // Call the function again after a delay (e.g., 50 milliseconds)
+      setTimeout(updateText, interval);
+    }
+  }
+
+  // Start updating text when the page loads
+  window.onload = updateText;
+</script>
+<!-- Bootstrap JS and jQuery (optional, but needed for certain Bootstrap features) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
