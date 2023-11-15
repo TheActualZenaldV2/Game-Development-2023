@@ -20,6 +20,12 @@
       font-weight: bold;
       text-align: center;
     }
+    /* Style the text */
+    .modern-text1 {
+      font-size: 2rem;
+      color: #007bff; /* Bootstrap's primary color */
+      font-weight: bold;
+    }
     /* Add fade classes for the last 5 characters */
     .fade1, .fade2, .fade3, .fade4, .fade5 {
       opacity: 0.5;
@@ -46,6 +52,31 @@
 <div class="modern-text"  id="dynamicText">
   
 </div>
+<h1 class="modern-text1"> Code: </h1>
+<pre style="color: whitesmoke;">
+  \m4_TLV_version 1d: tl-x.org
+\SV
+   // A Fibonacci Sequence example.
+   // Each cycle we generate a new number in the sequence,
+   // where each new value is the sum of the previous two.
+   // (1, 1, 2, 3, 5, 8, ...)
+
+   m4_makerchip_module
+\TLV
+!  $reset = *reset;
+
+   // =========================================
+   // Fibonacci.
+   $val[15:0] = $reset ? 1 : >>1$val + >>2$val;
+   // =========================================
+
+\SV
+   endmodule
+
+</pre>
+<h1 class="modern-text1"> Result:</h1>
+<img src="https://i.imgur.com/z90FcC0.png" width="450" height="400">
+
 <script>
    // Your text to be displayed
    const originalText = `Alright, let's imagine we're building things with colorful blocks. Verilog is like a special language we use to tell a really smart robot how to build something electronic with these blocks.
