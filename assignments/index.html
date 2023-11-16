@@ -1,436 +1,51 @@
-
+<!-- index.html -->
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Jon's Github</title>
-  <link rel="icon" href="https://i.ytimg.com/vi/cE0wfjsybIQ/maxresdefault.jpg" type="image/png">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="https://theactualzenaldv2.github.io/Game-Development-2023/assignments/index/index.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Basic Chat Room</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+    #messages {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+    #messages li {
+      margin: 0.5em 0;
+    }
+  </style>
 </head>
-<body> <br> <br>
+<body>
+  <ul id="messages"></ul>
+  <form id="form" action="">
+    <input id="m" autocomplete="off" /><button>Send</button>
+  </form>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+  <script>
+    const socket = io();
 
-    
-    <div class="container" >
-        <h1 class="section-title" style="text-align: center;">Jons Index With <b>NO </b>Daniel Sladner</h1>
-        <p class="section-title" style="text-align: center;"> <i class="fa-solid fa-trophy fa-shake"></i> Professinal Daniel hater </p>
-        <h3 class="section-title" style="text-align: center; font-size: 20px;">Ctrl + C & Ctrl + V Champion <br>  Click <a href="https://theactualzenaldv2.github.io/gamedev/public2/index.html"> Here</a> for old work</h3>
-    </div> <br>
-<div class="container">
-        <h3 class="section-title" style="text-align: center; font-size: 20px;">Click  <a href="https://github.com/TheActualZenaldV2/Game-Development-2023/tree/main/assignments"> Here</a> for github repo link</h3>
-        <h3 class="section-title" style="text-align: center; font-size: 20px;"><a href="https://theactualzenaldv2.github.io/Game-Development-2023/assignments/final/v0.4-plankton.html" class="btn btn-primary">Final Project WIP</a></h3>
-        <h3 class="section-title" style="text-align: center; font-size: 20px;"> <a href="https://theactualzenaldv2.github.io/Game-Development-2023/assignments/final/MP3DV5.html" class="btn btn-primary">3D 1V1 MULTIPLAYER</a></h3>
+    document.getElementById('form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const messageInput = document.getElementById('m');
+      const message = messageInput.value.trim();
+      if (message !== '') {
+        socket.emit('chat message', message);
+        messageInput.value = '';
+      }
+    });
 
-  
-</div>
-    <br>
-
-        <div class="container" id="mainContainer">
-  <ul class="nav nav-tabs" id="myTab" role="tablist">
-    <li class="nav-item" role="presentation">
-      <button class="nav-link active section-title" id="tab1-tab" data-bs-toggle="tab" data-bs-target="#tab1" type="button" role="tab" aria-controls="tab1" aria-selected="true" onclick="updateLocalStorage();">Class Work</button>
-    </li>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link section-title" id="tab2-tab" data-bs-toggle="tab" data-bs-target="#tab2" type="button" role="tab" aria-controls="tab2" aria-selected="false" onclick="updateLocalStorage();">3D Stuff</button>
-    </li>
-    <li class="nav-item" role="presentation">
-        <button class="nav-link section-title" id="tab3-tab" data-bs-toggle="tab" data-bs-target="#tab3" type="button" role="tab" aria-controls="tab3" aria-selected="false" onclick="updateLocalStorage();">Old Stuff</button>
-      </li>
-  </ul>
-
-  <div class="tab-content mt-3" id="myTabContent">
-    <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
-      <div class="row row-cols-1 row-cols-md-3 g-4">
-
-
-        <div class="col">
-          <div class="card odd">
-            <div class="card-body">
-              <h5 class="card-title">Research</h5>
-              <p class="card-text">Work Not Screentime??</p>
-              <a href="work-not-screentime.md" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-
-        
-        <div class="col">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Basic Web</h5>
-              <p class="card-text">t1a01</p>
-              <a href="t1a01.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-
-          <div class="col">
-          <div class="card odd">
-            <div class="card-body">
-              <h5 class="card-title">Tables</h5>
-              <p class="card-text">t1a02</p>
-              <a href="t1a02.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Forms</h5>
-              <p class="card-text">t1a03</p>
-              <a href="t1a03.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card odd">
-            <div class="card-body">
-              <h5 class="card-title">CSS</h5>
-              <p class="card-text">t1a04</p>
-              <a href="t1a04.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-        
-        <div class="col">
-          <div class="card ">
-            <div class="card-body">
-              <h5 class="card-title">First Javascript</h5>
-              <p class="card-text">t1a05</p>
-              <a href="first-js.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-
-         <div class="col">
-          <div class="card odd">
-            <div class="card-body">
-              <h5 class="card-title">Objects </h5>
-              <p class="card-text">t1a06</p>
-              <a href="t1a06.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Classes</h5>
-              <p class="card-text">t1a07</p>
-              <a href="t1a07.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card odd">
-            <div class="card-body">
-              <h5 class="card-title">Calculator</h5>
-              <p class="card-text">t1a08</p>
-              <a href="t1a08.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Trivia</h5>
-              <p class="card-text">t1a09</p>
-              <a href="t1a09.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card odd">
-            <div class="card-body">
-              <h5 class="card-title">Maps</h5>
-              <p class="card-text">t1a10</p>
-              <a href="t1a10.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-
-         <div class="col">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Three.Js</h5>
-              <p class="card-text">t1a11</p>
-              <a href="https://theactualzenaldv2.github.io/Game-Development-2023/assignments/assets/es6MODELSPIN.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card odd">
-            <div class="card-body">
-              <h5 class="card-title">Fun Test</h5>
-              <p class="card-text">t1a12</p>
-              <a href="t1a12.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-        
-         <div class="col">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Local Storage</h5>
-              <p class="card-text">t1a13</p>
-              <a href="t1a13.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card odd">
-            <div class="card-body">
-              <h5 class="card-title">Animated Classes</h5>
-              <p class="card-text">t1a14</p>
-              <a href="t1a14.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card ">
-            <div class="card-body">
-              <h5 class="card-title">Extended Classes</h5>
-              <p class="card-text">t1a15</p>
-              <a href="t1a15.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card odd">
-            <div class="card-body">
-              <h5 class="card-title">C++ WASM</h5>
-              <p class="card-text">t1a16</p>
-              <a href="https://theactualzenaldv2.github.io/Game-Development-2023/assignments/wasm-project/src/main.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Web Python</h5>
-              <p class="card-text">t1a17</p>
-              <a href="t1a17.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card odd">
-            <div class="card-body">
-              <h5 class="card-title">Anticheat</h5>
-              <p class="card-text">z01</p>
-              <a href="https://theactualzenaldv2.github.io/Game-Development-2023/assignments/anticheat/index.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Verilog</h5>
-              <p class="card-text">t2a18</p>
-              <a href="t2a18.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-
-         <div class="col">
-          <div class="card odd">
-            <div class="card-body">
-              <h5 class="card-title">Decryption Keys</h5>
-              <p class="card-text">t2a19</p>
-              <a href="t2a19.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-
-        
-
-
-      </div>
-    </div>
-
-    <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
-      <div class="row row-cols-1 row-cols-md-3 g-4">
-
-        <div class="col">
-          <div class="card odd">
-            <div class="card-body">
-              <h5 class="card-title"> 3D Game Base</h5>
-              <p class="card-text">Template</p>
-              <a href="https://theactualzenaldv2.github.io/Game-Development-2023/assignments/templates/basic3d.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">3D Model Displaying</h5>
-              <p class="card-text">WIP Project</p>
-              <a href="modelSpin.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card odd">
-            <div class="card-body">
-              <h5 class="card-title">3D Planets</h5>
-              <p class="card-text">3D Model Viwer</p>
-              <a href="https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/index.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-
-         <div class="col">
-          <div class="card ">
-            <div class="card-body">
-              <h5 class="card-title">3D Planet Orbiting</h5>
-              <p class="card-text">Daniel Is Stinky</p>
-              <a href="https://theactualzenaldv2.github.io/Game-Development-2023/assignments/daniel/orbit.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-
-         <div class="col">
-          <div class="card odd">
-            <div class="card-body">
-              <h5 class="card-title">3D Reflections</h5>
-              <p class="card-text">Example</p>
-              <a href="https://theactualzenaldv2.github.io/Game-Development-2023/assignments/assets/cube.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">3D Physics</h5>
-              <p class="card-text">Example</p>
-              <a href="https://theactualzenaldv2.github.io/Game-Development-2023/assignments/assets/cubes.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card odd">
-            <div class="card-body">
-              <h5 class="card-title">3D Water</h5>
-              <p class="card-text">Example</p>
-              <a href="https://theactualzenaldv2.github.io/Game-Development-2023/assignments/assets/water.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">3D Postprocessing</h5>
-              <p class="card-text">Example</p>
-              <a href="https://theactualzenaldv2.github.io/Game-Development-2023/assignments/assets/postprocessingAdvanced.html" class="btn btn-primary">Click Here</a>
-            </div>
-          </div>
-        </div>
-
-        
-        
-
-      </div>
-    </div>
-
-    <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab3-tab">
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-
-
-          <div class="col">
-            <div class="card odd">
-              <div class="card-body">
-                <h5 class="card-title">Tic Tac Toe</h5>
-                <p class="card-text"> <i class="fa-solid fa-user"></i> Single Player Game</p>
-                <a href="https://theactualzenaldv2.github.io/gamedev/public2/projects/aiTicTacToe.html" class="btn btn-primary">Click Here</a>
-              </div>
-            </div>
-            </div>
-
-          <div class="col">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Diamond Run</h5>
-                <p class="card-text"><i class="fa-solid fa-user"></i> Single Player Game</p>
-                <a href="https://theactualzenaldv2.github.io/gamedev/public2/projects/diamondRun.html" class="btn btn-primary">Click Here</a>
-              </div>
-            </div>
-
-
-          </div>
-          <div class="col">
-            <div class="card odd">
-              <div class="card-body">
-                <h5 class="card-title">Connect Four</h5>
-                <p class="card-text"><i class="fa-solid fa-users"></i> Multiplayer Game</p>
-                <a href="https://theactualzenaldv2.github.io/gamedev/public2/projects/connectFour.html" class="btn btn-primary">Click Here</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Tic Tac Toe</h5>
-                <p class="card-text"><i class="fa-solid fa-users"></i> Multiplayer Game</p>
-                <a href="https://theactualzenaldv2.github.io/gamedev/public2/projects/TicTacToe.html" class="btn btn-primary">Click Here</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="card odd">
-              <div class="card-body">
-                <h5 class="card-title">Pong</h5>
-                <p class="card-text"><i class="fa-solid fa-users"></i> Multiplayer Game</p>
-                <a href="https://theactualzenaldv2.github.io/gamedev/public2/projects/pongMultiplayer.html" class="btn btn-primary">Click Here</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Login Page</h5>
-                <p class="card-text"><i class="fa-brands fa-ethereum"></i> Other</p>
-                <a href="https://theactualzenaldv2.github.io/gamedev/public2/projects/advancedLogin.html" class="btn btn-primary">Click Here</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-  </div>
-        </div><br>
-
-        <script src="https://kit.fontawesome.com/5e0a1eec4b.js" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-        <script src="https://theactualzenaldv2.github.io/Game-Development-2023/assignments/index/index.js"></script>
-      
+    socket.on('chat message', (msg) => {
+      const messages = document.getElementById('messages');
+      const li = document.createElement('li');
+      li.textContent = msg;
+      messages.appendChild(li);
+    });
+  </script>
 </body>
-<style>
-#myTabContent {
-  max-height: 340px;
-  height: 100%;
-  width: 100%;
-}
-</style>
 </html>
