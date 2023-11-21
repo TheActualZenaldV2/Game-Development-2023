@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mr Elis Stinky Test</title>
+  <!-- Add Bootstrap CSS link -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <style>
+    /* Add custom styles here if needed */
+    body {
+      padding: 20px;
+    }
+    #good {
+        color: green;
+        font-weight: bolder;
+        font-size: larger;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1 class="mt-4">Mr Elis Stinky Test</h1>
+    <h1 class="mt-4">WITH NO DANIEL SLANDER</h1>
+
+
+    <div id="result" class="mt-3"></div>
+
+    <button class="btn btn-primary mt-3" onclick="action()">Click me</button>
+    <button class="btn btn-success mt-3" onclick="add()">Add Name To Array</button>
+  </div>
+<script>
+    var array = ["Joe", "Trey", "Gabby", "Hooper"];
+    const results = document.getElementById("result");
+    function action(){
+        results.innerHTML = ''
+        for(let i =0; i< array.length; i++){
+            results.innerHTML += `<br> <li>  ${array[i]}</li>`
+            if(array[i] === "Trey"){
+            results.innerHTML += `<div id="good"> Wow hes not dumb like dan....i....e....l... </div>`
+        }
+        }
+    }
+    function add(){
+        var newName = prompt("Enter a name...");
+        array.push(newName);
+        console.log(array);
+        action()
+
+    }
+</script>
