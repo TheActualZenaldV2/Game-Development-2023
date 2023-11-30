@@ -1,3 +1,4 @@
+
 <body id="myBody">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
 
@@ -226,50 +227,63 @@ function myCheckHit(){
 
   // more if statements here
 
-}// Add these variables to control the speed of enemy movement
-let enemySpeed = 5; // Adjust this value based on your preference
-//wiggly was here
+}
+let enemySpeed = 5;
+let enemy2Speed = 1;
 
-function moveEnemy2() {
-  let currentX2 = parseInt(document.getElementById('myImg02').style.left);
-  let currentY2 = parseInt(document.getElementById('myImg02').style.top);
+function moveEnemy(enemyId) {
+  let currentX = parseInt(document.getElementById(enemyId).style.left);
+  let currentY = parseInt(document.getElementById(enemyId).style.top);
 
-  // Calculate the direction towards the target
-  let deltaX2 = parseInt(document.getElementById('myImg01').style.left) - currentX2;
-  let deltaY2 = parseInt(document.getElementById('myImg01').style.top) - currentY2;
+  let targetX = parseInt(document.getElementById('myImg01').style.left);
+  let targetY = parseInt(document.getElementById('myImg01').style.top);
 
-  // Calculate the distance
-  let distance2 = Math.sqrt(deltaX2 * deltaX2 + deltaY2 * deltaY2);
+  let deltaX = targetX - currentX;
+  let deltaY = targetY - currentY;
 
-  // Normalize the direction
-  let directionX2 = deltaX2 / distance2;
-  let directionY2 = deltaY2 / distance2;
+  let distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
-  // Update the position
-  document.getElementById('myImg02').style.left = currentX2 + directionX2 * enemySpeed + 'px';
-  document.getElementById('myImg02').style.top = currentY2 + directionY2 * enemySpeed + 'px';
+  let directionX = deltaX / distance;
+  let directionY = deltaY / distance;
+
+  document.getElementById(enemyId).style.left = currentX + directionX * enemySpeed + 'px';
+  document.getElementById(enemyId).style.top = currentY + directionY * enemySpeed + 'px';
 }
 
-function moveEnemy3() {
+let directionX = Math.random() * 2 - 1;
+let directionY = Math.random() * 2 - 1;
+setInterval(() => {
+  newAngle();
+}, 500);
 
-  let currentX3 = parseInt(document.getElementById('myImg03').style.left);
-  let currentY3 = parseInt(document.getElementById('myImg03').style.top);
-
-  // Calculate the direction towards the target
-  let deltaX3 = parseInt(document.getElementById('myImg01').style.left) - currentX3;
-  let deltaY3 = parseInt(document.getElementById('myImg01').style.top) - currentY3;
-
-  // Calculate the distance
-  let distance3 = Math.sqrt(deltaX3 * deltaX3 + deltaY3 * deltaY3);
-
-  // Normalize the direction
-  let directionX3 = deltaX3 / distance3;
-  let directionY3 = deltaY3 / distance3;
-
-  // Update the position
-  document.getElementById('myImg03').style.left = currentX3 + directionX3 * enemySpeed + 'px';
-  document.getElementById('myImg03').style.top = currentY3 + directionY3 * enemySpeed + 'px';
+function newAngle(){
+  directionX = Math.random() * 2 - 1;
+ directionY = Math.random() * 2 - 1;
 }
+
+function moveEnemyAway(enemyId) {
+  let currentX = parseInt(document.getElementById(enemyId).style.left);
+  let currentY = parseInt(document.getElementById(enemyId).style.top);
+
+  let distance = Math.sqrt(directionX * directionX + directionY * directionY);
+
+  // Normalize the direction vector
+  let normalizedDirectionX = directionX / distance;
+  let normalizedDirectionY = directionY / distance;
+
+  let enemySpeed = 5; // Adjust the speed as needed
+
+  document.getElementById(enemyId).style.left = currentX + normalizedDirectionX * enemySpeed + 'px';
+  document.getElementById(enemyId).style.top = currentY + normalizedDirectionY * enemySpeed + 'px';
+}
+
+
+
+
+var enemies = []
+enemies.push('myImg02', 'myImg03');
+
+// Add more enemies as needed
 
 // Add these variables to store the current state of movement
 let movingRight = false;
@@ -347,10 +361,13 @@ function toggleGameOver() {
   if(calls === 1){
     const gameOverOverlay = document.getElementById('gameOverOverlay');
   gameOverOverlay.style.display = (gameOverOverlay.style.display === 'none' || gameOverOverlay.style.display === '') ? 'flex' : 'none';
-  document.getElementById("myImg01").style.display = 'none'
-  document.getElementById("myImg02").style.display = 'none'
-  document.getElementById("myImg03").style.display = 'none'
-  document.getElementById("myImg04").style.display = 'none'
+  for (let i=0; i <enemies.length; i++){
+    document.getElementById(enemies[i]).style.display = 'none'
+  }
+  clearInterval(createEnemiesInt)
+  document.getElementById('myImg01').style.display = 'none';
+  document.getElementById('myImg04').style.display = 'none'
+
   stopBackgroundMove();
   }
  
@@ -393,11 +410,45 @@ function startNewGame(){
   document.getElementById("myImg03").style.display = 'block'
   document.getElementById("myImg04").style.display = 'block'
   backgroundMove();
+setInterval(() => {
+  for (let i =0; i< enemies.length; i++){
+    moveEnemy(enemies[i])
+  }  
+}, 30);
+setInterval(() => {
+  moveEnemyAway('myImg04')
+}, 30);
+createEnemiesInt = setInterval(() => {
+  createNewEnemy();
+}, 2000);
   
-// Add these intervals to control the smooth movement of enemies
-setInterval(moveEnemy2, 30); // Adjust the interval based on your preference
-setInterval(moveEnemy3, 30); // Adjust the interval based on your preference
+
 document.getElementById("startMenuOverlay").style.display = 'none'
+}
+
+var enemiesCreated = 0
+function createNewEnemy(){
+  enemiesCreated++
+// Create a new image element
+let newImg = document.createElement('img');
+const randomX = Math.random()*1000 - 200;
+const randomY = Math.random()*1000 - 200;
+
+console.log(randomX, randomY)
+// Set attributes for the new image
+newImg.id = 'myImg' + parseInt(5 + enemiesCreated)
+newImg.src = 'https://i.imgur.com/dnOSmCr.png';
+newImg.style.position = 'absolute';
+newImg.style.width = '100px';
+newImg.style.height = '80px';
+newImg.style.left = randomX;
+newImg.style.top = randomY;
+console.log(newImg.id)
+enemies.push(newImg.id)
+
+// Append the new image to the body or another container element
+document.body.appendChild(newImg);
+
 }
 
 </script>
