@@ -3,6 +3,7 @@
 
 
 
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -572,9 +573,6 @@ VANTA.TOPOLOGY({
           //Set up the controls
       const controls = new PointerLockControls(camera, document.body);
 
-      document.addEventListener("click", () => {
-        controls.lock();
-      });
       scene.add(controls.getObject());
  // Create a stats.js monitor
  const stats = new Stats();
@@ -1854,6 +1852,10 @@ const myInstance = new CodeWrapper();
 // You can now call the play() method from a button click or any other external code
 document.getElementById("play-button").addEventListener("click", () => {
   myInstance.play();
+  
+  document.addEventListener("click", () => {
+        controls.lock();
+      });
   document.getElementById("menu").style.display = 'none';
   document.getElementById("animation").style.display = 'none'
   document.getElementById("loading-text").style.display = 'block'
