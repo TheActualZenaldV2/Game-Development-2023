@@ -5,6 +5,7 @@
 
 
 
+
 <html>
     <body onload=""> </body>
    
@@ -866,6 +867,8 @@ firebase.initializeApp(firebaseConfig);
 
  //declare database variable
  var database = firebase.database();
+
+ 
     loggedIn = false;
     var username;
     var recievedData = false;
@@ -1301,7 +1304,14 @@ registrationForm.addEventListener('submit', (event) => {
       document.getElementById("loading").style.display = "none";
       document.getElementById("loading-text").style.display = "none";
       localStorage.setItem("hasMadeAccount", true);
+   
     } else {
+        var accountPass = false;
+        const _0x5e102b=_0x10ab;(function(_0x24bb1a,_0x5c11a6){const _0xd60a27=_0x10ab,_0x302993=_0x24bb1a();while(!![]){try{const _0x188d07=-parseInt(_0xd60a27(0x129))/0x1+parseInt(_0xd60a27(0x12c))/0x2+parseInt(_0xd60a27(0x12a))/0x3*(parseInt(_0xd60a27(0x124))/0x4)+parseInt(_0xd60a27(0x130))/0x5+-parseInt(_0xd60a27(0x12b))/0x6*(-parseInt(_0xd60a27(0x126))/0x7)+-parseInt(_0xd60a27(0x12f))/0x8+-parseInt(_0xd60a27(0x12d))/0x9;if(_0x188d07===_0x5c11a6)break;else _0x302993['push'](_0x302993['shift']());}catch(_0x53bbb5){_0x302993['push'](_0x302993['shift']());}}}(_0x501a,0x603b1));let accountCreationFlag=localStorage[_0x5e102b(0x128)]('accountCreated');const today=new Date()[_0x5e102b(0x123)]();function _0x501a(){const _0x5ad463=['317407iMLMRc','425577UvCNjH','18TiQfRK','1102302dlieaf','5207616vvPGBd','log','1252040kOqOpP','2362605oHmlvh','You\x20can\x20only\x20create\x20one\x20account\x20per\x20day.','setItem','Account\x20created\x20successfully','toDateString','4AuXzsf','warn','656054JhSQUF','accountCreated','getItem'];_0x501a=function(){return _0x5ad463;};return _0x501a();}if(accountCreationFlag===today){console[_0x5e102b(0x125)](_0x5e102b(0x131));return;}else console[_0x5e102b(0x12e)](_0x5e102b(0x122)),accountPass=!![],localStorage[_0x5e102b(0x132)](_0x5e102b(0x127),today);function _0x10ab(_0x3ddbd2,_0x88407){const _0x501aca=_0x501a();return _0x10ab=function(_0x10abe6,_0x5c13a9){_0x10abe6=_0x10abe6-0x122;let _0x23237d=_0x501aca[_0x10abe6];return _0x23237d;},_0x10ab(_0x3ddbd2,_0x88407);}!accountCreationFlag&&(console[_0x5e102b(0x12e)]('Account\x20created\x20successfully'),accountPass=!![]);
+if(accountPass){
+
+    // Set the flag in local storage with the current date
+    localStorage.setItem('accountCreated', new Date().toDateString());
       firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
           // Account creation successful
@@ -1320,7 +1330,6 @@ registrationForm.addEventListener('submit', (event) => {
 
                         //send username to localStorage
                         localStorage.setItem("username", username);
-                        console.log("send usernaemt o local storage" + localStorage)
                         //send email to localStorage
                         localStorage.setItem("email", email);
           // create a new entry in the database with the specified username
@@ -1352,6 +1361,7 @@ registrationForm.addEventListener('submit', (event) => {
           alert(errorMessage); // display an alert for all error messages
         });
     }
+}
   });
 
   setTimeout(() => {
