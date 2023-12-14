@@ -8,6 +8,7 @@
 
 
 
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -261,7 +262,7 @@
 
     #menu {
       color: white;
-      background: linear-gradient(45deg, rgba(106, 134, 128, 0.8), rgba(26, 35, 38, 0.8));
+      background: linear-gradient(45deg, rgba(4, 4, 4, 0.8), rgba(26, 35, 38, 0.8));
 
         position: absolute;
         top: 50%;
@@ -272,7 +273,6 @@
         flex-direction: column;
         justify-content: space-around;
         text-shadow: 5px #000000;
-        border: 5px solid white;
         border-radius: 5%;
         width: 25%;
         height: 35%;
@@ -354,7 +354,6 @@
           <div class="col-md-6" style="border-right: 2px solid white">
               <button id="settings-button" class="btn btn-primary"><i class="fas fa-cog"></i> Settings</button> <br> <br>
               <button id="play-button" class="btn btn-primary"><i class="fa-solid fa-play"></i> Play</button> <br> <br>
-              <button id="class-button" class="btn btn-primary"><i class="fa-solid fa-user-secret"></i> Class</button> <br> <br>
           </div>
           <div class="col-md-6" id="main2" style="border-left: 2px solid white">
               <div id="settings-menu" class="fade-out">
@@ -371,16 +370,10 @@
                   </div>
               </div>
           
-              <div id="class-menu" class="fade-out">
-                  <div class="text-left">
-                      <h1 class="section-title">Class</h1>
-                      <!-- Your class menu content here -->
-                  </div>
-              </div>
+             
           </div>
       </div>
-  </div> <br>
-  
+  </div> 
 
 
 </div>
@@ -455,6 +448,7 @@
   <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.topology.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.fog.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.rings.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
  
   <script type="importmap">
     {
@@ -472,6 +466,7 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.118/build/three.mod
     import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
     import { FBXLoader } from 'https://unpkg.com/three@0.118.0/examples/jsm/loaders/FBXLoader.js';
     import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/loaders/GLTFLoader.js';
+    
 
 
     const scene = new THREE.Scene();
@@ -552,19 +547,22 @@ groundMirror2.position.set(-9.1, -1.1, 8); // Set a different position here
 groundMirror2.rotateY(Math.PI /2);
 const minHeight = window.innerHeight *-5;
 const minWidth = window.innerWidth /-5.0
-VANTA.RINGS({
+VANTA.WAVES({
   el: "#animation",
   mouseControls: true,
   touchControls: true,
   gyroControls: false,
   minHeight: minHeight,
   minWidth: minWidth,
-  scale: 1.00,
+  scale: 0.65,
   scaleMobile: 1.00,
-  backgroundColor: 0x0,
-  color: 0xccc2d2
-})
+  color: 0xc0c0c,
+  shininess: 150.00,
+  waveHeight: 1.50,
+  waveSpeed: 2.00,
+  zoom: 0.65
 
+})
         document.addEventListener("DOMContentLoaded", function () {
         // Get references to your buttons and menus
         const settingsButton = document.getElementById("settings-button");
@@ -572,7 +570,6 @@ VANTA.RINGS({
         const classButton = document.getElementById("class-button");
         const settingsMenu = document.getElementById("settings-menu");
         const playMenu = document.getElementById("play-menu");
-        const classMenu = document.getElementById("class-menu");
 
         // Add event listeners to toggle menus with custom fade animations
         settingsButton.addEventListener("click", function () {
@@ -583,9 +580,6 @@ VANTA.RINGS({
             toggleMenu(playMenu);
         });
 
-        classButton.addEventListener("click", function () {
-            toggleMenu(classMenu);
-        });
 
         // Function to toggle fade-in and fade-out classes
         function toggleMenu(menu) {
