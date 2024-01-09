@@ -2085,7 +2085,7 @@ const intervalId = setInterval(() => {
 
 
     const textureLoader = new THREE.TextureLoader(loadingManager);
-    textureLoader.load('https://theactualzenaldv2.github.io/Game-Development-2023/assignments/capstone/overlay.jpg'); //overlay experimental background img 
+    textureLoader.load('overlay.jpg'); //overlay experimental background img 
     //
     //
     //possible skyboxes made with https://skybox.blockadelabs.com/
@@ -2096,7 +2096,7 @@ const intervalId = setInterval(() => {
     //https://i.imgur.com/y4K0Idj.jpg
     //https://i.imgur.com/Qp9m02L.jpg <=== best so far
     //https://i.imgur.com/7EFwzds.jpg
-    const texture = textureLoader.load('https://theactualzenaldv2.github.io/Game-Development-2023/assignments/capstone/skybox.jpg');
+    const texture = textureLoader.load('skybox.jpg');
 
     // Create the skybox geometry
     const skyboxGeometry = new THREE.SphereGeometry(1000, 32, 32);
@@ -2140,7 +2140,7 @@ loadingManager.onError = function (url) {
 
 
 
-    loader1.load('https://theactualzenaldv2.github.io/Game-Development-2023/assignments/capstone/SciFiRifle.fbx', function (object) {
+    loader1.load('SciFiRifle.fbx', function (object) {
         gun = object;
         gun.scale.set(0.003, 0.003, 0.003); // Set the scale of the gun model
         gun.position.set(1.5, -1.2, -2); // Set the position of the gun model
@@ -2148,7 +2148,7 @@ loadingManager.onError = function (url) {
         gun.rotation.z = Math.PI; // Rotate the gun model around the y axis
         // Load the gun texture
         const textureLoader = new THREE.TextureLoader();
-        const gunTexture = textureLoader.load('https://theactualzenaldv2.github.io/Game-Development-2023/assignments/capstone/gunTexture.jpg');
+        const gunTexture = textureLoader.load('gunTexture.jpg');
         gunTexture.repeat.set(0.0032, 0.0032); // Set the repeat property of the texture
 
         // Create a material with a fixed color
@@ -2403,7 +2403,7 @@ loadingManager.onError = function (url) {
 
     }
 
-    let mapUrl = "https://theactualzenaldv2.github.io/Game-Development-2023/assignments/capstone/CAPSTONEMAP.gltf"
+    let mapUrl = "CAPSTONEMAP.gltf"
 
     // Load the GLTF model
     const gltfLoader = new THREE.GLTFLoader(loadingManager);
