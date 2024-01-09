@@ -51,7 +51,6 @@ var accountError = false;
 if (localStorage.getItem("username") !== null) {
 
     username = localStorage.getItem("username");
-    console.log("Username: " + username);
     document.getElementById("menuLogin")
         .innerHTML = "Profile";
     document.getElementById("menuUsername")
@@ -130,7 +129,6 @@ function logout() {
     //clear username variable
     username = "";
     console.clear();
-    console.log("Logged out successfully.");
     //clear local storage username
     localStorage.removeItem("username");
     setTimeout(() => {
@@ -378,7 +376,6 @@ registrationForm.addEventListener('submit', (event) => {
                     .createUserWithEmailAndPassword(email, password)
                     .then((userCredential) => {
                         // Account creation successful
-                        console.log("Account created successfully");
                         // show account confirmation form and hide spinner
                         document.getElementById("account-confirmation")
                             .style.display = "block";
@@ -500,7 +497,6 @@ loginForm.addEventListener('submit', (event) => {
 
 
 
-                            console.log("User logged in successfully (Step 1)");
 
                             document.getElementById("username-from-database")
                                 .innerHTML = username;
@@ -838,7 +834,6 @@ databaseError1.addEventListener('submit', (event) => {
                 })
                 .then(() => {
                     // entry creation successful
-                    console.log("Account data sent to database successfully (Step 2)");
                     // show login form and hide spinner
                     document.getElementById("databaseError")
                         .style.display = "none";
@@ -937,7 +932,6 @@ function enableDevAccess() {
         console.log("Developer access enabled. Press B to open the shop.");
     }
     else {
-        console.log("Incorrect code. Developer access not enabled.");
     }
 }
 
@@ -1082,7 +1076,6 @@ function closeControls() {
 function updateFOV(value) {
     userFov = value;
     if (value > 150.0) {
-        console.log("Fuck you");
         userFov = 150;
     }
     document.getElementById("fovValue")
@@ -1092,7 +1085,6 @@ function updateFOV(value) {
 function updateResolution(value) {
     userResolution = value;
     if (value > 2.5) {
-        console.log("Fuck you");
         userResolution = 2.5;
     }
     document.getElementById("resolution")
@@ -1297,7 +1289,6 @@ function gameStartFunction() {
 
 
 
-        console.log("Loading GLTF")
         animate();
     };
 
@@ -1420,7 +1411,6 @@ function round1(roundNbr){
    setTimeout(() => {roundHolder.style.display = 'none';}, 3500);
    document.getElementById("round-count").textContent = roundNbr;
    roundOver = false;
-   console.log("round " + roundNbr);
 
    setTimeout(() => {
         spawnEnemies(5, new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial({ color: 0x00ff00 }), 1);
@@ -1460,7 +1450,6 @@ function round2(roundNbr){
    setTimeout(() => {roundHolder.style.display = 'none';}, 3500);
    document.getElementById("round-count").textContent = roundNbr;
    roundOver = false;
-   console.log("round " + roundNbr)
 
    setTimeout(() => {
         spawnEnemies(5, new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial({ color: 0x00ff00 }), 1);
@@ -1502,7 +1491,6 @@ function round3(roundNbr){
    setTimeout(() => {roundHolder.style.display = 'none';}, 3500);
    document.getElementById("round-count").textContent = roundNbr;
    roundOver = false;
-   console.log("round " + roundNbr)
    roundPopup.classList.remove('fade-in');
     roundPopup.classList.remove('fade-out');
     roundPopup.style.display = 'block';
@@ -1560,7 +1548,6 @@ function round4(roundNbr){
    setTimeout(() => {roundHolder.style.display = 'none';}, 3500);
    document.getElementById("round-count").textContent = roundNbr;
    roundOver = false;
-   console.log("round " + roundNbr)
 setTimeout(() => {
     spawnEnemies(5, new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial({ color: 0x00ff00 }), 1);
     spawnEnemies(7, enemyGeometry2, enemyMaterial2, 2);
@@ -1595,7 +1582,6 @@ function round5(roundNbr){
    setTimeout(() => {roundHolder.style.display = 'none';}, 3500);
    document.getElementById("round-count").textContent = roundNbr;
    roundOver = false;
-   console.log("round " + roundNbr);
 
    roundPopup.classList.remove('fade-in');
     roundPopup.classList.remove('fade-out');
@@ -1654,7 +1640,6 @@ function round6(roundNbr){
    setTimeout(() => {roundHolder.style.display = 'none';}, 3500);
    document.getElementById("round-count").textContent = roundNbr;
    roundOver = false;
-   console.log("round " + roundNbr)
 
 setTimeout(() => {
     spawnEnemies(1, new THREE.BoxGeometry(3, 3, 3), new THREE.MeshBasicMaterial({ color: 0xffffff }), 3);
@@ -1693,7 +1678,6 @@ function round7(roundNbr){
    setTimeout(() => {roundHolder.style.display = 'none';}, 3500);
    document.getElementById("round-count").textContent = roundNbr;
    roundOver = false;
-   console.log("round " + roundNbr)
 
 
 //lvl 1:         spawnEnemies(1, new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial({ color: 0x00ff00 }), 1);
@@ -1735,7 +1719,6 @@ function round8(roundNbr){
    setTimeout(() => {roundHolder.style.display = 'none';}, 3500);
    document.getElementById("round-count").textContent = roundNbr;
    roundOver = false;
-   console.log("round " + roundNbr)
 
 
 //lvl 1:         spawnEnemies(1, new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial({ color: 0x00ff00 }), 1);
@@ -1777,7 +1760,6 @@ function round9(roundNbr){
    setTimeout(() => {roundHolder.style.display = 'none';}, 3500);
    document.getElementById("round-count").textContent = roundNbr;
    roundOver = false;
-   console.log("round " + roundNbr)
 setTimeout(() => {
     spawnEnemies(1, new THREE.BoxGeometry(3, 3, 3), new THREE.MeshBasicMaterial({ color: 0xffffff }), 3);
 }, 1000);
@@ -1830,7 +1812,6 @@ function round10(roundNbr){
    setTimeout(() => {roundHolder.style.display = 'none';}, 3500);
    document.getElementById("round-count").textContent = roundNbr;
    roundOver = false;
-   console.log("round " + roundNbr)
 
 
 //lvl 1:         spawnEnemies(1, new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial({ color: 0x00ff00 }), 1);
@@ -1880,7 +1861,6 @@ function round11(roundNbr){
    setTimeout(() => {roundHolder.style.display = 'none';}, 3500);
    document.getElementById("round-count").textContent = roundNbr;
    roundOver = false;
-   console.log("round " + roundNbr)
 
 setTimeout(() => {
     spawnEnemies(7, new THREE.BoxGeometry(3, 3, 3), new THREE.MeshBasicMaterial({ color: 0xffffff }), 3);
@@ -1922,7 +1902,6 @@ function round12(roundNbr){
    setTimeout(() => {roundHolder.style.display = 'none';}, 3500);
    document.getElementById("round-count").textContent = roundNbr;
    roundOver = false;
-   console.log("round " + roundNbr)
 
 setTimeout(() => {
     spawnEnemies(5, new THREE.BoxGeometry(3, 3, 3), new THREE.MeshBasicMaterial({ color: 0xffffff }), 3);
@@ -1963,7 +1942,6 @@ function round13(roundNbr){
    setTimeout(() => {roundHolder.style.display = 'none';}, 3500);
    document.getElementById("round-count").textContent = roundNbr;
    roundOver = false;
-   console.log("round " + roundNbr)
 
 
 //lvl 1:         spawnEnemies(1, new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial({ color: 0x00ff00 }), 1);
@@ -2033,7 +2011,6 @@ round++
    setTimeout(() => {roundHolder.style.display = 'none';}, 3500);
    document.getElementById("round-count").textContent = round;
    roundOver = false;
-   console.log("Freeplay Round: " + round)
 
  const freeplayDifficulty = round/2;
  //lvl 1:         spawnEnemies(1, new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial({ color: 0x00ff00 }), 1);
@@ -2449,13 +2426,11 @@ loadingManager.onError = function (url) {
 
                 // Check collision with player
                 if (box.containsPoint(camera.position)) {
-                    console.log("Collision detected");
                     collisionDetected = true;
                 }
             }
         }
         else {
-            console.log('GLTF model not loaded yet');
         }
 
         return collisionDetected;
@@ -2482,7 +2457,6 @@ loadingManager.onError = function (url) {
             }
         }
         else {
-            console.log('GLTF model not loaded yet');
         }
         // No collision detected, return false
         return false;
@@ -2510,7 +2484,6 @@ loadingManager.onError = function (url) {
             }
         }
         else {
-            console.log('GLTF model not loaded yet');
         }
         // No collision detected, return false
         return false;
@@ -2558,7 +2531,6 @@ loadingManager.onError = function (url) {
         if (gameOver) return;
         //if there are more than 20 bullets in the array, remove the first one
         if (enemyBullets.length > 20) {
-            console.log("Removing bullet");
             scene.remove(enemyBullets[0]);
             enemyBullets.shift();
         }
@@ -2617,7 +2589,6 @@ loadingManager.onError = function (url) {
         if (gameOver) return;
         //if more than 20 bullets in bullet array, remove first one 
         if (bullets.length > 10) {
-            console.log("Removing bullet");
             scene.remove(bullets[0]);
             bullets.shift();
         }
@@ -3666,11 +3637,7 @@ updateLeaderboardButton.addEventListener('click', (event) => {
                             .scrollHeight + 10;
                     }
                     else {
-                        // Log the average, low, and high ping times to the console
-                        console.log("Firebase Response Time:");
-                        console.log(`Average Response Time: ${averagePingTime.toFixed(2)} ms`);
-                        console.log(`Lowest Response Time: ${lowPingTime.toFixed(2)} ms`);
-                        console.log(`Highest Response Time: ${highPingTime.toFixed(2)} ms`);
+                        
                     }
                 }, 6000);
             }
@@ -3853,12 +3820,10 @@ updateLeaderboardButton.addEventListener('click', (event) => {
 
                     if (megaJumpCooldown !== null) {
                         clearTimeout(megaJumpTimeoutId);
-                        console.log("megaJump cooldown cancelled");
                     }
 
                     scene.remove(powerup);
                     powerups.splice(i, 1);
-                    console.log("megaJump added to inventory");
                     break;
                 case "nuke":
                     if (nukeActive || inventorySlot1.classList.contains("inventoryAvaliable")) {
@@ -3869,7 +3834,6 @@ updateLeaderboardButton.addEventListener('click', (event) => {
                     inventorySlot1.classList.add("inventoryAvaliable");
                     scene.remove(powerup);
                     powerups.splice(i, 1);
-                    console.log("nuke added to inventory");
 
                     break;
 
@@ -3885,16 +3849,13 @@ updateLeaderboardButton.addEventListener('click', (event) => {
 
                     if (liquifyingBulletsTimeoutId !== null) {
                         clearTimeout(liquifyingBulletsTimeoutId);
-                        console.log("liquifyingBullets cooldown cancelled");
                     }
 
                     scene.remove(powerup);
                     powerups.splice(i, 1);
-                    console.log("liquifyingBullets added to inventory");
                     break;
                 case "shield":
                     if (inventorySlot5.classList.contains("inventoryAvaliable")) {
-                        console.log("error");
                         return;
                     }
                     inventory.push("shield");
@@ -3902,7 +3863,6 @@ updateLeaderboardButton.addEventListener('click', (event) => {
                     inventorySlot5.classList.add("inventoryAvaliable");
                     scene.remove(powerup);
                     powerups.splice(i, 1);
-                    console.log("shield added to inventory");
                     updateHealth();
                     break;
 
@@ -3918,12 +3878,10 @@ updateLeaderboardButton.addEventListener('click', (event) => {
 
                     if (stealthTimeoutId !== null) {
                         clearTimeout(stealthTimeoutId);
-                        console.log("stealth cooldown cancelled");
                     }
 
                     scene.remove(powerup);
                     powerups.splice(i, 1);
-                    console.log("stealth added to inventory");
                     break;
                 }
             }
@@ -4217,7 +4175,6 @@ updateLeaderboardButton.addEventListener('click', (event) => {
             if (event.key === "b" || event.key === "B") {
                 if (gameOver) return;
                 if (!gameLoaded) return;
-                  console.log("open ya mamma")
         toggleEventListeners();
                 if (shop.classList.contains("active")) {
                     if (!shopOpen) {
@@ -4450,7 +4407,6 @@ updateLeaderboardButton.addEventListener('click', (event) => {
             for (let enemyBullet of enemyBullets) {
                 scene.remove(enemyBullet);
             }
-            console.log("nuke");
             enemies = [];
             enemyBullets = [];
 
@@ -4581,7 +4537,6 @@ updateLeaderboardButton.addEventListener('click', (event) => {
                 inventorySlot2.innerHTML = '<i class="fa-solid fa-clock"></i>';
                 inventorySlot2.classList.add('inventoryCooldown');
                 megaJumpTimeoutId = setTimeout(() => {
-                    console.log("main jump cooldown")
                     if (hasBoughtMegaJump) {
                         // add mega jump back to inventory
                         inventory.push("megaJump");
@@ -4628,7 +4583,6 @@ updateLeaderboardButton.addEventListener('click', (event) => {
                 inventorySlot3.innerHTML = '<i class="fa-solid fa-clock"></i>';
                 inventorySlot3.classList.add('inventoryCooldown');
                 liquifyingBulletsTimeoutId = setTimeout(() => {
-                    console.log("liquifying bullets cooldown")
                     if (hasBoughtLiquifyingBullets) {
                         // add liquifying bullets back to inventory
                         inventory.push("liquifyingBullets");
@@ -4677,7 +4631,6 @@ updateLeaderboardButton.addEventListener('click', (event) => {
                 inventorySlot4.innerHTML = '<i class="fa-solid fa-clock"></i>';
                 inventorySlot4.classList.add('inventoryCooldown');
                 stealthTimeoutId = setTimeout(() => {
-                    console.log("liquifying bullets cooldown")
                     if (hasBoughtStealth) {
                         // add liquifying bullets back to inventory
                         inventory.push("stealth");
