@@ -1,0 +1,768 @@
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="icon" type="image/x-icon" href="https://i.imgur.com/z7OXcUS.png">
+    <meta charset="utf-8" />
+    <title>FireShot</title>
+    <link rel="stylesheet" href="main.css">
+
+	<body>
+		<div id="background"></div>
+
+
+		
+<!-- Game Menus-->
+
+    <div class="menu" id="startMenu" style="display: block;">
+      <h1 style="color: gold; font-weight: bolder; text-shadow: 5px 5px 5px #1f1f1f;"> <img src="https://i.imgur.com/z7OXcUS.png"> FireShot <span style="color: white; margin-left: 10px;"> v0.2.2</span></h1>
+      <p style="color: white;"> Logged In As: <span style="cursor: pointer;" id="menuUsername" onclick="showLoginForm()"> N/A</span></p>
+      <p id="loginWarning" style="font-size: 1rem; color: gold;" > Login to send scores to global leaderboard, chat, view account stats and more. </p>
+      <button onclick="startGame();"><i class="fa-solid fa-play"></i> Start Game </button> 
+      <button onclick="openControls()"><i class="fa-solid fa-gamepad"></i> How To Play</button>
+	  <button onclick="openOptions();"><i class="fa-solid fa-gears"></i> Settings </button> <br>
+	  <button id="changelogs" onclick="openDemo();"><i class="fa-solid fa-inbox"></i> Changelogs</button>
+    <button id="login" onclick="showLoginForm()"> <i class="fa-solid fa-user"></i> <span id="menuLogin">Login </span> </button>
+<button id="register" onclick="showRegistrationForm()"> <i class="fa-solid fa-user-plus"></i> Register </button>
+    </div>
+
+
+	
+<div class="menu" id="optionsMenu" style="display: none;">
+  <h1><i class="fa-solid fa-screwdriver-wrench"></i> Options</h1>
+  <hr>
+  <button id="uiBtn" onclick="toggleUI()" style="background-color: aquamarine;"><i class="fa-solid fa-cookie-bite"></i> <span id="ui"> UI Enabled </span></button>
+  <br>
+  <br>
+  <label><input type="checkbox" id="antialias"><i class="fa-solid fa-camera-retro"></i> Anti-Aliasing</label>
+  <br>
+  <br>
+  <label id="fov" for="fov-slider"><i class="fa-solid fa-magnifying-glass"></i> <span id="fovValue">  FOV: 90</span></label><input type="range" id="fov-slider" min="30" max="150" value="90" onchange="updateFOV(this.value);">
+  <br>
+  <br>
+  <label id="resolution" for="resolution-slider"><i class="fa-solid fa-pen"></i> Resolution: 1</label><input type="range" id="resolution-slider" min="0.1" max="2.5" value="1" step="0.1" onchange="updateResolution(this.value);">
+  <br>
+  <br>
+  <button onclick="resetSettings();" id="resetSettingsBtn"><i class="fa-solid fa-trash-can"></i> Reset</button><button onclick="closeOptions();">Save <i class="fa-solid fa-angles-right"></i></button>
+</div>
+
+
+<div id="controlsMenu" class="menu" style="display: none;">
+  <h1><i class="fa-solid fa-gamepad"></i> Controls:</h1>
+  <ul>
+    <li><i class="fa-solid fa-person-walking"></i> Use WASD to move</li>
+    <li><i class="fa-solid fa-person-running"></i> Shift to dash</li>
+    <li><i class="fa-solid fa-angles-up"></i> Space to jump</li>
+    <li><i class="fa-solid fa-meteor"></i> Left click to shoot</li> <br> <hr>
+	<h1><i class="fa-solid fa-code-pull-request"></i> How to play:</h1>
+    <li><i class="fa-solid fa-arrows-spin"></i> Move mouse to look around</li>
+    <li><i class="fa-solid fa-bomb"></i> Avoid Touching Zombies</li>
+    <li><i class="fa-brands fa-gripfire"></i> Zombies will shoot at you</li>
+  </ul>
+  <button onclick="closeControls();">Continue <i class="fa-solid fa-angles-right"></i></button>
+</div>
+
+<div id="demo" style="display: none;">
+	
+	<div id="demoContent" class="menu">
+		<button onclick="closeDemo();">Close <i class="fa-solid fa-angles-right"></i></button>
+<hr>
+<br>
+		<h1> <i class="fa-solid fa-bars-progress"></i> Beta Version </h1><hr> 
+		<p><i class="fa-solid fa-list"></i>  Full version concept: <br></p>
+		<li> <i class="fa-solid fa-users"></i> <span style="color: limegreen; font-weight: bold;">Accounts (Completed) </span></li>
+		<li> <i class="fa-solid fa-biohazard"></i> <span style="color: limegreen; font-weight: bold;">Zombie Rounds (Completed) </span></li>
+		<li> <i class="fa-solid fa-shop"></i> <span style="color: limegreen; font-weight: bold;">Functioning Shop (Completed)</span> </li>
+		<li> <i class="fa-solid fa-angles-up"></i> <span style="color: limegreen; font-weight: bold;">Powerups (Completed)</span></li>
+		<li> <i class="fa-solid fa-medal"></i> <span style="color: limegreen; font-weight: bold;">Leaderboards (Completed) </span></li> <br>
+		<hr><br>
+		<div id="changelog">
+		<h1> <i class="fa-solid fa-folder-open"></i>  Changelogs</h1> <hr>
+
+        <p style="text-decoration: underline;color: burlywood"> v0.2.2</p>
+        <li style="color: gold; text-shadow: none; font-weight: bold;"> Added Freeplay mode </li>
+        <li> All bullets now move faster due to optimization issues</li>
+        <li> Added Round Popups whenever a new game <br> element is introduced</li>
+        <li> Adjusted game economy & kill rewards</li>
+        <li> Final minor bug fixes</li>
+            <br>
+
+
+        <p style="text-decoration: underline;color: burlywood"> v0.2.1</p>
+        <li style="color: gold; text-shadow: none; font-weight: bold;"> Moved all assets onto github hosting <br> refer to credits for original creators  </li>    
+        <li> Visual bug fixes to map</li>
+        <li> Pause game logic fixes</li>
+        <li> Added more zombie rounds</li>
+        <br>
+
+
+
+        <p style="text-decoration: underline;color: burlywood"> v0.2.0</p>
+        <li style="color: gold; text-shadow: none; font-weight: bold;">WIP Zombie Round System</li>
+        <li> Finalized Game Map </li>
+        <li> WIP Level 3 Zombies</li>
+        <li> Added tone mapping for HDR-Like effect</li>
+        <li> Added crosshair hitmarker</li>
+<br>
+
+        <p style="text-decoration: underline;color: burlywood"> v0.1.9</p>
+        <li style="color: gold; text-shadow: none; font-weight: bold;">Menu CSS Redesign</li>
+        <li> Added spinners as placeholders where needed </li>
+        <li> Added WIP background to first intro screen</li>
+        <li> CSS Consistency Improvements </li>
+        <li> Added leaderboard update button</li>
+        <br>
+    <p style="text-decoration: underline;color: burlywood"> v0.1.8</p>
+    <li style="color: gold; text-shadow: none; font-weight: bold;">You can now search a user by clicking <br> their name in chat</li>
+    <li> Added chat cooldown</li>  
+    <li> Bug + CSS Fixes </li>
+      <li> Slight Menu Redesign</li>
+      <li> Click on a username in leaderboard to view profile</li>
+      <li> Type /data in chat for cool server stats </li>
+      <br>
+
+
+    <p style="text-decoration: underline;color: burlywood"> v0.1.7</p>
+    <li style="color: gold; text-shadow: none; font-weight: bold;">Added User searching</li>
+    <li> You can now search for a user and see their stats</li>
+    <li> Leaderboard now has solid colors and medals</li>
+    <li> Chat shows date and time</li>
+    <li> Chat sender is now green if you sent the message.</li>
+    <li> Shooting bug fix</li>
+    
+      <br>
+
+    <p style="text-decoration: underline;color: burlywood"> v0.1.6</p>
+    <li style="color: gold; text-shadow: none; font-weight: bold;">Added Global Chat</li>
+    <li> Added animations to leaderboard</li>
+    <li> Leaderboard now shows current run</li>
+    <li> Bug Fixes</li> <br>
+
+
+    <p style="text-decoration: underline;color: burlywood"> v0.1.5</p>
+    <li style="color: gold; text-shadow: none; font-weight: bold;">Accounts update</li>
+    <li> Added Accounts</li>
+    <li> Added Leaderboards</li>
+    <li> Added Account-stats</li>
+    <li> Framework for global chat WIP</li> <br> 
+
+
+
+
+
+
+    <p style="text-decoration: underline;color: burlywood"> v0.0.5</p>
+    <li style="color: gold; text-shadow: none; font-weight: bold;">Game is now called FireShot</li>
+        <li> CSS Remake </li>
+        <li> Bug Fixes </li>
+        <li> New map added - Trapped (WIP)</li> 
+        <li> Zombies now give money on death</li>
+        <li> Added money & score earnt popup</li>
+        <li> Added full and complete shop functionality</li>
+        <li> Added following upgrades: Health, Speed, Ammo, Damage</li> 
+        <li> Added free upgrade when you start</li>
+        <li> Animations remake</li> <br>
+        
+
+    <p style="text-decoration: underline; color: burlywood"> v0.0.4</p>
+        <li style="color: gold; text-shadow: none; font-weight: bold;"> Added GLTF Map</li>
+        <li> Bug fixes</li>
+        <li> This will be the new development version from now on</li> <br>
+
+		<p style="text-decoration: underline;color: burlywood"> v0.0.3</p>
+    <li style="color: gold; text-shadow: none; font-weight: bold;"> Fully Finished Popups </li>
+
+		<li> Added popup, will be used to send information</li>
+		<li> Added Nuke and Shield Powerups</li>
+		<li> Powerups now spin and move up/down</li>
+		<li> Powerups now identified based off of color</li>
+		<li> Changes to zombie spawning intervals</li>
+		<li> Added double jump mechanic</li>
+		<li> Added another enemy type</li>
+		<li> New enemy type moves faster, <br> doesn't shoot, 2 hits to kill</li>
+		<li> 2 point reward for killing them</li> <br>
+
+
+		<p style="text-decoration: underline;color: burlywood"> v0.0.2</p>
+    <li style="color: gold; text-shadow: none; font-weight: bold;"> Basic Powerups (WIP) </li>
+
+		<li> Changed Zombie Spawning (Rounds soon)</li>
+		<li> Decreased Gun Fire rate</li>
+		<li> Added Liquid Bullets + Mega Jump powerups</li>
+		<li> Added logic for future powerups</li>
+		<li> Updated Map</li>
+		<li> Slight Lighting changes (WIP)</li>
+		<li> Money displays with comma seperators</li>
+		<li> Added powerups spawning on the ground</li>
+		<li> Added Powerup spawning</li>
+		<li> Once a second, 25% chance to spawn powerup</li>
+		<li> Max 20 powerups on map at once</li>
+		<br>
+		<p style="text-decoration: underline;color: burlywood"> v0.0.1</p>
+    <li style="color: gold; text-shadow: none; font-weight: bold;"> Added Gun Model </li>
+		<li> WASD Movement Overlay</li>
+		<li> Added shooting animation (recoil soon)</li>
+		<li> Reload animation</li>
+		<li> Bug Fixes</li>
+		<li> Fixed massive movement bug</li>
+		<br>
+		<p style="text-decoration: underline;color: burlywood"> v0.0.0</p>
+		<li> Initial Version </li> <hr> <br>
+
+
+    <h1> <i class="fa-solid fa-link"></i> Credits </h1> <hr>
+    <li> <span style="font-weight: bold;">Skybox: </span><a href="https://skybox.blockadelabs.com/"> Blockadelabs</a></li>
+    <li> <span style="font-weight: bold;"> CSS Animations: </span><a href="https://animista.net/"> Animista </a></li>
+    <li> <span style="font-weight: bold;">Wallpapers (WallpaperFlare.com): </span><br><a href="https://c4.wallpaperflare.com/wallpaper/142/751/831/landscape-anime-digital-art-fantasy-art-wallpaper-preview.jpg">(Main Menu) </a> <a href="https://c4.wallpaperflare.com/wallpaper/600/360/964/digital-art-landscape-forest-mountains-wallpaper-preview.jpg">(Secondary Menu) </a></li>
+    <li> <span style="font-weight: bold;">Weapon Model: </span><a href="https://aaron-winter.itch.io/sci-fi-rifle"> Aaron Winter (via itch.io) </a></li>
+    <li> <span style="font-weight: bold;">CSS Icons: </span><a href="https://fontawesome.com/"> FontAwesome </a></li>
+    <li> <span style="font-weight: bold;">Map Engine: </span><a href="https://krunker.io/editor.html"> Krunker Editor </a></li>
+    <li> <span style="font-weight: bold;">Map Models: </span><a href="https://krunker.io/editor.html"> Yendis/FRVR </a></li>
+    <h5> Email comemesswithme1@gmail.com <br> for additional credit or removal. <br> Developed by Jon L.</h5>
+		</div> 
+<button onclick="closeDemo();">Close <i class="fa-solid fa-angles-right"></i></button>
+
+	</div>
+</div>
+<!-- Loading Spinner -->
+<div id="loading"></div>
+<span id="loading-text">Please Wait....</span>
+
+<!-- Game Over HTML -->
+
+<div id="endGame" style="display: none" class="endGame">
+<div class="stats-container1">
+
+  <div id="stats">
+    <h1><i class="fa-solid fa-skull"></i> Game Over!</h1>
+
+
+    <p><i class="fa-solid fa-star"></i> Score: <span id="score-holder"></span></p>
+    <p> <i class="fa-solid fa-circle-radiation"></i> Round: <span id="roundEnd"></span></p>
+    <button onclick="location.reload()">  <span style="font-weight: 300">Play Again </span><i class="fa-solid fa-rotate"></i></button>
+  </div>
+</div>
+<div id="leaderboard-holder">
+  <h1><i class="fa-solid fa-medal"></i> High Scores</h1> 
+
+  <button onclick="showUserSearch()" id="searchPlayerButton"> <i class="fa-solid fa-magnifying-glass-plus"></i> <span style="margin-left: 5px;">Find Player</span></button>
+  <button onclick="searchUser(username)" id="myProfileButton"> <i class="fa-solid fa-magnifying-glass-minus"></i><span style="margin-left: 5px;">Your Profile</span></button> 
+  <button id="updateLeaderboard"> <i class="fa-solid fa-arrows-rotate"></i><span id="leaderboardUpdate" style="margin-left: 5px;"> Update Leaderboard </span></button> 
+  <hr>
+  <table id="highscoreTable">
+    <thead>
+      <tr>
+        <th>Username</th> 
+        <th>Score</th>
+        <th>Round</th>
+        <th>Date</th>
+      </tr> 
+    </thead> 
+    <tbody id="high-scores"> 
+    </tbody>
+  </table>
+
+  <div id="userSearch" style="display: none;">
+<div style="display: flex; align-items: center;">
+<input type="text" id="usernameSearchInput" placeholder="Enter a username to search for..." style="width: 65%;" oninput="document.getElementById('myProfileButton').classList.remove('active'); document.getElementById('searchPlayerButton').classList.add('active'); document.getElementById('results').style.display = 'none'; searchUser();"> 
+ <button onclick="searchUser()" style="width: 15%;">Search</button>
+  <button onclick="hideUserSearch()" style="width: 15%;">Close</button>
+</div>
+<p id="error" style="color: red;"> </p>
+<div id="results" style="display: none;">
+    <h3><i class="fa-solid fa-medal"></i> <span id="usernameResult"></span></h3>
+
+    <p><i class="fa-solid fa-star"></i> Average Score:
+        <span id="averageScoreResult">
+            <span class="loading-spinner" style="margin-left: 5px;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: #ccc; font-weight: bold;"></i>
+            </span>
+        </span>
+    </p>
+    <p><i class="fa-solid fa-dice"></i> Total Score:
+        <span id="totalScoreResult">
+            <span class="loading-spinner" style="margin-left: 5px;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: #ccc; font-weight: bold;"></i>
+            </span>
+        </span>
+    </p>
+    <p><i class="fa-solid fa-trophy"></i> Games Played:
+        <span id="numRunsResult">
+            <span class="loading-spinner" style="margin-left: 5px;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: #ccc; font-weight: bold;"></i>
+            </span>
+        </span>
+    </p>
+</div>
+
+</div>
+
+</div>
+
+
+
+      <div id="chat-container">
+   <h1 style="text-align: center;"> <i class="fa-solid fa-earth-americas"></i> Global Chat </h1> <hr>
+   <div id="chat-messages"></div>
+    <input type="text" id="chat-input" placeholder="Enter a message... (type: /data /ping)" style="text-align: left;">
+    <button id="chat-send"><span id="sendButtonText"> Send <i class="fa-solid fa-paper-plane"></i> </span> </button>
+    </div>
+
+
+</div>
+<!-- Game UI	-->
+
+<div class="options-menu" id="options-menu">
+  <h2 style="text-align: center;"><i class="fa-solid fa-angles-up"></i> Choose a free perk: </h2>
+  <ul>
+    <li id="dayRewardHealth">
+      <i class="fas fa-heart"></i>
+      <span id="dayRewardHealthText">More Health</span>
+    </li>
+    <li id="dayRewardAmmo">
+      <i class="fas fa-bomb"></i>
+      <span id="dayRewardAmmoText">More Ammo</span>
+    </li>
+    <li id="dayRewardDamage">
+      <i class="fas fa-fire"></i>
+      <span id="dayRewardDamageText">More Damage</span>
+    </li>
+    <li id="dayRewardMovement">
+      <i class="fas fa-running"></i>
+      <span id="dayRewardMovementText">Faster Movement</span>
+    </li> <br>
+  </ul>
+  <button id="upgradesContinue"> Continue <i class="fa-solid fa-angles-right"></i></button>
+
+</div>
+
+<div id="overlay"> <span id="mapChangeText"></span></div>
+<div id="gameUI" style="display: none;">
+	<div id="round-popup">
+		<div id="round-popup-content">
+	<h3 style=" font-weight: bold; text-align: center;">Press H to Hide | <span id="popuo-round"> Round 1 </span><i class="fa-solid fa-biohazard"></i></h3> <hr> <br> 
+    <li> <i class="fa-solid fa-bolt"></i> Constantly Stay Moving & Avoid Enemies</li> <BR>
+	<li><i class="fa-solid fa-shop"></i> Press B to buy powerups & upgrades from the shop</li> <br>
+    <li> <i class="fa-solid fa-biohazard"></i> Press Shift to Sprint (With cooldown)</li> <br>
+	<li> <i class="fa-solid fa-toolbox"></i> Next Milestone: Level 3</li> <BR>
+		</div>
+</div>
+
+  <div id="inventory-container">
+    <div id="inventory-slot-1" class="inventory-slot"><i class="fa-solid fa-bomb"></i></div>
+    <div id="inventory-slot-2" class="inventory-slot"><i class="fa-solid fa-angles-up"></i></div>
+    <div id="inventory-slot-3" class="inventory-slot"><i class="fa-solid fa-fire"></i></div>
+    <div id="inventory-slot-4" class="inventory-slot"><i class="fa-solid fa-user-ninja"></i></div>
+    <div id="inventory-slot-5" class="inventory-slot"><i class="fa-sharp fa-solid fa-shield"></i></div>
+  </div>
+  <div id="keyboard-overlay">
+     <div class="key-row">
+      <div class="key" id="w-key">W</div>
+      <div class="key" id="a-key">A</div>
+      <div class="key" id="s-key">S</div>
+      <div class="key" id="d-key">D</div>
+    </div>
+  </div>
+  <div id="fps-counter"></div>
+  <div id="score-counter"></div>
+  <div id="money-popup"></div>
+  <div id="popup-holder" style="display: none;"><h2 id="popup-text"></h2></div>
+  <button id="pause-button"><i class="fas fa-pause"></i></button>
+  <button id="fullscreen-button" onclick="fullscreen()"><i class="fa-solid fa-maximize"></i></button>
+  <button id="shopButton" onclick=""><i class="fa-solid fa-shop"></i></button>
+  <h1 id="pausedText" style="display: none;">Game Is Paused</h1>
+  <div id="crosshair">+</div>
+  <div id="newRound" style="display: none;">Round <span id="newRoundCount">1</span></div>
+  
+    <div id="hud2">
+    <div id="round"> <i class="fa-solid fa-circle-radiation"></i> <span id="round-count">1</span></div>
+    <div id="score"> <i class="fa-solid fa-star"></i> <span id="score-value">0</span> </div>
+    <div id="ammo-count"> <i class="fa-solid fa-crosshairs"></i> <span id="ammo-count-value">10</span> </div>
+    <div id="money"> <i class="fa-solid fa-money-bill-1-wave"></i> <span id="money-count">$0</span> </div>
+    </div>
+    <div id="hud">
+    <div class="progress-bar-container">
+      <div id="dash-background"><i class="fa-solid fa-person-running"></i> Dash Cooldown</div>
+      <div id="dash-progress-bar" class="progress-bar"></div>
+    </div>
+    <div id="health-bar">
+      <div id="health-bar-number"><i class="fa-solid fa-heart" style="color: #ffffff;"></i>Health: 100</div>
+      <div id="health-bar-value">
+        <div id="health-bar-value-inner">
+          <div class="health-section"></div>
+          <div class="health-section"></div>
+          <div class="health-section"></div>
+          <div class="health-section"></div>
+          <div class="health-section"></div>
+        </div>
+      </div>
+    </div>
+    </div>
+  
+</div>
+<!-- Game Shop HTML-->
+</div>
+<div id="shop">
+	<div id="shop-header">
+		<div>
+			<h2><i class="fa-solid fa-shop"></i> Supplies Shop</h2>
+		</div>
+		<h2 id="shopMoney"><i class="fa-solid fa-tag"></i> Money: <span id="shopMoneyCount"> $0</span></h2>
+		<span id="shop-close"><i class="fa-solid fa-circle-xmark"></i></span>
+	</div>
+	<div id="shop-tabs">
+		<button id="player-tab"><i class="fa-solid fa-person-running"></i> Player Upgrades</button>
+		<button id="weapon-tab" class="active"><i class="fa-solid fa-person-rifle"></i> Weapon Upgrades</button>
+		<button id="powerups-tab"><i class="fa-solid fa-bolt"></i> Powerups</button>
+	</div>
+
+	<div id="shop-content">
+		<div id="weapon-upgrades">
+			<h3>Weapon Upgrades</h3>
+			<button id="more-ammo">
+				<i class="fa-solid fa-rotate"></i> More Ammo: <br> 
+				<div id="ammoDetails">
+					<br>
+					Current: <span id="currentAmmo">10</span> <i class="fa-solid fa-crosshairs"></i><br>
+					<span id="shopUpgradeAmmoCount">+5:</span> <span id="shopAmmoCost">$550</span>
+					<div class="buyButtonIcon1"> 
+						<i class="fa-solid fa-cart-shopping"></i><input class="buyButton" type="button" value="Buy" id="buyExtendedAmmo">
+					</div>
+				</div>
+				<br> <i class="fa-solid fa-gun"></i> Level : <span id="ammoLevel"> <i class="fa-solid fa-star"></i></span>
+				<br>
+			</button> 
+			
+			<button id="more-damage">
+				<i class="fa-solid fa-fire"></i> More Damage <br> 
+				<div id="damageDetails">
+					<br>
+					Current: <span id="currentDamage">10</span> <i class="fa-solid fa-fire"></i><br>
+					<span id="shopUpgradeDamageCount">+2:</span> <span id="shopDamageCost">$230</span>
+					<div class="buyButtonIcon1"> 
+						<i class="fa-solid fa-cart-shopping"></i><input class="buyButton" type="button" value="Buy" id="buyMoreDamage">
+					</div>
+				</div>
+				<br> <i class="fa-solid fa-bolt"></i> Level: <span id="damageLevel"><i class="fa-solid fa-star"></i></span>
+			</button>
+		</div>
+
+		<div id="player-upgrades" style="display: none;">
+			<h3>Player Upgrades</h3>
+			<button id="more-health">
+				<i class="fa-solid fa-heart-circle-plus"></i> More Health:
+				<div id="healthDetails">
+					<br>
+					Current: <span id="currentHealth">100</span> <i class="fa-solid fa-heart"></i><br>
+					<span id="shopHealthCount">+25:</span> <span id="shopHealthCost">$1000</span>
+					<div class="buyButtonIcon1">
+						<i class="fa-solid fa-cart-shopping"></i><input class="buyButton" type="button" value="Buy" id="buyMoreHealth">
+					</div>
+				</div> <br>
+				<br> <i class="fa-solid fa-heart-circle-exclamation"></i> Level: <span id="healthLevel"><i class="fa-solid fa-heart"></i></span>
+			</button>
+			<button id="faster-movement">
+				<i class="fa-solid fa-person-running"></i> Faster Movement: <br> 
+				<div id="movementDetails">
+					<br>
+					Current: <span id="currentMovement">0.05</span> <i class="fa-solid fa-person-running"></i><br>
+					<span id="shopUpgradeFasterMovementCount">+0.04:</span> <span id="shopFasterMovementCost">$500</span>
+					<div class="buyButtonIcon1">
+						<i class="fa-solid fa-cart-shopping"></i><input class="buyButton" type="button" value="Buy" id="buyFasterMovement">
+					</div>
+				</div> <br>
+				<br> <i class="fa-solid fa-bolt"></i> Level: <span id="movementLevel"><i class="fa-solid fa-person-running"></i></span>  
+			</button>
+		</div>
+
+		<div id="powerups-upgrades" style="display: none;">
+		<h3> Powerups</h3>
+			<button id="nuke">
+  <h3><i class="fa-solid fa-bomb"></i> Nuke</h3>
+  <span><b>Slot Number:</b> 1</span><br>
+  <span><b>Item Type:</b> One-Time Use</span><br>
+  <span><b>Description:</b> Kills All Zombies</span><br>
+  <span><b>Cost:</b> $2500</span><br>
+  <div class="buyButtonIcon">
+    <i class="fa-solid fa-cart-shopping"></i><input id="buyNuke" class="buyButton" type="button" value="Buy">
+  </div>
+</button>
+
+<button id="mega-jump">
+  <h3><i class="fa-solid fa-angles-up"></i> Mega Jump</h3>
+  <span><b>Slot Number:</b> 2</span><br>
+  <span><b>Item Type:</b> Permanent</span><br>
+  <span><b>Description:</b> Increases Jump Height + Increases Movement Speed + Enables Double Jump</span><br>
+  <span><b>Duration:</b> 10s</span><br>
+  <span><b>Cooldown:</b> 60s</span><br>
+  <span><b>Cost:</b> $1550</span><br>
+  <div class="buyButtonIcon">
+    <i class="fa-solid fa-cart-shopping"></i><input id="buyMegaJump" class="buyButton" type="button" value="Buy">
+  </div>
+</button>
+
+<button id="liquifying-bullets">
+  <h3><i class="fa-solid fa-fire"></i> Liquifying Bullets</h3>
+  <span><b>Slot Number:</b> 3</span><br>
+  <span><b>Item Type:</b> Permanent</span><br>
+  <span><b>Description:</b> Bullets Kill More Zombies + Faster Fire Rate</span><br>
+  <span><b>Duration:</b> 30s</span><br>
+  <span><b>Cooldown:</b> 60s</span><br>
+  <span><b>Cost:</b> $5000</span><br>
+  <div class="buyButtonIcon">
+    <i class="fa-solid fa-cart-shopping"></i><input id="buyLiquifyingBullets" class="buyButton" type="button" value="Buy">
+  </div>
+</button>
+
+<button id="stealth">
+  <h3><i class="fa-solid fa-user-ninja"></i> Stealth</h3>
+  <span><b>Slot Number:</b> 4</span><br>
+  <span><b>Item Type:</b> Permanent</span><br>
+  <span><b>Description:</b> Stops Enemy Movement</span><br>
+  <span><b>Duration:</b> 5s</span><br>
+  <span><b>Cooldown:</b> 30s</span><br>
+  <span><b>Cost:</b> $1200</span><br>
+  <div class="buyButtonIcon">
+    <i class="fa-solid fa-cart-shopping"></i><input id="buyStealth" class="buyButton" type="button" value="Buy">
+  </div>
+</button>
+
+<button id="shield">
+  <h3><i class="fa-solid fa-shield"></i> Shield</h3>
+  <span><b>Slot Number:</b> 5</span><br>
+  <span><b>Item Type:</b> One-Time Use </span><br>
+  <span><b>Description:</b> Fully Regenerates Health</span><br>
+  <span><b>Cost:</b> $750</span><br>
+  <div class="buyButtonIcon">
+    <i class="fa-solid fa-cart-shopping"></i><input id="buyShield" class="buyButton" type="button" value="Buy">
+  </div>
+</button>
+        </div>
+
+
+				
+
+
+
+			
+	</div>
+</div>
+
+<!-- Login HTML-->
+
+<form id="registration-form">
+  <p style="text-align: center;"> Welcome! Create an account to get started. </p>
+  <label for="email-input">Email:</label> 
+  <input type="email" id="email-input" required> 
+
+  <label for="password-input">Password:</label>
+  <input type="password" id="password-input" minlength="6" required> 
+  <label for="password-input-confirm">Confirm Password:</label>
+  <input type="password" id="password-input-confirm" minlength="6" required>
+  <p id="password-text"> Password must be at least 6 characters long.</p>
+  <p> Already have an account? Click  <a href="#" onclick="showLoginForm()">here</a> to login. </p>
+  <p> Click <a href="#" onclick="contineLogin()">here</a> to go back. </p>
+
+
+
+
+  <button id="continue-button" type="submit">Continue</button>
+</form>
+
+<form id="registration-form-2">
+  <p style="text-align: center;"> Welcome! Choose a username to continue. </p>
+  <label for="username-input">Username:</label>
+  <input type="text" id="username-input" placeholder="" required>
+
+  <p> Click <a href="#" onclick="showRegistrationForm()"> here</a> to go back.</p>
+  <button type="submit">Create Account</button>
+</form>
+
+
+
+
+
+
+
+
+<form id="account-confirmation" >
+  <p> Account Creation Successful! Welcome, <span id="username-welcome" style="font-weight: bold;"> </span>!<br> </p>
+  <br> 
+  <p> Thank you for creating an account! </p>
+  <button type="submit" onclick="showLoginForm()">Log In</button>
+</form>
+
+
+
+
+<form id="login-form">
+  <p style="text-align: center"> Welcome back! Login to continue. </p>
+  <label for="email-input-login">Email:</label>
+  <input type="email" id="email-input-login" name="email" required>
+
+  <label for="password-input-login">Password:</label>
+  <input type="password" id="password-input-login" name="password" minlength="6" required>
+  <label> Remember Me  <input type="checkbox" id="remember-me" name="remember-me" value="remember-me"> </label>
+  <p> Forgot your password? Click <a href="#" onclick="showResetPassword()">here</a> to reset it. </p>
+  <p> Click <a href="#" onclick="contineLogin()">here</a> to go back. </p>
+
+  
+  <button type="submit">Log In</button>
+</form>
+
+
+<form id="login-success">
+    <div id="stats-container">
+        <h1 style="color: white;"> Welcome, <span id="username-from-database" style="font-weight: bold;"></span></h1>
+    
+        <h2 style="font-weight: bold; color: white;"><i class="fa-solid fa-medal"></i> My Stats</h2>
+        <p>
+            <i class="fa-solid fa-star"></i> Average Score: 
+            <span id="average-score">
+                <span class="loading-spinner" style="margin-left: 5px;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: #ccc; font-weight: bold;"></i>
+                </span>
+            </span>
+        </p>
+        <p>
+            <i class="fa-solid fa-dice"></i> Total Score: 
+            <span id="total-score">
+                <span class="loading-spinner" style="margin-left: 5px;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: #ccc; font-weight: bold;"></i>
+                </span>
+            </span>
+        </p>
+        <p>
+            <i class="fa-solid fa-trophy"></i> Games Completed: 
+            <span id="games-completed">
+                <span class="loading-spinner" style="margin-left: 5px;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: #ccc; font-weight: bold;"></i>
+                </span>
+            </span>
+        </p>
+    </div>
+    
+    
+    
+
+<div id="accountDetails" style="display: none;">
+  <h2 style="color: white"> Account Details: </h2>
+  <p> <i class="fa-solid fa-envelope"></i> Email: <br> <span id="accountEmail"></span></p>
+</div>
+<br>
+  <button type="submit" onclick="contineLogin();"><i class="fa-solid fa-angles-right"></i> Continue</button> <br>
+  <button type="submit" id="showAccountDetailsText" onclick="showAccountDetails()"><i class="fa-solid fa-circle-info"></i> Acount Details</button> <br> 
+  
+  <button type="submit" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
+</form>
+
+<form id="reset-password"> 
+  <p style="text-align: center;"> Enter your email to reset your password. </p>
+  
+  <label for="reset-email">Email:</label>
+  <input type="email" id="reset-email" required placeholder="Enter Account Email">
+  <p> Click <a href="#" onclick="showLoginForm()"> here</a> To go back</p>
+  <button type="submit" onclick="resetPass()"> Reset Password</button>
+</form>
+
+<form id="passwordResetConfirmation"> 
+<p style="text-align: center;"> An email has been sent to <span id="user-email"> </span> <br> <br> <br> <i id="check" class="fas fa-check-circle checkmark-icon" style="color: green;"></i>
+  <br> Please check your email to reset your password. </p>
+  <button type="submit" onclick="showLoginForm()"> Continue</button>
+
+
+</form>
+
+<form id="databaseError">
+  <p style="text-align: center;"> Continue Setting Up Your Account... </p>
+  
+  <label for="databaseErrorUsername">Username:</label>
+  <input type="text" id="databaseErrorUsername" required>
+
+  <button type="submit"> Continue </button>
+</form>
+
+<form id="databaseErrorFixed" style="display: none;"> 
+  <p style="text-align: center;"> Thank you for your patience. Your account has been set-up! </p>
+  <br> <br> 
+  <i id="check" class="fas fa-check-circle checkmark-icon" style="color: green;"></i> <br> 
+  <button type="submit" onclick="showLoginForm()"> Continue </button>
+</form>
+
+<button class="devTools" id="devTools1" onclick="reset()" style="display: none;"> Reset local storage /dev testing/ </button>
+
+
+
+
+</body>
+
+
+  </head>
+  <body>
+	<!-- scripts -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.135.0/build/three.module.js",
+                "three/addons/objects/Lensflare.js": "https://unpkg.com/three@0.135.0/examples/jsm/objects/Lensflare.js"
+            }
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/FBXLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/GLTFLoader.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/fflate@0.8.0/umd/index.min.js"></script>
+	<script src="https://cdn.rawgit.com/mrdoob/three.js/r128/examples/js/controls/PointerLockControls.js"></script>
+    <script src="https://kit.fontawesome.com/5e0a1eec4b.js" crossorigin="anonymous"></script>
+    <script src="https://mrdoob.github.io/stats.js/build/stats.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-auth.js"></script>
+
+
+
+	<!-- unused scripts-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/21.0.0/tween.umd.js"></script>
+
+    <script type="module">
+        import * as THREE from 'three';
+            import { Lensflare, LensflareElement } from 'three/addons/objects/Lensflare.js';
+           
+    
+    
+    // lensflares
+    const textureLoader = new THREE.TextureLoader();
+
+    
+    const textureFlare0 = textureLoader.load( 'https://i.imgur.com/80OABdD.png' );
+    const textureFlare3 = textureLoader.load( 'https://i.imgur.com/26zm7OM.png' );
+    addLight(0.08, 0.8, 0.5, 20, 250, -800); // Adjust the z position to bring it closer
+    
+   
+function addLight(h, s, l, x, y, z) {
+      console.log(x, y, z);
+      const light = new THREE.PointLight(0xffffff, 1, 2000, 0);
+      
+
+
+    light.shadow.mapSize.width = 1024;
+    light.shadow.mapSize.height = 1024;
+
+    light.color.setHSL(h, s, l);
+    light.position.set(x, y, z);
+    scene.add(light);
+  
+    const lensflare = new Lensflare();
+    lensflare.addElement(new LensflareElement(textureFlare0, 700, 0, light.color));
+    lensflare.addElement(new LensflareElement(textureFlare3, 60, 0.6));
+    lensflare.addElement(new LensflareElement(textureFlare3, 70, 0.7));
+    lensflare.addElement(new LensflareElement(textureFlare3, 120, 0.9));
+    lensflare.addElement(new LensflareElement(textureFlare3, 70, 1));
+    light.add(lensflare);
+    }
+  
+    </script>
+<script src="main.js"></script>
+  </body>
+</html>
