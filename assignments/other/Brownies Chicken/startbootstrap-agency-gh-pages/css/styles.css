@@ -10945,7 +10945,7 @@ p {
 
   @media (max-width: 576px) {
     #mainNav .navbar-brand img {
-      height: 5rem; /* Adjust this value as needed */
+      height: 3rem; /* Adjust this value as needed */
     }
     .masthead-heading {
       font-size: 0.5rem !important; /* Larger text size for "Welcome To" */
