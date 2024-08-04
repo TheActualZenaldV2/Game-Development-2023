@@ -10946,7 +10946,13 @@ p {
   @media (max-width: 576px) {
     #mainNav .navbar-brand img {
       height: 5rem; /* Adjust this value as needed */
-    }}
+    }
+    .masthead-heading {
+      font-size: 0.5rem !important; /* Larger text size for "Welcome To" */
+
+    }
+  
+  }
 header.masthead {
   position: relative;
   padding-top: 10.5rem;
@@ -11062,7 +11068,7 @@ header.masthead::before {
 
 
 .masthead-heading #browniesText {
-  font-size: 4.5rem; /* Slightly larger size for "Brownies" */
+  font-size: 3.5rem; /* Slightly larger size for "Brownies" */
   color: #FFC800; /* Optional: Add color to make it stand out */
 }
 
@@ -11073,7 +11079,7 @@ header.masthead::before {
   margin-top: 0; /* Adjust margin as needed */
 }
 .masthead-heading {
-  font-size: 3rem !important; /* Larger text size for "Welcome To" */
+  font-size: 2rem !important; /* Larger text size for "Welcome To" */
   font-weight: bold; /* Bold text */
   line-height: 1.2 !important; /* Adjust line height for better spacing */
   margin-bottom: 1rem !important; /* Space below the heading */
